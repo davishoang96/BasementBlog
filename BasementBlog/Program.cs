@@ -1,10 +1,28 @@
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using BasementBlog.Components;
+using BasementBlog.Database;
+using BasementBlog.Services.Modules;
+using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+        .ConfigureContainer<ContainerBuilder>(builder =>
+        {
+            builder.RegisterModule(new ServiceModules());
+        });
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services
+    .AddDbContext<DatabaseContext>(s => s.UseSqlite(connectionString), ServiceLifetime.Transient)
+    .AddMudServices();
 
 var app = builder.Build();
 

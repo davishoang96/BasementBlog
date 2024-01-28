@@ -15,4 +15,8 @@
 		<PackageReference Include="MudBlazor.Markdown" Version="0.1.3" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\BasementBlog.Services\BasementBlog.Services.csproj" />
+	</ItemGroup>
+
 </Project>
