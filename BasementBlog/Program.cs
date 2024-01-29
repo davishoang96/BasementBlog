@@ -26,6 +26,12 @@ builder.Services
 
 var app = builder.Build();
 
+using (var scope = ((IApplicationBuilder)app).ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
+}
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
