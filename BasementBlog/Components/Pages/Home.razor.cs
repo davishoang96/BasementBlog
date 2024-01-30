@@ -9,10 +9,23 @@ public partial class Home : ComponentBase
     [Inject]
     protected IPostService postService { get; set; } = default!;
 
-    public IEnumerable<PostDTO> Posts { get; set; }
+    public List<PostDTO> Posts { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Posts = await postService.GetAllPosts();
+        var result = await postService.GetAllPosts();
+        if (result.Any())
+        {
+            Posts = result.ToList();
+        }
+    }
+
+    public async void DeletePostCommand(PostDTO postDTO)
+    {
+        var result = await postService.DeletePost(postDTO.Id);
+        if (result)
+        {
+            Posts.Remove(postDTO);
+        }
     }
 }

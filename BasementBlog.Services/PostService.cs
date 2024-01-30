@@ -14,6 +14,19 @@ public class PostService : IPostService
         this.databaseContext = databaseContext;
     }
 
+    public async Task<bool> DeletePost(int id)
+    {
+        var model = databaseContext.Post.SingleOrDefault(s => s.Id == id);
+        if (model is not null)
+        {
+            var result = databaseContext.Remove(model);
+            await databaseContext.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
+    }
+
     public async Task<IEnumerable<PostDTO>> GetAllPosts()
     {
         var result = databaseContext.Post;

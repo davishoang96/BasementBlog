@@ -14,7 +14,7 @@
                 <MudCardActions>
                     <MudButton Color="MudBlazor.Color.Success">Read more</MudButton>
                     <MudButton Color="MudBlazor.Color.Primary">Edit</MudButton>
-                    <MudButton Color="MudBlazor.Color.Error">Delete</MudButton>
+                    <MudButton Color="MudBlazor.Color.Error" OnClick="() => DeletePostCommand(post)">Delete</MudButton>
                 </MudCardActions>
             </MudCard>
         }
