@@ -31,6 +31,25 @@ public class DatabaseContext : DbContext
             Description = "Test",
             ModifiedDate = DateTime.Now,
             PublishDate = DateTime.Now,
-        });
+        },
+        new()
+        {
+            Id = 3,
+            Title = "Lorem Ipsum",
+            Body = "Test",
+            Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum",
+            ModifiedDate = DateTime.Now,
+            PublishDate = DateTime.Now,
+        },
+        new()
+        {
+            Id = 4,
+            Title = "Where does it come from?",
+            Body = "Test",
+            Description = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots",
+            ModifiedDate = DateTime.Now,
+            PublishDate = DateTime.Now,
+        }
+        );
     }
 }

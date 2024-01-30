@@ -6,8 +6,8 @@
 
 <MudLayout>
     <MudAppBar>
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Secondary" Edge="Edge.End" OnClick="@DrawerToggle" />
-        <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" />
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Secondary" Edge="Edge.End" OnClick="@DrawerToggle" />
+        <MudSwitch @bind-Checked="@_isDarkMode" Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" />
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu />
@@ -20,7 +20,6 @@
 @code {
 
     private MudTheme _theme = new();
-
     protected override void OnInitialized()
     {
         _isDarkMode = true;
