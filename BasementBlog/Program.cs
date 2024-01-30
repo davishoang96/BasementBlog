@@ -4,6 +4,7 @@ using BasementBlog.Components;
 using BasementBlog.Database;
 using BasementBlog.Services.Modules;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +23,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services
     .AddDbContext<DatabaseContext>(s => s.UseSqlite(connectionString), ServiceLifetime.Transient)
-    .AddMudServices();
+    .AddMudServices()
+    .AddMudMarkdownServices();
 
 var app = builder.Build();
 
