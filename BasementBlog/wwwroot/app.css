@@ -42,10 +42,17 @@ h1:focus {
     color: white;
 }
 
-    .blazor-error-boundary::after {
-        content: "An error has occurred."
-    }
+.blazor-error-boundary::after {
+    content: "An error has occurred."
+}
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
+}
+
+.floating-button {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 1000; /* Ensure the button stays on top of other elements */
 }

@@ -11,4 +11,8 @@
             <MudTypography Typo="Typo.body1">@((MarkupString)PostBody)</MudTypography>
         </div>
     </MudPaper>
+    <!-- Save button -->
+    <MudItem xs="12" Class="floating-button">
+        <MudFab Color="MudBlazor.Color.Primary" OnClick="@EditPost" StartIcon="@Icons.Material.Filled.Edit" />
+    </MudItem>
 </MudContainer>

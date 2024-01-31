@@ -11,6 +11,9 @@ public partial class ViewPost : ComponentBase
     [Inject]
     protected IMarkdownService markdownService { get; set; } = default!;
 
+    [Inject]
+    protected NavigationManager navigationManager { get; set; } = default!;
+
     [Parameter] public int PostId { get; set; }
 
     public string PostTitle { get; set; }
@@ -28,5 +31,10 @@ public partial class ViewPost : ComponentBase
             PostBody = string.IsNullOrEmpty(post.Body) ? string.Empty : markdownService.TextToHtml(post.Body);
             PublishDate = post.PublishDate;
         }
+    }
+
+    public async void EditPost()
+    {
+        navigationManager.NavigateTo($"/postEditor/{PostId}");
     }
 }

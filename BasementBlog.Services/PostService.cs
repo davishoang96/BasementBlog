@@ -73,24 +73,29 @@ public class PostService : IPostService
         };
     }
 
-    public async Task<bool> SaveOrUpdatePost(PostDTO post)
+    public async Task<int> SaveOrUpdatePost(PostDTO post)
     {
         if (post is null)
         {
-            return false;
+            return -1;
         }
 
-        var modelPost = databaseContext.Post.SingleOrDefault(s => s.Id == post.Id);
+        Post modelPost;
+
+        // TODO: fix this
+        modelPost = databaseContext.Post.SingleOrDefault(s => s.Id == post.Id);
         if (modelPost is null)
         {
-            databaseContext.Add(new Post
+            modelPost = new Post
             {
                 Title = post.Title,
                 ModifiedDate = DateTime.Now,
                 PublishDate = DateTime.Now,
                 Description = post.Description,
                 Body = post.Body,
-            });
+            };
+
+            databaseContext.Add(modelPost);
         }
         else
         {
@@ -102,6 +107,6 @@ public class PostService : IPostService
         }
 
         await databaseContext.SaveChangesAsync();
-        return true;
+        return modelPost.Id;
     }
 }

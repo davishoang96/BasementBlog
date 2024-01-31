@@ -12,7 +12,7 @@ public partial class Home : ComponentBase
     [Inject]
     protected NavigationManager navigationManager { get; set; } = default!;
 
-    public List<PostDTO> Posts { get; set; }
+    public List<PostDTO> Posts = new List<PostDTO>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -32,7 +32,12 @@ public partial class Home : ComponentBase
         }
     }
 
-    public async void ViewPostById(int postId)
+    public async void EditPost(int postId)
+    {
+        navigationManager.NavigateTo($"/postEditor/{postId}");
+    }
+
+    public async void ViewPost(int postId)
     {
         navigationManager.NavigateTo($"/viewpost/{postId}");
     }
