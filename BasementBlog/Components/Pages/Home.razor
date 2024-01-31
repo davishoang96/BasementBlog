@@ -12,7 +12,7 @@
                     <p>@post.Description</p>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton Color="MudBlazor.Color.Success">Read more</MudButton>
+                    <MudButton Color="MudBlazor.Color.Success" OnClick="() => ViewPostById(post.Id)">Read more</MudButton>
                     <MudButton Color="MudBlazor.Color.Primary">Edit</MudButton>
                     <MudButton Color="MudBlazor.Color.Error" OnClick="() => DeletePostCommand(post)">Delete</MudButton>
                 </MudCardActions>

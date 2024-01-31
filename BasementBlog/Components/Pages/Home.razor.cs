@@ -9,6 +9,9 @@ public partial class Home : ComponentBase
     [Inject]
     protected IPostService postService { get; set; } = default!;
 
+    [Inject]
+    protected NavigationManager navigationManager { get; set; } = default!;
+
     public List<PostDTO> Posts { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -27,5 +30,10 @@ public partial class Home : ComponentBase
         {
             Posts.Remove(postDTO);
         }
+    }
+
+    public async void ViewPostById(int postId)
+    {
+        navigationManager.NavigateTo($"/viewpost/{postId}");
     }
 }
