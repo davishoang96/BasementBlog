@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using BasementBlog.Components;
 using BasementBlog.Database;
 using BasementBlog.Services.Modules;
+using Blazorise;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
@@ -24,6 +25,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services
     .AddDbContext<DatabaseContext>(s => s.UseSqlite(connectionString), ServiceLifetime.Transient)
     .AddMudServices()
+    .AddBlazorise()
     .AddMudMarkdownServices();
 
 var app = builder.Build();

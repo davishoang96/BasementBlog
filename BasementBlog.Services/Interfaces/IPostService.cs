@@ -7,4 +7,5 @@ public interface IPostService
     Task<PostDTO> GetPostById(int id);
     Task<bool> SaveOrUpdatePost(PostDTO post);
     Task<IEnumerable<PostDTO>> GetAllPosts();
+    Task<bool> DeletePost(int id);
 }

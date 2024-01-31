@@ -1,30 +1,31 @@
 ﻿@page "/postEditor";
 
-<div class="container mt-5">
-    <div class="row">
-        <!-- Left Side - Input Fields -->
+ <MudContainer>
+     <MudGrid>
+         <!-- Title and Description inputs -->
+         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+             <MudTextField Label="Title" @bind-Value="@PostTitle" />
+         </MudItem>
 
-        <div class="col-md-12">
-            <div class="form-group">
-                <MudTextField @bind-Value="@PostTitle" Label="Title" Variant="Variant.Filled" Clearable="true"></MudTextField>
+         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+             <MudTextField Label="Description" @bind-Value="@PostDescription" />
+         </MudItem>
+
+         <!-- Body input and Preview text -->
+         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <MudTextField Multiline Rows="10" Immediate="true" AutoGrow Label="Body" @bind-Value="@PostContent" />
+         </MudItem>
+
+         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+             <div class="preview-container">
+                 <h3>Preview</h3>
+                 @((MarkupString)PostPreview)
             </div>
-            <div class="form-group">
-                <MudTextField @bind-Value="@PostDescription" Label="Description" Variant="Variant.Filled" Clearable="true"></MudTextField>
-            </div>
-        </div>
+        </MudItem>
 
-        <div class="col-md-6">
-            <form>
-                
-                <div class="form-group">
-                    <MudTextField Immediate="true" Label="Filled" Variant="Variant.Filled" @bind-Value="@PostContent" AutoGrow />
-                </div>
-            </form>
-        </div>
-
-        <!-- Right Side - Preview -->
-        <div class="col-md-6">
-            <MudMarkdown Value="@PostContent"></MudMarkdown>
-        </div>
-    </div>
-</div>
+        <!-- Save button -->
+        <MudItem xs="12">
+            <MudButton Color="MudBlazor.Color.Primary" OnClick="@SaveOrUpdatePostCommand" Variant="Variant.Filled">Save</MudButton>
+        </MudItem>
+    </MudGrid>
+</MudContainer>

@@ -1,8 +1,23 @@
 ﻿@page "/"
-@inherits HomeBase;
 
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-5">
-    <MudMarkdown Value="@Value"></MudMarkdown>
+    <MudStack>
+        @foreach (var post in Posts)
+        {
+            <MudCard>
+                <MudCardContent>
+                    <h3 class="mb-2">@post.Title</h3>
+                    <p>@post.Description</p>
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Color="MudBlazor.Color.Success">Read more</MudButton>
+                    <MudButton Color="MudBlazor.Color.Primary">Edit</MudButton>
+                    <MudButton Color="MudBlazor.Color.Error" OnClick="() => DeletePostCommand(post)">Delete</MudButton>
+                </MudCardActions>
+            </MudCard>
+        }
+    </MudStack>
 </div>
+
