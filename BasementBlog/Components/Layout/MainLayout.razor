@@ -5,9 +5,11 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar>
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Secondary" Edge="Edge.End" OnClick="@DrawerToggle" />
+    <MudAppBar Fixed="true" Dense="true">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Secondary" Edge="Edge.Start" OnClick="@DrawerToggle" />
+        <MudSpacer />
         <MudSwitch @bind-Checked="@_isDarkMode" Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" />
+        <MudIconButton Icon="@Icons.Outlined.Login" Color="MudBlazor.Color.Inherit" Link="https://github.com/MudBlazor/MudBlazor" Target="_blank" />
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu />

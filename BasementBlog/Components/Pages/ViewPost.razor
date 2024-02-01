@@ -1,16 +1,9 @@
 ﻿@page "/viewPost/{postId:int}"
 
 <MudContainer>
-    <MudPaper Class="post-viewer" Padding="16px">
-        <MudTypography Typo="Typo.h1">@PostTitle</MudTypography>
-        <p><strong>Publish Date:</strong> @PublishDate</p>
-        
-        <MudDivider />
-
-        <div class="post-body">
-            <MudTypography Typo="Typo.body1">@((MarkupString)PostBody)</MudTypography>
-        </div>
-    </MudPaper>
+    <MudText Typo="Typo.h3">@PostTitle</MudText>
+    <MudText Typo="Typo.h5">Publish Date: @PublishDate</MudText>
+    <MudText Typo="Typo.body1">@((MarkupString)PostBody)</MudText>
     <!-- Save button -->
     <MudItem xs="12" Class="floating-button">
         <MudFab Color="MudBlazor.Color.Primary" OnClick="@EditPost" StartIcon="@Icons.Material.Filled.Edit" />

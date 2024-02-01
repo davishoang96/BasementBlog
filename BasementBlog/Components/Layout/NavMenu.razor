@@ -1,12 +1,10 @@
-﻿<MudNavMenu>
-    <div class="container mt-5">
-        <h4>Basement Blog</h4>
-    </div>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
-    <MudNavLink Href="/postEditor" Match="NavLinkMatch.Prefix">Create a post</MudNavLink>
-    @* <MudNavGroup Title="Settings" Expanded="true">
-    <MudNavLink Href="/users" Match="NavLinkMatch.Prefix">Users</MudNavLink>
-    <MudNavLink Href="/security" Match="NavLinkMatch.Prefix">Security</MudNavLink>
-    </MudNavGroup> *@
-    <MudNavLink Href="/about" Match="NavLinkMatch.Prefix">About me</MudNavLink>
-</MudNavMenu>
+﻿<MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
+    <MudNavMenu Class="mud-width-full">
+        <MudText Typo="Typo.h6" Class="px-4">Basement Blog</MudText>
+        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Created by Viet</MudText>
+        <MudDivider Class="my-2" />
+        <MudNavLink Href="/" Icon="@Icons.Material.Filled.House">Home</MudNavLink>
+        <MudNavLink Href="/postEditor" Icon="@Icons.Material.Filled.Create">Create a post</MudNavLink>
+        <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
+    </MudNavMenu>
+</MudPaper>

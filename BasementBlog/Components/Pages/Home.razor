@@ -3,21 +3,23 @@
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-5">
-    <MudStack>
+    <MudGrid>
         @foreach (var post in Posts)
         {
-            <MudCard>
-                <MudCardContent>
-                    <h3 class="mb-2">@post.Title</h3>
-                    <p>@post.Description</p>
-                </MudCardContent>
-                <MudCardActions>
-                    <MudButton Color="MudBlazor.Color.Success" OnClick="() => ViewPost(post.Id)">Read more</MudButton>
-                    <MudButton Color="MudBlazor.Color.Primary" OnClick="() => EditPost(post.Id)">Edit</MudButton>
-                    <MudButton Color="MudBlazor.Color.Error" OnClick="() => DeletePostCommand(post)">Delete</MudButton>
-                </MudCardActions>
-            </MudCard>
+            <MudItem xs="3">
+                <MudCard Outlined="true">
+                    <MudCardContent>
+                        <h3 class="mb-2">@post.Title</h3>
+                        <p>@post.Description</p>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Color="MudBlazor.Color.Success" OnClick="() => ViewPost(post.Id)">Read more</MudButton>
+                        <MudButton Color="MudBlazor.Color.Primary" OnClick="() => EditPost(post.Id)">Edit</MudButton>
+                        <MudButton Color="MudBlazor.Color.Error" OnClick="() => DeletePostCommand(post)">Delete</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
         }
-    </MudStack>
+    </MudGrid>
 </div>
 
