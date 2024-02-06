@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using BasementBlog.Components;
 using BasementBlog.Database;
 using BasementBlog.Services.Modules;
+using BasementBlog.ViewModels;
 using Blazorise;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
@@ -14,6 +15,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureContainer<ContainerBuilder>(builder =>
         {
             builder.RegisterModule(new ServiceModules());
+            builder.RegisterModule(new ViewModelModule());
         });
 
 // Add services to the container.
@@ -34,7 +36,6 @@ using (var scope = ((IApplicationBuilder)app).ApplicationServices.GetService<ISe
 {
     scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
 }
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
