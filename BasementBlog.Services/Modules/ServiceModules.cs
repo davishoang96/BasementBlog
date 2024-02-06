@@ -9,7 +9,6 @@ public class ServiceModules : Module
         base.Load(builder);
 
         builder.RegisterType<MarkdownService>().AsImplementedInterfaces().InstancePerDependency();
-
-        builder.RegisterType<PostService>().AsImplementedInterfaces().InstancePerLifetimeScope();
+        builder.RegisterType<PostService>().AsImplementedInterfaces().InstancePerDependency();
     }
 }
