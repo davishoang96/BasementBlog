@@ -8,6 +8,7 @@ namespace BasementBlog.ViewModels
         {
             base.Load(builder);
             builder.RegisterType<HomeViewModel>().InstancePerDependency();
+            builder.RegisterType<PostViewModel>().InstancePerDependency();
         }
     }
 }
