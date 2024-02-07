@@ -2,15 +2,22 @@
 
 <MudDialog>
     <DialogContent>
-        Dialog Content
+        @ContentText
     </DialogContent>
     <DialogActions>
-        <MudButton Color="MudBlazor.Color.Primary" OnClick="Submit">Ok</MudButton>
+        <MudButton Color="@Color" OnClick="Submit">@ButtonText</MudButton>
     </DialogActions>
 </MudDialog>
 
-@code {
+@code 
+{
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string ContentText { get; set; }
+
+    [Parameter] public string ButtonText { get; set; }
+
+    [Parameter] public Color Color { get; set; }
 
     void Submit() => MudDialog.Close(DialogResult.Ok(true));
 }

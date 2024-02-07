@@ -1,5 +1,6 @@
 ﻿using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 
 namespace BasementBlog.ViewModels;
 
@@ -12,7 +13,8 @@ public class PostViewModel : BaseViewModel
     [Parameter]
     public int PostId { get; set; }
 
-    public PostViewModel(NavigationManager navigationManager, IPostService postService, IMarkdownService markdownService)
+    public PostViewModel(IDialogService dialogService, NavigationManager navigationManager,
+        IPostService postService, IMarkdownService markdownService)
     {
         this.navigationManager = navigationManager;
         this.postService = postService;

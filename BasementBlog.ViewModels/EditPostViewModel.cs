@@ -1,9 +1,6 @@
 ﻿using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
-using MudBlazor;
-using BasementBlog;
-using BasementBlog.Views;
 
 namespace BasementBlog.ViewModels;
 
@@ -11,17 +8,18 @@ public class EditPostViewModel : BaseViewModel
 {
     private readonly IMarkdownService markdownService;
     private readonly IPostService postService;
-    private readonly IDialogService dialogService;
+    private readonly IBlogDialogService blogDialogService;
     private readonly NavigationManager navigationManager;
 
     [Parameter] public int PostId { get; set; }
 
-    public EditPostViewModel(IDialogService dialogService, NavigationManager navigationManager, IMarkdownService markdownService, IPostService postService)
+    public EditPostViewModel(IBlogDialogService blogDialogService, NavigationManager navigationManager,
+        IMarkdownService markdownService, IPostService postService)
     {
         this.markdownService = markdownService;
         this.postService = postService;
         this.navigationManager = navigationManager;
-        this.dialogService = dialogService;
+        this.blogDialogService = blogDialogService;
     }
 
     public string PostTitle { get; set; }
@@ -52,7 +50,7 @@ public class EditPostViewModel : BaseViewModel
     {
         if (string.IsNullOrEmpty(PostTitle) || string.IsNullOrEmpty(PostDescription) || string.IsNullOrEmpty(PostBody))
         {
-            await dialogService.ShowAsync<Dialog>("Must enter something", new DialogOptions { CloseOnEscapeKey = true });
+            await blogDialogService.ShowDialog("Warning", "Cannot leave those field empty");
             return false;
         }
 
