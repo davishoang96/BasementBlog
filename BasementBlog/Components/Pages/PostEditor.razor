@@ -1,7 +1,7 @@
 ﻿@page "/postEditor";
 @page "/postEditor/{postId:int}"
 @using BasementBlog.ViewModels;
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
 
  <MudContainer>
      <MudGrid>

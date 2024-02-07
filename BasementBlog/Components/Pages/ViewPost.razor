@@ -6,7 +6,7 @@
     <MudText Typo="Typo.h5">Publish Date: @vm.PublishDate</MudText>
     <MudText Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
     <!-- Save button -->
-    <AuthorizeView>
+    <AuthorizeView Roles="Admin">
         <Authorized>
             <MudItem xs="12" Class="floating-button">
                 <MudFab Color="MudBlazor.Color.Primary" OnClick="@vm.EditPost" StartIcon="@Icons.Material.Filled.Edit" />

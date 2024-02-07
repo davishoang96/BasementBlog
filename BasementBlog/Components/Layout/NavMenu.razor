@@ -4,7 +4,7 @@
         <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Created by Viet</MudText>
         <MudDivider Class="my-2" />
         <MudNavLink Href="/" Icon="@Icons.Material.Filled.House">Home</MudNavLink>
-        <AuthorizeView>
+        <AuthorizeView Roles="Admin">
             <Authorized>
                 <MudNavLink Href="/postEditor" Icon="@Icons.Material.Filled.Create">Create a post</MudNavLink>
             </Authorized>

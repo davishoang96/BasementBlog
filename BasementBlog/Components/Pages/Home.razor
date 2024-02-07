@@ -4,6 +4,8 @@
 <PageTitle>Home</PageTitle>
 
 <div class="container mt-5">
+
+    <h3>Hello @Username</h3>
     <MudGrid>
         @foreach (var post in vm.Posts)
         {
@@ -15,7 +17,7 @@
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton Color="MudBlazor.Color.Success" OnClick="() => vm.ViewPost(post.Id)">Read more</MudButton>
-                        <AuthorizeView>
+                        <AuthorizeView Roles="Admin">
                             <Authorized>
                                 <MudButton Color="MudBlazor.Color.Primary" OnClick="() => vm.EditPost(post.Id)">Edit</MudButton>
                                 <MudButton Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePostCommand.Execute(post)">Delete</MudButton>
@@ -33,8 +35,19 @@
     [Inject]
     private HomeViewModel vm { get; set; }
 
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    private string Username = "";
+
     protected override async Task OnInitializedAsync()
     {
         await vm.GetPosts();
+
+        if (authenticationState is not null)
+        {
+            var state = await authenticationState;
+            Username = state?.User?.Identity?.Name ?? string.Empty;
+        }
     }
 }

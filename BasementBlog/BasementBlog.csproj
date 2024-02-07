@@ -19,6 +19,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\BasementBlog.Services\BasementBlog.Services.csproj" />
+		<ProjectReference Include="..\BasementBlog.Utilities\BasementBlog.Utilities.csproj" />
 		<ProjectReference Include="..\BasementBlog.ViewModels\BasementBlog.ViewModels.csproj" />
 	</ItemGroup>
 
