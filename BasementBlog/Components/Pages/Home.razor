@@ -15,8 +15,12 @@
                     </MudCardContent>
                     <MudCardActions>
                         <MudButton Color="MudBlazor.Color.Success" OnClick="() => vm.ViewPost(post.Id)">Read more</MudButton>
-                        <MudButton Color="MudBlazor.Color.Primary" OnClick="() => vm.EditPost(post.Id)">Edit</MudButton>
-                        <MudButton Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePostCommand.Execute(post)">Delete</MudButton>
+                        <AuthorizeView>
+                            <Authorized>
+                                <MudButton Color="MudBlazor.Color.Primary" OnClick="() => vm.EditPost(post.Id)">Edit</MudButton>
+                                <MudButton Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePostCommand.Execute(post)">Delete</MudButton>
+                            </Authorized>
+                        </AuthorizeView>
                     </MudCardActions>
                 </MudCard>
             </MudItem>

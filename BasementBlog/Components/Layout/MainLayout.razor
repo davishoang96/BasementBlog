@@ -9,7 +9,14 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Secondary" Edge="Edge.Start" OnClick="@DrawerToggle" />
         <MudSpacer />
         <MudSwitch @bind-Checked="@_isDarkMode" Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" />
-        <MudIconButton Icon="@Icons.Outlined.Login" Color="MudBlazor.Color.Inherit" Link="https://github.com/MudBlazor/MudBlazor" Target="_blank" />
+        <AuthorizeView>
+            <Authorized>        
+                <MudIconButton Icon="@Icons.Outlined.Logout" Color="MudBlazor.Color.Inherit" Link="Account/Logout" Target="_blank" />
+            </Authorized>
+            <NotAuthorized>
+                <MudIconButton Icon="@Icons.Outlined.Login" Color="MudBlazor.Color.Inherit" Link="Account/Login?redirectUri=/" Target="_blank" />
+            </NotAuthorized>
+        </AuthorizeView>
     </MudAppBar>
     <MudDrawer @bind-Open="@_drawerOpen">
         <NavMenu />

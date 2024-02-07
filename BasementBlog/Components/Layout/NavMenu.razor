@@ -4,7 +4,11 @@
         <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Created by Viet</MudText>
         <MudDivider Class="my-2" />
         <MudNavLink Href="/" Icon="@Icons.Material.Filled.House">Home</MudNavLink>
-        <MudNavLink Href="/postEditor" Icon="@Icons.Material.Filled.Create">Create a post</MudNavLink>
+        <AuthorizeView>
+            <Authorized>
+                <MudNavLink Href="/postEditor" Icon="@Icons.Material.Filled.Create">Create a post</MudNavLink>
+            </Authorized>
+        </AuthorizeView>
         <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
     </MudNavMenu>
 </MudPaper>

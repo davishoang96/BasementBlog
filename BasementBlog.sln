@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Services", "Ba
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.ViewModels", "BasementBlog.ViewModels\BasementBlog.ViewModels.csproj", "{B9978FFB-6882-4197-A7C2-0F22A828BFAF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasementBlog.Views", "BasementBlog.Views\BasementBlog.Views.csproj", "{3CAABA12-71CE-4025-9C77-4983FEBE57E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Views", "BasementBlog.Views\BasementBlog.Views.csproj", "{3CAABA12-71CE-4025-9C77-4983FEBE57E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

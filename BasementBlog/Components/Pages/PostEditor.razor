@@ -1,6 +1,7 @@
 ﻿@page "/postEditor";
 @page "/postEditor/{postId:int}"
 @using BasementBlog.ViewModels;
+@attribute [Authorize]
 
  <MudContainer>
      <MudGrid>
