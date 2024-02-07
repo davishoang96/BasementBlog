@@ -1,0 +1,35 @@
+﻿@page "/"
+@using BasementBlog.ViewModels
+
+<PageTitle>Home</PageTitle>
+
+<div class="container mt-5">
+    <MudGrid>
+        @foreach (var post in vm.Posts)
+        {
+            <MudItem xs="3">
+                <MudCard Outlined="true">
+                    <MudCardContent>
+                        <h3 class="mb-2">@post.Title</h3>
+                        <p>@post.Description</p>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Color="MudBlazor.Color.Success" OnClick="() => vm.ViewPost(post.Id)">Read more</MudButton>
+                        <MudButton Color="MudBlazor.Color.Primary" OnClick="() => vm.EditPost(post.Id)">Edit</MudButton>
+                        <MudButton Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePostCommand.Execute(post)">Delete</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</div>
+
+@code{
+    [Inject]
+    private HomeViewModel vm { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await vm.GetPosts();
+    }
+}

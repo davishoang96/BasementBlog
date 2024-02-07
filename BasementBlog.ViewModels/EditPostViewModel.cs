@@ -2,24 +2,27 @@
 using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
+using BasementBlog;
+using BasementBlog.Views;
 
-namespace BasementBlog.Components.Pages;
+namespace BasementBlog.ViewModels;
 
-public partial class PostEditor : ComponentBase
+public class EditPostViewModel : BaseViewModel
 {
-    [Inject]
-    protected IMarkdownService markdownService { get; set; } = default!;
-
-    [Inject]
-    protected IPostService postService { get; set; } = default!;
-
-    [Inject]
-    protected IDialogService dialogService { get; set; } = default!;
-
-    [Inject]
-    protected NavigationManager navigationManager { get; set; } = default!;
+    private readonly IMarkdownService markdownService;
+    private readonly IPostService postService;
+    private readonly IDialogService dialogService;
+    private readonly NavigationManager navigationManager;
 
     [Parameter] public int PostId { get; set; }
+
+    public EditPostViewModel(IDialogService dialogService, NavigationManager navigationManager, IMarkdownService markdownService, IPostService postService)
+    {
+        this.markdownService = markdownService;
+        this.postService = postService;
+        this.navigationManager = navigationManager;
+        this.dialogService = dialogService;
+    }
 
     public string PostTitle { get; set; }
     public string PostDescription { get; set; }
@@ -27,14 +30,16 @@ public partial class PostEditor : ComponentBase
 
     public string PostPreview => string.IsNullOrEmpty(PostBody) ? "Type here" : markdownService.TextToHtml(PostBody);
 
-    protected override async Task OnInitializedAsync()
+    public async Task GetPostById(int postId)
     {
-        if (PostId == default)
+        if (postId == default)
         {
             return;
         }
 
-        var post = await postService.GetPostById(PostId);
+        PostId = postId;
+
+        var post = await postService.GetPostById(postId);
         if (post != null)
         {
             PostTitle = post.Title;
