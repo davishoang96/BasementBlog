@@ -28,7 +28,7 @@ builder.Services
 
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
-    .AddJsonFile($"appsettings.Development.json", true, true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
     .AddEnvironmentVariables();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
