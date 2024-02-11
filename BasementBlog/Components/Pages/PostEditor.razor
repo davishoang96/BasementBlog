@@ -3,7 +3,7 @@
 @using BasementBlog.ViewModels;
 @attribute [Authorize(Roles = "Admin")]
 
- <MudContainer>
+ <MudContainer Class="home-container">
      <MudGrid>
          <!-- Title and Description inputs -->
          <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
@@ -21,7 +21,6 @@
 
          <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
              <div class="preview-container">
-                 <h3>Preview</h3>
                  @((MarkupString)vm.PostPreview)
             </div>
         </MudItem>

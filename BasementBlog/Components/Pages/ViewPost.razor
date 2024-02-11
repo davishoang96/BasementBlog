@@ -1,9 +1,9 @@
 ﻿@page "/viewPost/{postId:int}"
 @using BasementBlog.ViewModels;
 
-<MudContainer>
-    <MudText Typo="Typo.h3">@vm.PostTitle</MudText>
-    <MudText Typo="Typo.h5">Publish Date: @vm.PublishDate</MudText>
+<div class="home-container">
+    <MudText Typo="Typo.body1">@vm.PostTitle</MudText>
+    <MudText Typo="Typo.body1">Publish Date: @vm.PublishDate</MudText>
     <MudText Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
     <!-- Save button -->
     <AuthorizeView Roles="Admin">
@@ -13,7 +13,7 @@
             </MudItem>
         </Authorized>
     </AuthorizeView>
-</MudContainer>
+</div>
 
 @code
 {

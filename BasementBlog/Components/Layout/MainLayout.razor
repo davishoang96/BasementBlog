@@ -6,7 +6,16 @@
 
 <MudLayout>
     <MudAppBar Fixed="true" Dense="true">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="MudBlazor.Color.Secondary" Edge="Edge.Start" OnClick="@DrawerToggle" />
+        <MudMenu Label="Open Menu" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.Menu">
+            <MudMenuItem Href="/" Icon="@Icons.Material.Filled.Home">Home</MudMenuItem>
+            <AuthorizeView Roles="Admin">
+                <Authorized>
+                    <MudMenuItem Href="/postEditor" Icon="@Icons.Material.Filled.Create">Create a post</MudMenuItem>
+                    <MudMenuItem Href="/" Icon="@Icons.Material.Filled.List">Work Logs</MudMenuItem>
+                </Authorized>
+            </AuthorizeView>
+            <MudMenuItem Href="/about" Icon="@Icons.Material.Filled.ContactMail">Resume</MudMenuItem>
+        </MudMenu>
         <MudSpacer />
         <MudSwitch @bind-Checked="@_isDarkMode" Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" />
         <AuthorizeView>
@@ -18,17 +27,26 @@
             </NotAuthorized>
         </AuthorizeView>
     </MudAppBar>
-    <MudDrawer @bind-Open="@_drawerOpen">
-        <NavMenu />
-    </MudDrawer>
     <MudMainContent>
         @Body
     </MudMainContent>
 </MudLayout>
 
 @code {
+    private MudTheme _theme = new()
+    {
+        Palette = new PaletteLight()
+        {
+            Primary = Colors.Blue.Darken1,
+            Secondary = Colors.Green.Accent4,
+            AppbarBackground = Colors.Blue.Darken4,
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1
+        },
+    };
 
-    private MudTheme _theme = new();
     protected override void OnInitialized()
     {
         _isDarkMode = true;

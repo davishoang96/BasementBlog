@@ -3,31 +3,26 @@
 
 <PageTitle>Home</PageTitle>
 
-<div class="container mt-5">
+<div class="home-container">
 
-    <h3>Hello @Username</h3>
-    <MudGrid>
+    <MudList Clickable="true">
+        <MudText>
+            Just your average everyday nerd, developer, motorcycle enthusiast, dog dad.
+
+            The business side of this blog is mostly about SQL Server, PowerShell, programming tips and tools.
+
+            I also like to post about my hobbies…motorcycles, rubiks cubes, dogs, nerdy home projects, archery and whatever else I seem to be obsessing over that month.
+
+            Hope you enjoy what you’re reading here!
+        </MudText>
+        <MudSpacer />
         @foreach (var post in vm.Posts)
         {
-            <MudItem xs="3">
-                <MudCard Outlined="true">
-                    <MudCardContent>
-                        <h3 class="mb-2">@post.Title</h3>
-                        <p>@post.Description</p>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton Color="MudBlazor.Color.Success" OnClick="() => vm.ViewPost(post.Id)">Read more</MudButton>
-                        <AuthorizeView Roles="Admin">
-                            <Authorized>
-                                <MudButton Color="MudBlazor.Color.Primary" OnClick="() => vm.EditPost(post.Id)">Edit</MudButton>
-                                <MudButton Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePostCommand.Execute(post)">Delete</MudButton>
-                            </Authorized>
-                        </AuthorizeView>
-                    </MudCardActions>
-                </MudCard>
-            </MudItem>
+            <div>
+                <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+            </div>
         }
-    </MudGrid>
+    </MudList>
 </div>
 
 @code
@@ -38,8 +33,6 @@
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
 
-    private string Username = "";
-
     protected override async Task OnInitializedAsync()
     {
         await vm.GetPosts();
@@ -47,7 +40,7 @@
         if (authenticationState is not null)
         {
             var state = await authenticationState;
-            Username = state?.User?.Identity?.Name ?? string.Empty;
+            var username = state?.User?.Identity?.Name ?? string.Empty;
         }
     }
 }
