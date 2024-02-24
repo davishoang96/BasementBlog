@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme" DefaultScrollbar="true" />
+<MudThemeProvider IsDarkMode="true" Theme="_theme" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -17,7 +17,7 @@
             <MudMenuItem Href="/about" Icon="@Icons.Material.Filled.ContactMail">Resume</MudMenuItem>
         </MudMenu>
         <MudSpacer />
-        <MudSwitch @bind-Checked="@_isDarkMode" Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" />
+        @* <MudSwitch @bind-Checked="@_isDarkMode" Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" /> *@
         <AuthorizeView>
             <Authorized>        
                 <MudIconButton Icon="@Icons.Outlined.Logout" Color="MudBlazor.Color.Inherit" Link="Account/Logout" Target="_blank" />
@@ -35,29 +35,30 @@
 @code {
     private MudTheme _theme = new()
     {
-        Palette = new PaletteLight()
-        {
-            Primary = Colors.Blue.Darken1,
-            Secondary = Colors.Green.Accent4,
-            AppbarBackground = Colors.Blue.Darken4,
-        },
+        // Palette = new PaletteLight()
+        // {
+        //     Primary = Colors.Blue.Darken1,
+        //     Secondary = Colors.Green.Accent4,
+        //     AppbarBackground = Colors.Blue.Darken4,
+        // },
         PaletteDark = new PaletteDark()
         {
-            Primary = Colors.Blue.Lighten1
+            Primary = Colors.Blue.Lighten1,
+            Background = "#0d1117",
         },
     };
 
     protected override void OnInitialized()
     {
-        _isDarkMode = true;
+        // _isDarkMode = true;
         _drawerOpen = true;
     }
 
-    public string DarkModeToggleText => _isDarkMode ? "Dark" : "Light";
+    // public string DarkModeToggleText => _isDarkMode ? "Dark" : "Light";
 
     public bool _drawerOpen { get; set; }
 
-    public bool _isDarkMode { get; set; }
+    // public bool _isDarkMode { get; set; }
 
     void DrawerToggle()
     {
