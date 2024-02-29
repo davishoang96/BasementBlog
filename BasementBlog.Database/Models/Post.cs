@@ -2,8 +2,11 @@
 
 namespace BasementBlog.Database.Models;
 
-public class Post : Object
+public class Post
 {
+    [Required]
+    public int Id { get; set; }
+
     [Required]
     public string Title { get; set; }
 
