@@ -1,6 +1,9 @@
 ﻿using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Graph.DeviceManagement.AuditEvents.GetAuditCategories;
+using Microsoft.Graph.Models;
+using System.Diagnostics.Metrics;
 
 namespace BasementBlog.ViewModels;
 
@@ -26,6 +29,13 @@ public class EditPostViewModel : BaseViewModel
     public string PostDescription { get; set; }
     public string PostBody { get; set; }
 
+    public IEnumerable<CategoryDTO> Categories { get; set; }
+
+    public async Task GetCategories()
+    {
+        Categories = await postService.GetCategoryDTOs();
+    }
+
     public string PostPreview => string.IsNullOrEmpty(PostBody) ? "Type here" : markdownService.TextToHtml(PostBody);
 
     public async Task GetPostById(int postId)
@@ -43,6 +53,7 @@ public class EditPostViewModel : BaseViewModel
             PostTitle = post.Title;
             PostDescription = post.Description;
             PostBody = post.Body;
+            SelectedCategory = Categories.SingleOrDefault(s => s.CategoryId == post.CategoryId);
         }
     }
 
@@ -59,6 +70,8 @@ public class EditPostViewModel : BaseViewModel
             Id = PostId,
             Title = PostTitle,
             Description = PostDescription,
+            CategoryId = SelectedCategory != null ? SelectedCategory.CategoryId : 0,
+            CategoryName = SelectedCategory != null ? SelectedCategory.Name : newCategory,
             Body = PostBody,
         });
 
@@ -67,7 +80,34 @@ public class EditPostViewModel : BaseViewModel
             navigationManager.NavigateTo($"/viewpost/{postId}");
             return true;
         }
-
         return false;
+    }
+
+    public Func<CategoryDTO, string?> DisplayValue = item => item is null ? null : item.Name;
+
+    public CategoryDTO? SelectedCategory { get; set; }
+
+    private string newCategory { get; set; }
+
+    public async Task<IEnumerable<CategoryDTO>> SearchCategories(string value)
+    {
+        if (!Categories.Any())
+        {
+            return null;
+        }
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return Categories;
+        }
+
+        var result = Categories.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        if (!result.Any())
+        {
+            SelectedCategory = null;
+            newCategory = value;
+        }
+
+        return result;
     }
 }

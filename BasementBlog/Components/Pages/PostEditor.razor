@@ -1,18 +1,28 @@
 ﻿@page "/postEditor";
 @page "/postEditor/{postId:int}"
 @using BasementBlog.ViewModels;
+@using BasementBlog.DTO;
+
 @attribute [Authorize(Roles = "Admin")]
 
  <MudContainer Class="home-container">
      <MudGrid>
          <!-- Title and Description inputs -->
          <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-             <MudTextField Label="Title" @bind-Value="@vm.PostTitle" />
+            <MudTextField Label="Title" @bind-Value="@vm.PostTitle" Variant="Variant.Outlined" />
          </MudItem>
 
          <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-             <MudTextField Label="Description" @bind-Value="@vm.PostDescription" />
+            <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Outlined" />
          </MudItem>
+
+        <MudItem MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+            <MudAutocomplete T="CategoryDTO" Label="Category"
+                             @bind-Value="@vm.SelectedCategory" 
+                             SearchFunc="@vm.SearchCategories" 
+                             ToStringFunc="@vm.DisplayValue"
+                             Variant="Variant.Outlined" />
+        </MudItem>
 
          <!-- Body input and Preview text -->
          <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
@@ -32,7 +42,7 @@
 </MudContainer>
 
 @code
- {
+{
     [Inject]
     private EditPostViewModel vm { get; set; }
 
@@ -41,6 +51,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await vm.GetCategories();
         await vm.GetPostById(PostId);
     }
 }
