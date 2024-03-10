@@ -15,7 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.ViewModels", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Views", "BasementBlog.Views\BasementBlog.Views.csproj", "{3CAABA12-71CE-4025-9C77-4983FEBE57E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasementBlog.Utilities", "BasementBlog.Utilities\BasementBlog.Utilities.csproj", "{AC648F77-28DB-4FF6-88BD-C8402F79A909}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Utilities", "BasementBlog.Utilities\BasementBlog.Utilities.csproj", "{AC648F77-28DB-4FF6-88BD-C8402F79A909}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasementBlog.Tests", "BasementBlog.Tests\BasementBlog.Tests.csproj", "{AD65C7FD-FEF6-4630-B628-1041E15129FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{AC648F77-28DB-4FF6-88BD-C8402F79A909}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC648F77-28DB-4FF6-88BD-C8402F79A909}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC648F77-28DB-4FF6-88BD-C8402F79A909}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD65C7FD-FEF6-4630-B628-1041E15129FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD65C7FD-FEF6-4630-B628-1041E15129FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD65C7FD-FEF6-4630-B628-1041E15129FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD65C7FD-FEF6-4630-B628-1041E15129FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

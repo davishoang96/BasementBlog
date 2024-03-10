@@ -17,6 +17,21 @@ namespace BasementBlog.Database.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
 
+            modelBuilder.Entity("BasementBlog.Database.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("BasementBlog.Database.Models.Post", b =>
                 {
                     b.Property<int>("Id")
@@ -26,6 +41,9 @@ namespace BasementBlog.Database.Migrations
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -43,7 +61,9 @@ namespace BasementBlog.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Post");
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("Posts");
 
                     b.HasData(
                         new
@@ -51,8 +71,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 1,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4161),
-                            PublishDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4175),
+                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(720),
+                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(730),
                             Title = "Make the world better"
                         },
                         new
@@ -60,8 +80,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 2,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4177),
-                            PublishDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4178),
+                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(732),
+                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(732),
                             Title = "AI take over the world"
                         },
                         new
@@ -69,8 +89,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 3,
                             Body = "Test",
                             Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-                            ModifiedDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4179),
-                            PublishDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4180),
+                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(734),
+                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(734),
                             Title = "Lorem Ipsum"
                         },
                         new
@@ -78,10 +98,33 @@ namespace BasementBlog.Database.Migrations
                             Id = 4,
                             Body = "Test",
                             Description = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots",
-                            ModifiedDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4182),
-                            PublishDate = new DateTime(2024, 2, 29, 21, 59, 14, 760, DateTimeKind.Local).AddTicks(4183),
+                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(736),
+                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(736),
                             Title = "Where does it come from?"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Body = "Test",
+                            Description = "Lorem Ipsum is not simply random text. It has roots",
+                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(737),
+                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(738),
+                            Title = "Create post and add catetory"
                         });
+                });
+
+            modelBuilder.Entity("BasementBlog.Database.Models.Post", b =>
+                {
+                    b.HasOne("BasementBlog.Database.Models.Category", "Category")
+                        .WithMany("Posts")
+                        .HasForeignKey("CategoryId");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("BasementBlog.Database.Models.Category", b =>
+                {
+                    b.Navigation("Posts");
                 });
 #pragma warning restore 612, 618
         }

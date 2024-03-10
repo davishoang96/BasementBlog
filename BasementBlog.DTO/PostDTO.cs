@@ -3,9 +3,11 @@
 public class PostDTO
 {
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Body { get; set; }
-    public string Description { get; set; }
+    public int? CategoryId { get; set; }
+    public string? CategoryName { get; set; }
+    public required string Title { get; set; }
+    public required string Body { get; set; }
+    public required string Description { get; set; }
 
     public DateTime PublishDate { get; set; }
     public DateTime ModifiedDate { get; set; }

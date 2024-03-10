@@ -4,21 +4,12 @@ namespace BasementBlog.Database.Models;
 
 public class Post
 {
-    [Required]
     public int Id { get; set; }
-
-    [Required]
-    public string Title { get; set; }
-
-    [Required]
-    public string Body { get; set; }
-
-    [Required]
-    public string Description { get; set; }
-
-    [Required]
+    public int? CategoryId { get; set; }
+    public virtual Category? Category { get; set; }
+    public required string Title { get; set; }
+    public required string Body { get; set; }
+    public required string Description { get; set; }
     public DateTime PublishDate { get; set; }
-
-    [Required]
     public DateTime ModifiedDate { get; set; }
 }
