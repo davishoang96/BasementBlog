@@ -12,6 +12,8 @@ public partial class HomeViewModel : BaseViewModel
 
     public List<PostDTO> Posts = new List<PostDTO>();
 
+    public List<CategoryDTO> Categoroies = new List<CategoryDTO>();
+
     public IAsyncRelayCommand<PostDTO> DeletePostCommand { get; }
 
     public HomeViewModel(NavigationManager navigationManager, IPostService postService)
@@ -23,9 +25,9 @@ public partial class HomeViewModel : BaseViewModel
     }
 
 
-    public async Task GetPosts()
+    public async Task GetUnclassifiedPosts()
     {
-        var result = await postService.GetAllPosts();
+        var result = await postService.GetUnclassifiedPosts();
         if (result.Any())
         {
             Posts = result.ToList();
@@ -38,6 +40,15 @@ public partial class HomeViewModel : BaseViewModel
         if (result)
         {
             Posts.Remove(postDTO);
+        }
+    }
+
+    public async Task GetCategoriesWithPost()
+    {
+        var result = await postService.GetCategoriesWithLightPostDTO();
+        if (result.Any())
+        {
+            Categoroies = result.ToList();
         }
     }
 

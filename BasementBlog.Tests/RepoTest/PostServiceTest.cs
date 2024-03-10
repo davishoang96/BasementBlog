@@ -5,6 +5,7 @@ using BasementBlog.DTO;
 using BasementBlog.Services;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph.Models;
 using Xunit;
 using Post = BasementBlog.Database.Models.Post;
 
@@ -12,6 +13,36 @@ namespace BasementBlog.Tests.RepoTest;
 
 public sealed class PostServiceTest : BaseDataContextTest
 {
+    [Fact]
+    public async Task GetCategoriesWithPosts()
+    {
+        // Arrange
+        var fixture = new Fixture();
+        var posts = fixture.Build<Post>()
+            .Without(s => s.Category)
+            .With(s => s.CategoryId, 25).CreateMany(17);
+
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            context.Categories.Add(new Category
+            {
+                CategoryId = 25,
+                Name = "Programming",
+            });
+
+            context.Posts.AddRange(posts);
+            await context.SaveChangesAsync();
+        }
+
+        var service = new PostService(new DatabaseContext(_dbContextOptions));
+
+        // Act
+        var result = await service.GetCategoriesWithLightPostDTO();
+
+        // Assert
+        result.SingleOrDefault(s => s.CategoryId == 25).PostDTOs.Count().Should().Be(17);
+    }
+
     [Fact]
     public async Task AddPostOK()
     {

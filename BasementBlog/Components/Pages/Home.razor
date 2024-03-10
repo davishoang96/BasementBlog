@@ -4,25 +4,43 @@
 <PageTitle>Home</PageTitle>
 
 <div class="home-container">
-
-    <MudList Clickable="true">
+    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
         <MudText>
-            Just your average everyday nerd, developer, motorcycle enthusiast, dog dad.
-
-            The business side of this blog is mostly about SQL Server, PowerShell, programming tips and tools.
-
-            I also like to post about my hobbies…motorcycles, rubiks cubes, dogs, nerdy home projects, archery and whatever else I seem to be obsessing over that month.
-
-            Hope you enjoy what you’re reading here!
+            Hello, I'm Davis, a versatile individual fueled by a passion for photography,
+            hiking, piano, and coding. Behind the camera,
+            I find joy in capturing the essence of life through unique visual narratives. \
+            Whether exploring nature's trails, playing melodies on the piano for relaxation,
+            or delving into the world of coding to craft innovative solutions,
+            each interest contributes to a harmonious blend of creativity and exploration in my life.
+            This diverse tapestry reflects my continuous journey of self-discovery and growth,
+            where each pursuit adds a unique color to the canvas of my experiences.
         </MudText>
-        <MudSpacer />
-        @foreach (var post in vm.Posts)
-        {
+    </MudItem>
+
+    @foreach (var category in vm.Categoroies)
+    {
+        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+            <h6>@category.Name</h6>
+            <ul>
+                @foreach (var post in category.PostDTOs)
+                {
+                    <li>
+                        <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+                    </li>
+                }
+            </ul>
+        </MudItem>
+    }
+
+    @foreach (var post in vm.Posts)
+    {
+        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+            <h6>Unclassified Posts</h6>
             <div>
                 <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
             </div>
-        }
-    </MudList>
+        </MudItem>
+    }
 </div>
 
 @code
@@ -35,7 +53,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await vm.GetPosts();
+        await vm.GetCategoriesWithPost();
+        await vm.GetUnclassifiedPosts();
 
         if (authenticationState is not null)
         {

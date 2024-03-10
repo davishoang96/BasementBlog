@@ -13,7 +13,7 @@ public class PostService : IPostService
     private readonly DatabaseContext db;
     public PostService(DatabaseContext databaseContext)
     {
-        this.db = databaseContext;
+        db = databaseContext;
     }
 
     public async Task<bool> DeletePost(int id)
@@ -32,6 +32,33 @@ public class PostService : IPostService
     public async Task<IEnumerable<PostDTO>> GetAllPosts()
     {
         var result = db.Posts;
+
+        if (result == null || result.IsNullOrEmpty())
+        {
+            return Enumerable.Empty<PostDTO>();
+        }
+
+        var r = new List<PostDTO>();
+
+        foreach (var model in result)
+        {
+            r.Add(new PostDTO
+            {
+                Id = model.Id,
+                Title = model.Title,
+                Body = model.Body,
+                PublishDate = model.PublishDate,
+                Description = model.Description,
+                ModifiedDate = model.ModifiedDate,
+            });
+        }
+
+        return r;
+    }
+
+    public async Task<IEnumerable<PostDTO>> GetUnclassifiedPosts()
+    {
+        var result = db.Posts.Where(s => s.CategoryId == null);
 
         if (result == null || result.IsNullOrEmpty())
         {
@@ -157,6 +184,44 @@ public class PostService : IPostService
                 {
                     CategoryId = category.CategoryId,
                     Name = category.Name
+                });
+            }
+
+            return categoryDTOs;
+        }
+
+        return null;
+    }
+
+    public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
+    {
+        var categoryModels = await db.Categories.Include(c => c.Posts).Where(s => s.Posts.Any()).ToListAsync();
+        if (categoryModels.Any())
+        {
+            var categoryDTOs = new List<CategoryDTO>();
+            foreach (var category in categoryModels)
+            {
+                List<PostDTO> postDTOs = new List<PostDTO>();
+
+                foreach (var post in category.Posts)
+                {
+                    var postDTO = new PostDTO
+                    {
+                        Id = post.Id,
+                        Title = post.Title,
+                        Body = null,
+                        Description = null,
+                        PublishDate = post.PublishDate,
+                    };
+
+                    postDTOs.Add(postDTO);
+                }
+
+                categoryDTOs.Add(new CategoryDTO
+                {
+                    CategoryId = category.CategoryId,
+                    Name = category.Name,
+                    PostDTOs = postDTOs,
                 });
             }
 
