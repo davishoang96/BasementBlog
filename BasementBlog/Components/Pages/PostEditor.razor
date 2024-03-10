@@ -8,32 +8,38 @@
  <MudContainer Class="home-container">
      <MudGrid>
          <!-- Title and Description inputs -->
-         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+        @* <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            
+        </MudItem> *@
+
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
             <MudTextField Label="Title" @bind-Value="@vm.PostTitle" Variant="Variant.Outlined" />
-         </MudItem>
 
-         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+        </MudItem>
+
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
             <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Outlined" />
-         </MudItem>
 
-        <MudItem MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+        </MudItem>
+
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
             <MudAutocomplete T="CategoryDTO" Label="Category"
-                             @bind-Value="@vm.SelectedCategory" 
-                             SearchFunc="@vm.SearchCategories" 
+                             @bind-Value="@vm.SelectedCategory"
+                             SearchFunc="@vm.SearchCategories"
                              ToStringFunc="@DisplayValue"
                              Variant="Variant.Outlined" />
         </MudItem>
 
-         <!-- Body input and Preview text -->
-         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <MudTextField Multiline Rows="10" Immediate="true" AutoGrow Label="Body" @bind-Value="@vm.PostBody" />
-         </MudItem>
+        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <MudTextField Style="font-size: 13px;font-family: 'Cascadia Mono'" Multiline Rows="19" Immediate="true" AutoGrow Label="Body" @bind-Value="@vm.PostBody" />
+        </MudItem>
 
-         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-             <div class="preview-container">
-                 @((MarkupString)vm.PostPreview)
+        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <div class="preview-container">
+                @((MarkupString)vm.PostPreview)
             </div>
         </MudItem>
+
     </MudGrid>
      <!-- Save button -->
      <MudItem xs="12" Class="floating-button">

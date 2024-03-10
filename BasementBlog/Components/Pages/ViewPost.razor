@@ -4,7 +4,7 @@
 <div class="home-container">
     <MudText Typo="Typo.body1">@vm.PostTitle</MudText>
     <MudText Typo="Typo.body1">Publish Date: @vm.PublishDate</MudText>
-    <MudText Class="markdown-body" Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
+    <MudText Class="markdown-body mt-5" Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
     <!-- Save button -->
     <AuthorizeView Roles="Admin">
         <Authorized>
