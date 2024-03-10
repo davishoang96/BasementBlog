@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Xunit;
 using Post = BasementBlog.Database.Models.Post;
 
-namespace BasementBlog.Tests;
+namespace BasementBlog.Tests.RepoTest;
 
 public sealed class PostServiceTest : BaseDataContextTest
 {

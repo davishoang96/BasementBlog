@@ -1,9 +1,6 @@
 ﻿using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
-using Microsoft.Graph.DeviceManagement.AuditEvents.GetAuditCategories;
-using Microsoft.Graph.Models;
-using System.Diagnostics.Metrics;
 
 namespace BasementBlog.ViewModels;
 
@@ -17,7 +14,7 @@ public class EditPostViewModel : BaseViewModel
     [Parameter] public int PostId { get; set; }
 
     public EditPostViewModel(IBlogDialogService blogDialogService, NavigationManager navigationManager,
-        IMarkdownService markdownService, IPostService postService)
+                             IMarkdownService markdownService, IPostService postService)
     {
         this.markdownService = markdownService;
         this.postService = postService;
@@ -82,8 +79,6 @@ public class EditPostViewModel : BaseViewModel
         }
         return false;
     }
-
-    public Func<CategoryDTO, string?> DisplayValue = item => item is null ? null : item.Name;
 
     public CategoryDTO? SelectedCategory { get; set; }
 

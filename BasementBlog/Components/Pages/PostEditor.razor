@@ -20,7 +20,7 @@
             <MudAutocomplete T="CategoryDTO" Label="Category"
                              @bind-Value="@vm.SelectedCategory" 
                              SearchFunc="@vm.SearchCategories" 
-                             ToStringFunc="@vm.DisplayValue"
+                             ToStringFunc="@DisplayValue"
                              Variant="Variant.Outlined" />
         </MudItem>
 
@@ -48,6 +48,8 @@
 
     [Parameter]
     public int PostId { get; set; }
+
+    private Func<CategoryDTO, string?> DisplayValue = item => item is null ? null : item.Name;
 
     protected override async Task OnInitializedAsync()
     {
