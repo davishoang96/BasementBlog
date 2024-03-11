@@ -46,3 +46,6 @@ jobs:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.BasementBlog_71B2 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+    - name: Delete Artifact
+      uses: GeekyEggo/delete-artifact@v4.1.0
+            
