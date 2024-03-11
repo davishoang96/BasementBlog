@@ -29,6 +29,8 @@ namespace BasementBlog.Database.Migrations
 
                     b.HasKey("CategoryId");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Categories");
                 });
 
@@ -63,6 +65,8 @@ namespace BasementBlog.Database.Migrations
 
                     b.HasIndex("CategoryId");
 
+                    b.HasIndex("Id");
+
                     b.ToTable("Posts");
 
                     b.HasData(
@@ -71,8 +75,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 1,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(720),
-                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(730),
+                            ModifiedDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1424),
+                            PublishDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1433),
                             Title = "Make the world better"
                         },
                         new
@@ -80,36 +84,9 @@ namespace BasementBlog.Database.Migrations
                             Id = 2,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(732),
-                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(732),
+                            ModifiedDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1435),
+                            PublishDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1435),
                             Title = "AI take over the world"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Body = "Test",
-                            Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum",
-                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(734),
-                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(734),
-                            Title = "Lorem Ipsum"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Body = "Test",
-                            Description = "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots",
-                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(736),
-                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(736),
-                            Title = "Where does it come from?"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Body = "Test",
-                            Description = "Lorem Ipsum is not simply random text. It has roots",
-                            ModifiedDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(737),
-                            PublishDate = new DateTime(2024, 3, 1, 0, 2, 30, 335, DateTimeKind.Local).AddTicks(738),
-                            Title = "Create post and add catetory"
                         });
                 });
 
