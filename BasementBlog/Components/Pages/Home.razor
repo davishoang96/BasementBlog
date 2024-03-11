@@ -32,15 +32,16 @@
         </MudItem>
     }
 
-    @foreach (var post in vm.Posts)
-    {
-        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-            <h6>Unclassified Posts</h6>
+    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+        <h6>Unclassified Posts</h6>
+        @foreach (var post in vm.Posts)
+        {
             <div>
                 <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
             </div>
-        </MudItem>
-    }
+        }
+    </MudItem>
+
 </div>
 
 @code

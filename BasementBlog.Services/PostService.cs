@@ -190,44 +190,44 @@ public class PostService : IPostService
             return categoryDTOs;
         }
 
-        return null;
+        return Enumerable.Empty<CategoryDTO>();
     }
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
     {
         var categoryModels = await db.Categories.Include(c => c.Posts).Where(s => s.Posts.Any()).ToListAsync();
-        if (categoryModels.Any())
+        if (!categoryModels.Any())
         {
-            var categoryDTOs = new List<CategoryDTO>();
-            foreach (var category in categoryModels)
-            {
-                List<PostDTO> postDTOs = new List<PostDTO>();
-
-                foreach (var post in category.Posts)
-                {
-                    var postDTO = new PostDTO
-                    {
-                        Id = post.Id,
-                        Title = post.Title,
-                        Body = null,
-                        Description = null,
-                        PublishDate = post.PublishDate,
-                    };
-
-                    postDTOs.Add(postDTO);
-                }
-
-                categoryDTOs.Add(new CategoryDTO
-                {
-                    CategoryId = category.CategoryId,
-                    Name = category.Name,
-                    PostDTOs = postDTOs,
-                });
-            }
-
-            return categoryDTOs;
+            return Enumerable.Empty<CategoryDTO>();
         }
 
-        return null;
+        var categoryDTOs = new List<CategoryDTO>();
+        foreach (var category in categoryModels)
+        {
+            List<PostDTO> postDTOs = new List<PostDTO>();
+
+            foreach (var post in category.Posts)
+            {
+                var postDTO = new PostDTO
+                {
+                    Id = post.Id,
+                    Title = post.Title,
+                    Body = null,
+                    Description = null,
+                    PublishDate = post.PublishDate,
+                };
+
+                postDTOs.Add(postDTO);
+            }
+
+            categoryDTOs.Add(new CategoryDTO
+            {
+                CategoryId = category.CategoryId,
+                Name = category.Name,
+                PostDTOs = postDTOs,
+            });
+        }
+
+        return categoryDTOs;
     }
 }

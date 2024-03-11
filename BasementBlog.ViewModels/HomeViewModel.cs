@@ -46,7 +46,7 @@ public partial class HomeViewModel : BaseViewModel
     public async Task GetCategoriesWithPost()
     {
         var result = await postService.GetCategoriesWithLightPostDTO();
-        if (result.Any())
+        if (result?.Any() == true)
         {
             Categoroies = result.ToList();
         }
