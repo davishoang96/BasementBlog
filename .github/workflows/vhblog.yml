@@ -44,7 +44,7 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.vhblog_FEE7 }}
+        publish-profile: ${{ secrets.vhblog_DE92 }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
     - name: Delete Artifact
       uses: GeekyEggo/delete-artifact@v4.1.0
