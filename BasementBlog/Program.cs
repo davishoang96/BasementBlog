@@ -12,8 +12,18 @@ using MudBlazor;
 using MudBlazor.Services;
 using BasementBlog.Components;
 using Microsoft.AspNetCore.HttpOverrides;
+using Autofac.Core;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+    // Only loopback proxies are allowed by default. Clear that restriction because forwarders are
+    // being enabled by explicit configuration.
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureContainer<ContainerBuilder>(builder =>
@@ -80,11 +90,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseForwardedHeaders(new ForwardedHeadersOptions
-{
-    ForwardedHeaders = ForwardedHeaders.XForwardedProto
-});
 
+app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
