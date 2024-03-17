@@ -15,15 +15,10 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Autofac.Core;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
+builder.WebHost.UseKestrel(o => o.ListenLocalhost(5000, builder =>
 {
-    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
-    // Only loopback proxies are allowed by default. Clear that restriction because forwarders are
-    // being enabled by explicit configuration.
-    options.KnownNetworks.Clear();
-    options.KnownProxies.Clear();
-});
+    builder.UseHttps();
+}));
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureContainer<ContainerBuilder>(builder =>
