@@ -75,8 +75,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 1,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1424),
-                            PublishDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1433),
+                            ModifiedDate = new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9017),
+                            PublishDate = new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9040),
                             Title = "Make the world better"
                         },
                         new
@@ -84,8 +84,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 2,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1435),
-                            PublishDate = new DateTime(2024, 3, 11, 23, 14, 50, 484, DateTimeKind.Local).AddTicks(1435),
+                            ModifiedDate = new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9043),
+                            PublishDate = new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9043),
                             Title = "AI take over the world"
                         });
                 });
