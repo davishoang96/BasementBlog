@@ -26,11 +26,19 @@ public class EditPostViewModel : BaseViewModel
     public string PostDescription { get; set; }
     public string PostBody { get; set; }
 
-    public IEnumerable<CategoryDTO> Categories { get; set; }
+    public List<CategoryDTO> Categories { get; set; }
 
     public async Task GetCategories()
     {
-        Categories = await postService.GetCategoryDTOs();
+        var result = await postService.GetCategoryDTOs();
+        Categories = result.ToList();
+        if (!Categories.Any())
+        {
+            Categories.Add(new CategoryDTO
+            {
+                Name = "General",
+            });
+        }
     }
 
     public string PostPreview => string.IsNullOrEmpty(PostBody) ? "Type here" : markdownService.TextToHtml(PostBody);
@@ -86,11 +94,6 @@ public class EditPostViewModel : BaseViewModel
 
     public async Task<IEnumerable<CategoryDTO>> SearchCategories(string value)
     {
-        if (!Categories.Any())
-        {
-            return null;
-        }
-
         if (string.IsNullOrEmpty(value))
         {
             return Categories;

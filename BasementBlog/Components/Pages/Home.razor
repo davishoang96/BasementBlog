@@ -41,8 +41,16 @@
             </div>
         }
     </MudItem>
-
 </div>
+
+<!-- Create post button -->
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <MudItem xs="12" Class="floating-button">
+            <MudFab Color="MudBlazor.Color.Primary" Link="/postEditor" StartIcon="@Icons.Material.Filled.Create" />
+        </MudItem>
+    </Authorized>
+</AuthorizeView>
 
 @code
 {

@@ -1,6 +1,7 @@
 using Auth0.AspNetCore.Authentication;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using BasementBlog.Components;
 using BasementBlog.Database;
 using BasementBlog.Services.Modules;
 using BasementBlog.ViewModels;
@@ -10,12 +11,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
-using BasementBlog.Components;
-using Microsoft.AspNetCore.HttpOverrides;
-using Autofac.Core;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseKestrel(o => o.ListenLocalhost(5000, builder =>
+builder.WebHost.UseKestrel(o => o.ListenLocalhost(int.Parse(builder.Configuration["General:PortNumber"]), builder =>
 {
     builder.UseHttps();
 }));
