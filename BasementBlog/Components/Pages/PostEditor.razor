@@ -1,5 +1,5 @@
 ﻿@page "/postEditor";
-@page "/postEditor/{postId:int}"
+@page "/postEditor/{postId}"
 @using BasementBlog.ViewModels;
 @using BasementBlog.DTO;
 
@@ -13,12 +13,11 @@
         </MudItem> *@
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
-            <MudTextField Label="Title" @bind-Value="@vm.PostTitle" Variant="Variant.Outlined" />
-
+            <MudTextField Label="Title" @bind-Value="@vm.PostTitle" Variant="Variant.Text" />
         </MudItem>
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
-            <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Outlined" />
+            <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
 
         </MudItem>
 
@@ -27,7 +26,7 @@
                              @bind-Value="@vm.SelectedCategory"
                              SearchFunc="@vm.SearchCategories"
                              ToStringFunc="@DisplayValue"
-                             Variant="Variant.Outlined" />
+                             Variant="Variant.Text" />
         </MudItem>
 
         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
@@ -53,7 +52,7 @@
     private EditPostViewModel vm { get; set; }
 
     [Parameter]
-    public int PostId { get; set; }
+    public string PostId { get; set; }
 
     private Func<CategoryDTO, string?> DisplayValue = item => item is null ? null : item.Name;
 

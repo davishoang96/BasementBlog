@@ -1,4 +1,4 @@
-﻿@page "/viewPost/{postId:int}"
+﻿@page "/viewPost/{postId}"
 @using BasementBlog.ViewModels;
 
 <div class="home-container">
@@ -21,7 +21,7 @@
     private PostViewModel vm { get; set; }
 
     [Parameter]
-    public int PostId { get; set; }
+    public string PostId { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

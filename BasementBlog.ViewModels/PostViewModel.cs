@@ -7,18 +7,20 @@ namespace BasementBlog.ViewModels;
 public class PostViewModel : BaseViewModel
 {
     private readonly IPostService postService;
+    private readonly ISqidService sqidService;
     private readonly IMarkdownService markdownService;
     private readonly NavigationManager navigationManager;
 
     [Parameter]
-    public int PostId { get; set; }
+    public string PostId { get; set; }
 
     public PostViewModel(IDialogService dialogService, NavigationManager navigationManager,
-        IPostService postService, IMarkdownService markdownService)
+        IPostService postService, IMarkdownService markdownService, ISqidService sqidService)
     {
         this.navigationManager = navigationManager;
         this.postService = postService;
         this.markdownService = markdownService;
+        this.sqidService = sqidService;
     }
 
     private string postTitle;
@@ -54,9 +56,10 @@ public class PostViewModel : BaseViewModel
         }
     }
 
-    public async Task GetPostById(int postId)
+    public async Task GetPostById(string postId)
     {
-        var post = await postService.GetPostById(postId);
+        var id = sqidService.DecryptId(postId);
+        var post = await postService.GetPostById(id);
         if (post != null)
         {
             PostTitle = post.Title;
