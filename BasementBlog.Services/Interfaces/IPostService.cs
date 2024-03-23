@@ -4,10 +4,10 @@ namespace BasementBlog.Services.Interfaces;
 
 public interface IPostService
 {
-    Task<PostDTO> GetPostById(int id);
-    Task<int> SaveOrUpdatePost(PostDTO post);
+    Task<PostDTO> GetPostById(string id);
+    Task<string> SaveOrUpdatePost(PostDTO post);
     Task<IEnumerable<PostDTO>> GetAllPosts();
-    Task<bool> DeletePost(int id);
+    Task<bool> DeletePost(string id);
     Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO();
     Task<IEnumerable<CategoryDTO>> GetCategoryDTOs();
     Task<IEnumerable<PostDTO>> GetUnclassifiedPosts();

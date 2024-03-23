@@ -7,7 +7,6 @@ namespace BasementBlog.ViewModels;
 public class PostViewModel : BaseViewModel
 {
     private readonly IPostService postService;
-    private readonly ISqidService sqidService;
     private readonly IMarkdownService markdownService;
     private readonly NavigationManager navigationManager;
 
@@ -15,12 +14,11 @@ public class PostViewModel : BaseViewModel
     public string PostId { get; set; }
 
     public PostViewModel(IDialogService dialogService, NavigationManager navigationManager,
-        IPostService postService, IMarkdownService markdownService, ISqidService sqidService)
+        IPostService postService, IMarkdownService markdownService)
     {
         this.navigationManager = navigationManager;
         this.postService = postService;
         this.markdownService = markdownService;
-        this.sqidService = sqidService;
     }
 
     private string postTitle;
@@ -58,8 +56,7 @@ public class PostViewModel : BaseViewModel
 
     public async Task GetPostById(string postId)
     {
-        var id = sqidService.DecryptId(postId);
-        var post = await postService.GetPostById(id);
+        var post = await postService.GetPostById(postId);
         if (post != null)
         {
             PostTitle = post.Title;

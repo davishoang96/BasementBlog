@@ -1,6 +1,5 @@
 ﻿using BasementBlog.Services.Interfaces;
 using Sqids;
-using static MudBlazor.Colors;
 
 namespace BasementBlog.Services;
 

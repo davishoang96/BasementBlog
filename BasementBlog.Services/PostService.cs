@@ -11,14 +11,17 @@ namespace BasementBlog.Services;
 public class PostService : IPostService
 {
     private readonly DatabaseContext db;
-    public PostService(DatabaseContext databaseContext)
+    private ISqidService sqidService;
+    public PostService(DatabaseContext databaseContext, ISqidService sqidService)
     {
+        this.sqidService = sqidService;
         db = databaseContext;
     }
 
-    public async Task<bool> DeletePost(int id)
+    public async Task<bool> DeletePost(string id)
     {
-        var model = db.Posts.SingleOrDefault(s => s.Id == id);
+        var postId = sqidService.DecryptId(id);
+        var model = db.Posts.SingleOrDefault(s => s.Id == postId);
         if (model is not null)
         {
             var result = db.Remove(model);
@@ -44,7 +47,7 @@ public class PostService : IPostService
         {
             r.Add(new PostDTO
             {
-                Id = model.Id,
+                Id = sqidService.EncryptId(model.Id),
                 Title = model.Title,
                 Body = model.Body,
                 PublishDate = model.PublishDate,
@@ -71,7 +74,7 @@ public class PostService : IPostService
         {
             r.Add(new PostDTO
             {
-                Id = model.Id,
+                Id = sqidService.EncryptId(model.Id),
                 Title = model.Title,
                 Body = model.Body,
                 PublishDate = model.PublishDate,
@@ -83,9 +86,10 @@ public class PostService : IPostService
         return r;
     }
 
-    public async Task<PostDTO> GetPostById(int id)
+    public async Task<PostDTO> GetPostById(string id)
     {
-        var model = db.Posts.Include(s => s.Category).SingleOrDefault(s => s.Id == id);
+        var postId = sqidService.DecryptId(id);
+        var model = db.Posts.Include(s => s.Category).SingleOrDefault(s => s.Id == postId);
         if (model is null)
         {
             return default!;
@@ -93,7 +97,7 @@ public class PostService : IPostService
 
         return new PostDTO
         {
-            Id = id,
+            Id = sqidService.EncryptId(model.Id),
             Title = model.Title,
             Body = model.Body,
             CategoryId = model.CategoryId,
@@ -122,18 +126,21 @@ public class PostService : IPostService
         return model;
     }
 
-    public async Task<int> SaveOrUpdatePost(PostDTO post)
+    public async Task<string> SaveOrUpdatePost(PostDTO post)
     {
         if (post is null)
         {
-            return -1;
+            return string.Empty;
         }
 
-        Post postModel;
+        Post? postModel = null;
         Category? categoryModel = null;
 
-        // TODO: fix this
-        postModel = db.Posts.SingleOrDefault(s => s.Id == post.Id);
+        if (post.Id is not null)
+        {
+            var postId = sqidService.DecryptId(post.Id);
+            postModel = db.Posts.Single(s => s.Id == postId);
+        }
 
         if (!string.IsNullOrEmpty(post.CategoryName))
         {
@@ -169,7 +176,7 @@ public class PostService : IPostService
         }
 
         await db.SaveChangesAsync();
-        return postModel.Id;
+        return sqidService.EncryptId(postModel.Id);
     }
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoryDTOs()
@@ -206,15 +213,15 @@ public class PostService : IPostService
         {
             List<PostDTO> postDTOs = new List<PostDTO>();
 
-            foreach (var post in category.Posts)
+            foreach (var model in category.Posts)
             {
                 var postDTO = new PostDTO
                 {
-                    Id = post.Id,
-                    Title = post.Title,
+                    Id = sqidService.EncryptId(model.Id),
+                    Title = model.Title,
                     Body = null,
                     Description = null,
-                    PublishDate = post.PublishDate,
+                    PublishDate = model.PublishDate,
                 };
 
                 postDTOs.Add(postDTO);

@@ -3,9 +3,10 @@ using BasementBlog.Database;
 using BasementBlog.Database.Models;
 using BasementBlog.DTO;
 using BasementBlog.Services;
+using BasementBlog.Services.Interfaces;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph.Models;
+using Moq;
 using Xunit;
 using Post = BasementBlog.Database.Models.Post;
 
@@ -13,6 +14,13 @@ namespace BasementBlog.Tests.RepoTest;
 
 public sealed class PostServiceTest : BaseDataContextTest
 {
+    private Mock<ISqidService> MockSqidService;
+
+    public PostServiceTest()
+    {
+        MockSqidService = new Mock<ISqidService>();
+    }
+
     [Fact]
     public async Task GetCategoriesWithPosts()
     {
@@ -34,7 +42,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(_dbContextOptions));
+        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
 
         // Act
         var result = await service.GetCategoriesWithLightPostDTO();
@@ -47,8 +55,8 @@ public sealed class PostServiceTest : BaseDataContextTest
     public async Task AddPostOK()
     {
         // Arrange
-        var service = new PostService(new DatabaseContext(_dbContextOptions));
-
+        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
         // Act
         var id = await service.SaveOrUpdatePost(new PostDTO
         {
@@ -60,10 +68,10 @@ public sealed class PostServiceTest : BaseDataContextTest
         });
 
         // Assert
-        id.Should().NotBe(0);
+        id.Should().Be("GOAIwe");
         using (var context = new DatabaseContext(_dbContextOptions))
         {
-            var model = context.Posts.SingleOrDefault(s => s.Id == id);
+            var model = context.Posts.SingleOrDefault(s => s.Title == "Hello");
             model.Body.Should().Be("Hello");
         }
     }
@@ -72,7 +80,8 @@ public sealed class PostServiceTest : BaseDataContextTest
     public async Task AddPostWithCategory()
     {
         // Arrange
-        var service = new PostService(new DatabaseContext(_dbContextOptions));
+        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
 
         // Act
         var id = await service.SaveOrUpdatePost(new PostDTO
@@ -89,12 +98,13 @@ public sealed class PostServiceTest : BaseDataContextTest
         {
             var rs = context.Posts
                 .Include(s => s.Category)
-                .FirstOrDefault(s => s.Id == id);
+                .FirstOrDefault(s => s.Title == "Hello");
 
             var ct = context.Categories.Count();
         }
     }
 
+    // TODO: Rewrite this unit test
     [Fact]
     public async Task UpdatePostOK()
     {
@@ -108,6 +118,8 @@ public sealed class PostServiceTest : BaseDataContextTest
             PublishDate = DateTime.Now,
             ModifiedDate = DateTime.Now,
         };
+
+        MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
 
         using (var context = new DatabaseContext(_dbContextOptions))
         {
@@ -156,7 +168,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(_dbContextOptions));
+        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
 
         // Act
         var result = await service.GetCategoryDTOs();

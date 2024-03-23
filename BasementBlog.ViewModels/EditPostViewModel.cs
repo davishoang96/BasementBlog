@@ -6,8 +6,6 @@ namespace BasementBlog.ViewModels;
 
 public class EditPostViewModel : BaseViewModel
 {
-    // TODO: Move Sqids logic to repo
-    private readonly ISqidService sqidService;
     private readonly IMarkdownService markdownService;
     private readonly IPostService postService;
     private readonly IBlogDialogService blogDialogService;
@@ -16,13 +14,12 @@ public class EditPostViewModel : BaseViewModel
     [Parameter] public string PostId { get; set; }
 
     public EditPostViewModel(IBlogDialogService blogDialogService, NavigationManager navigationManager,
-                             IMarkdownService markdownService, IPostService postService, ISqidService sqidService)
+                             IMarkdownService markdownService, IPostService postService)
     {
         this.markdownService = markdownService;
         this.postService = postService;
         this.navigationManager = navigationManager;
         this.blogDialogService = blogDialogService;
-        this.sqidService = sqidService;
     }
 
     public string PostTitle { get; set; }
@@ -56,8 +53,9 @@ public class EditPostViewModel : BaseViewModel
             return;
         }
 
-        id = sqidService.DecryptId(postId);
-        var post = await postService.GetPostById(id);
+        PostId = postId;
+
+        var post = await postService.GetPostById(postId);
         if (post != null)
         {
             PostTitle = post.Title;
@@ -77,7 +75,7 @@ public class EditPostViewModel : BaseViewModel
 
         var postId = await postService.SaveOrUpdatePost(new PostDTO
         {
-            Id = id,
+            Id = PostId,
             Title = PostTitle,
             Description = PostDescription,
             CategoryId = SelectedCategory != null ? SelectedCategory.CategoryId : 0,
@@ -85,9 +83,9 @@ public class EditPostViewModel : BaseViewModel
             Body = PostBody,
         });
 
-        if (postId > 0)
+        if (!string.IsNullOrEmpty(postId))
         {
-            navigationManager.NavigateTo($"/viewpost/{sqidService.EncryptId(postId)}");
+            navigationManager.NavigateTo($"/viewpost/{postId}");
             return true;
         }
         return false;

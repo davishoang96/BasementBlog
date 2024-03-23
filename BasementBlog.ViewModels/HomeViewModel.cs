@@ -8,7 +8,6 @@ namespace BasementBlog.ViewModels;
 public partial class HomeViewModel : BaseViewModel
 {
     private readonly IPostService postService;
-    private readonly ISqidService sqidService;
     private readonly NavigationManager navigationManager;
 
     public List<PostDTO> Posts = new List<PostDTO>();
@@ -17,15 +16,12 @@ public partial class HomeViewModel : BaseViewModel
 
     public IAsyncRelayCommand<PostDTO> DeletePostCommand { get; }
 
-    public HomeViewModel(NavigationManager navigationManager, IPostService postService, ISqidService sqidService)
+    public HomeViewModel(NavigationManager navigationManager, IPostService postService)
     {
         this.postService = postService;
         this.navigationManager = navigationManager;
-        this.sqidService = sqidService;
-
         DeletePostCommand = new AsyncRelayCommand<PostDTO>(ExecuteDeletePostCommand);
     }
-
 
     public async Task GetUnclassifiedPosts()
     {
@@ -54,13 +50,13 @@ public partial class HomeViewModel : BaseViewModel
         }
     }
 
-    public void EditPost(int postId)
+    public void EditPost(string postId)
     {
-        navigationManager.NavigateTo($"/postEditor/{sqidService.EncryptId(postId)}");
+        navigationManager.NavigateTo($"/postEditor/{postId}");
     }
 
-    public void ViewPost(int postId)
+    public void ViewPost(string postId)
     {
-        navigationManager.NavigateTo($"/viewpost/{sqidService.EncryptId(postId)}");
+        navigationManager.NavigateTo($"/viewpost/{postId}");
     }
 }
