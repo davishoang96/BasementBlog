@@ -48,16 +48,27 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BasementBlog.app
+          path: artifact
+
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.IP_SSH_DEVBLOG }}
+          username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+          password: ${{ secrets.KEY_SSH_DEVBLOG }}
+          port: 22
+          source: artifact
+          target: /var/www/
+      
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.IP_SSH_DEVBLOG }}
+          username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+          password: ${{ secrets.KEY_SSH_DEVBLOG }}
+          port: 22
+          script: sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
         with:
           name: BasementBlog.app
-
-  #     - name: Deploy to Azure Web App
-  #       id: deploy-to-webapp
-  #       uses: azure/webapps-deploy@v2
-  #       with:
-  #         app-name: 'devdiary'
-  #         slot-name: 'Production'
-  #         package: .
-  #         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FC72500D6FC641679382E680C6E7D738 }}
