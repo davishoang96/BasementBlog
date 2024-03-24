@@ -31,25 +31,28 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/BasementBlog/
 
-      # - name: Upload artifact for deployment job
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: .net-app
-      #     path: ${{env.DOTNET_ROOT}}/myapp
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: BasementBlog.app
+          path: ${{env.DOTNET_ROOT}}/BasementBlog/
 
-  # deploy:
-  #   runs-on: windows-latest
-  #   needs: build
-  #   environment:
-  #     name: 'Production'
-  #     url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Production'
     
-  #   steps:
-  #     - name: Download artifact from build job
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: .net-app
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: BasementBlog.app
       
+      - uses: geekyeggo/delete-artifact@v5
+        with:
+          name: BasementBlog.app
+
   #     - name: Deploy to Azure Web App
   #       id: deploy-to-webapp
   #       uses: azure/webapps-deploy@v2
