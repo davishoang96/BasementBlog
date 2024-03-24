@@ -50,6 +50,9 @@ jobs:
           name: BasementBlog.app
           path: artifact
 
+      - name: packaging artifact
+        run: zip -r artifact.zip artifact
+
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -57,9 +60,9 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: artifact/*
+          source: artifact.zip
           target: /var/www/
-      
+
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -67,7 +70,10 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          script: sudo systemctl restart vhdevblog
+          script: |
+            unzip artifact.zip -d /var/www/
+            rm artifact.zip
+            sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
         with:
