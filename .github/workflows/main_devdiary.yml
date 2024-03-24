@@ -57,7 +57,7 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: artifact
+          source: artifact/*
           target: /var/www/
       
       - name: executing remote ssh commands using password
