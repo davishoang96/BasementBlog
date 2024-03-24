@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: BasementBlog.app
-          path: artifact
+          path: ${{env.DOTNET_ROOT}}/BasementBlog/
 
   deploy:
     runs-on: ubuntu-latest
