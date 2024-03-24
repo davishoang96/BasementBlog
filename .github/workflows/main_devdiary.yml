@@ -25,20 +25,17 @@ jobs:
       - name: dotnet build
         run: dotnet build --configuration Release
 
-      # - name: dotnet test
-      #   run: dotnet test --verbosity normal
+      - name: dotnet test
+        run: dotnet test --verbosity normal
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/BasementBlog/
-
-      - name: packaging artifact
-        run: zip -r artifact.zip ${{env.DOTNET_ROOT}}/BasementBlog/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: BasementBlog.app
-          path: artifact.zip
+          path: artifact
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BasementBlog.app
-          path: artifact.zip
+          path: artifact
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
@@ -60,7 +57,7 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: artifact.zip
+          source: artifact
           target: /var/www/
 
       - name: executing remote ssh commands using password
@@ -72,9 +69,7 @@ jobs:
           port: 22
           script: |
             cd /var/www/
-            unzip -o artifact.zip -d /var/www/
-            rm artifact.zip
-            mv BasementBlog/* /var/www
+            mv artifact/* /var/www/
             sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
