@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Views", "Basem
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Utilities", "BasementBlog.Utilities\BasementBlog.Utilities.csproj", "{AC648F77-28DB-4FF6-88BD-C8402F79A909}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasementBlog.Tests", "BasementBlog.Tests\BasementBlog.Tests.csproj", "{AD65C7FD-FEF6-4630-B628-1041E15129FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Tests", "BasementBlog.Tests\BasementBlog.Tests.csproj", "{AD65C7FD-FEF6-4630-B628-1041E15129FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
