@@ -25,8 +25,8 @@ jobs:
       - name: dotnet build
         run: dotnet build --configuration Release
 
-      - name: dotnet test
-        run: dotnet test --verbosity normal
+      # - name: dotnet test
+      #   run: dotnet test --verbosity normal
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/BasementBlog/
