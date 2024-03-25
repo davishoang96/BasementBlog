@@ -33,7 +33,7 @@ jobs:
 
       - name: Create artifact zip
         run: |
-          zip -r artifact.zip ${{env.DOTNET_ROOT}}/BasementBlog/
+          zip -r artifact.zip ${{env.DOTNET_ROOT}}/BasementBlog/home/runner/.dotnet/BasementBlog/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BasementBlog.app
-          path: artifact.zip
+          path: /artifact.zip
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: artifact.zip
+          source: /artifact.zip
           target: /root/
 
       # - name: executing remote ssh commands using password
