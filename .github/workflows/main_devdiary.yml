@@ -52,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BasementBlog.app
-          path: /staging/
+          path: staging/
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: /staging/artifact.zip
+          source: staging/artifact.zip
           target: /root/
 
       # - name: executing remote ssh commands using password
