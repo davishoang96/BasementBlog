@@ -31,11 +31,15 @@ jobs:
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/BasementBlog/
 
+      - name: Create artifact zip
+        run: |
+          zip -r artifact.zip ${{env.DOTNET_ROOT}}/BasementBlog/
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: BasementBlog.app
-          path: ${{env.DOTNET_ROOT}}/BasementBlog/
+          path: artifact.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: BasementBlog.app
-          path: artifact
+          path: artifact.zip
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
@@ -57,20 +61,20 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: artifact
+          source: artifact.zip
           target: /var/www/
 
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.IP_SSH_DEVBLOG }}
-          username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
-          password: ${{ secrets.KEY_SSH_DEVBLOG }}
-          port: 22
-          script: |
-            cd /var/www/
-            mv artifact/* /var/www/
-            sudo systemctl restart vhdevblog
+      # - name: executing remote ssh commands using password
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.IP_SSH_DEVBLOG }}
+      #     username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+      #     password: ${{ secrets.KEY_SSH_DEVBLOG }}
+      #     port: 22
+      #     script: |
+      #       cd /var/www/
+      #       mv artifact/* /var/www/
+      #       sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
         with:
