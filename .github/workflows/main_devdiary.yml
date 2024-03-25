@@ -38,7 +38,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: BasementBlog.app
+          name: BasementBlogApp
           path: artifact.zip
 
   deploy:
@@ -51,8 +51,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: BasementBlog.app
-          path: staging/
+          name: BasementBlogApp
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
@@ -61,7 +60,7 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: staging/artifact.zip
+          source: artifact.zip
           target: /root/
 
       # - name: executing remote ssh commands using password
