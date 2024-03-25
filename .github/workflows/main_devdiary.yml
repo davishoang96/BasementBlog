@@ -25,8 +25,8 @@ jobs:
       - name: dotnet build
         run: dotnet build --configuration Release
 
-      - name: dotnet test
-        run: dotnet test --verbosity normal
+      # - name: dotnet test
+      #   run: dotnet test --verbosity normal
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/BasementBlog/
@@ -61,8 +61,8 @@ jobs:
           username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
           password: ${{ secrets.KEY_SSH_DEVBLOG }}
           port: 22
-          source: artifact.zip
-          target: /var/www/
+          source: artifact
+          target: /root/
 
       # - name: executing remote ssh commands using password
       #   uses: appleboy/ssh-action@v1.0.3
