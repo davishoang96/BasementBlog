@@ -33,7 +33,7 @@ jobs:
 
       - name: Create artifact zip
         run: |
-          zip -r artifact.zip ${{env.DOTNET_ROOT}}/BasementBlog/home/runner/.dotnet/BasementBlog/
+          zip -r artifact.zip ${{env.DOTNET_ROOT}}/BasementBlog/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
