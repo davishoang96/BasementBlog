@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - devdiary
+name: build & deploy to binarylane
 
 on:
   push:
@@ -63,17 +63,18 @@ jobs:
           source: artifact.zip
           target: /root/
 
-      # - name: executing remote ssh commands using password
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.IP_SSH_DEVBLOG }}
-      #     username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
-      #     password: ${{ secrets.KEY_SSH_DEVBLOG }}
-      #     port: 22
-      #     script: |
-      #       cd /var/www/
-      #       mv artifact/* /var/www/
-      #       sudo systemctl restart vhdevblog
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.IP_SSH_DEVBLOG }}
+          username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+          password: ${{ secrets.KEY_SSH_DEVBLOG }}
+          port: 22
+          script: |
+            sudo systemctl stop vhdevblog
+            unzip -o -j /root/artifact.zip 'home/runner/.dotnet/BasementBlog/*' -d /var/www/
+            rm /root/artifact.zip
+            sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
         with:
