@@ -32,6 +32,10 @@ public class PostService : IPostService
         return false;
     }
 
+    /// <summary>
+    /// Get all posts without body (lightweight posts)
+    /// </summary>
+    /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetAllPosts()
     {
         var result = db.Posts;
@@ -49,7 +53,7 @@ public class PostService : IPostService
             {
                 Id = sqidService.EncryptId(model.Id),
                 Title = model.Title,
-                Body = model.Body,
+                Body = null,
                 PublishDate = model.PublishDate,
                 Description = model.Description,
                 ModifiedDate = model.ModifiedDate,
@@ -59,6 +63,10 @@ public class PostService : IPostService
         return r;
     }
 
+    /// <summary>
+    /// Get all posts without body and categories (lightweight posts)
+    /// </summary>
+    /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetUnclassifiedPosts()
     {
         var result = db.Posts.Where(s => s.CategoryId == null);
@@ -76,7 +84,7 @@ public class PostService : IPostService
             {
                 Id = sqidService.EncryptId(model.Id),
                 Title = model.Title,
-                Body = model.Body,
+                Body = null,
                 PublishDate = model.PublishDate,
                 Description = model.Description,
                 ModifiedDate = model.ModifiedDate,

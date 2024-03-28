@@ -43,9 +43,6 @@ public class EditPostViewModel : BaseViewModel
 
     public string PostPreview => string.IsNullOrEmpty(PostBody) ? "Type here" : markdownService.TextToHtml(PostBody);
 
-    // TODO: Clean up
-    private int id { get; set; }
-
     public async Task GetPostById(string postId)
     {
         if (postId == default)
