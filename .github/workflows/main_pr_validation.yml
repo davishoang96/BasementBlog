@@ -8,10 +8,12 @@ on:
       - opened
 
 jobs:
-  main_branch_pr_job:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout 
+        uses: actions/checkout@v4
+
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
