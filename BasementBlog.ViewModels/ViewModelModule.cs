@@ -10,6 +10,6 @@ public class ViewModelModule : Module
         builder.RegisterType<HomeViewModel>().InstancePerDependency();
         builder.RegisterType<PostViewModel>().InstancePerDependency();
         builder.RegisterType<EditPostViewModel>().InstancePerDependency();
-        builder.RegisterType<AdminDashboardViewModel>().InstancePerDependency();
+        builder.RegisterType<DashboardViewModel>().InstancePerDependency();
     }
 }

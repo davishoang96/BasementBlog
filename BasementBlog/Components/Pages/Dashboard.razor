@@ -1,11 +1,27 @@
 ﻿@page "/dashboard"
 @using BasementBlog.ViewModels;
 
-<h3>Dashboard</h3>
+<MudDataGrid Items="@vm.Posts" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+    <Columns>
+        <PropertyColumn Property="p => p.Id" />
+        <PropertyColumn Property="p => p.Title" />
+        <PropertyColumn Property="p => p.Description" Title="Description" />
+        <PropertyColumn Property="p => p.CategoryName" Title="Category" />
+        <PropertyColumn Property="p => p.PublishDate" Title="Publish Date" />
+        <PropertyColumn Property="p => p.ModifiedDate" Title="Modified Date" />
+        <TemplateColumn CellClass="d-flex justify-end">
+            <CellTemplate>
+                <MudStack Row>
+                    <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePost(context.Item.Id)" StartIcon="@Icons.Material.Filled.Delete" />
+                </MudStack>
+            </CellTemplate>
+        </TemplateColumn>
+    </Columns>
+</MudDataGrid>
 
 @code {
     [Inject]
-    private AdminDashboardViewModel vm { get; set; }
+    private DashboardViewModel vm { get; set; }
 
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
