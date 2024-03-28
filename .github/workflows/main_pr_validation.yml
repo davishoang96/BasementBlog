@@ -1,4 +1,4 @@
-name: Main Branch PR Trigger
+name: BTA.BasementBlog
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
       - main
     types:
       - opened
+      - synchronize
 
 jobs:
   build:

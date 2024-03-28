@@ -26,8 +26,10 @@ public sealed class PostServiceTest : BaseDataContextTest
     {
         // Arrange
         var fixture = new Fixture();
+        var postId = 100;
         var posts = fixture.Build<Post>()
             .Without(s => s.Category)
+            .With(s => s.Id, () => postId++)
             .With(s => s.CategoryId, 25).CreateMany(17);
 
         using (var context = new DatabaseContext(_dbContextOptions))
