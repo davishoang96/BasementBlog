@@ -1,5 +1,6 @@
 ﻿@page "/dashboard"
 @using BasementBlog.ViewModels;
+@attribute [Authorize(Roles = "Admin")]
 
 <MudContainer Class="home-container">
     <MudDataGrid Items="@vm.Posts" Filterable="false" SortMode="@SortMode.None" Groupable="false">
@@ -32,11 +33,5 @@
     protected override async Task OnInitializedAsync()
     {
         await vm.GetAllPosts();
-
-        if (authenticationState is not null)
-        {
-            var state = await authenticationState;
-            var username = state?.User?.Identity?.Name ?? string.Empty;
-        }
     }
 }
