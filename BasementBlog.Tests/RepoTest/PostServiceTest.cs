@@ -179,4 +179,30 @@ public sealed class PostServiceTest : BaseDataContextTest
         result.Should().NotBeNull();
         result.Count().Should().Be(5);
     }
+
+    [Fact]
+    public async Task GetPostWithoutBody()
+    {
+        // Arrange
+        var fixture = new Fixture();
+        var id = 1000;
+        var posts = fixture.Build<Post>().With(s => s.Id, () => id++)
+            .Without(s => s.Category)
+            .Without(s => s.CategoryId)
+            .CreateMany(5);
+
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            context.AddRange(posts);
+            await context.SaveChangesAsync();
+        }
+
+        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+
+        // Act
+        var result = await service.GetAllPosts();
+
+        // Assert
+        result.All(s => s.Body == null).Should().BeTrue();
+    }
 }
