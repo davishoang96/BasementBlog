@@ -38,7 +38,7 @@ public class PostService : IPostService
     /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetAllPosts()
     {
-        var result = db.Posts;
+        var result = db.Posts.Include(p => p.Category);
 
         if (result == null || result.IsNullOrEmpty())
         {
@@ -54,6 +54,7 @@ public class PostService : IPostService
                 Id = sqidService.EncryptId(model.Id),
                 Title = model.Title,
                 Body = null,
+                CategoryName = model.Category?.Name,
                 PublishDate = model.PublishDate,
                 Description = model.Description,
                 ModifiedDate = model.ModifiedDate,

@@ -16,7 +16,7 @@ public class DashboardViewModel : BaseViewModel
     private IList<PostDTO> posts;
     public List<PostDTO> Posts = new List<PostDTO>();
 
-    public async Task GetUnclassifiedPosts()
+    public async Task GetAllPosts()
     {
         var result = await postService.GetAllPosts();
         if (result.Any())

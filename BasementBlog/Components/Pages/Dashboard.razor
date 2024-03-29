@@ -1,23 +1,26 @@
 ﻿@page "/dashboard"
 @using BasementBlog.ViewModels;
 
-<MudDataGrid Items="@vm.Posts" Filterable="false" SortMode="@SortMode.None" Groupable="false">
-    <Columns>
-        <PropertyColumn Property="p => p.Id" />
-        <PropertyColumn Property="p => p.Title" />
-        <PropertyColumn Property="p => p.Description" Title="Description" />
-        <PropertyColumn Property="p => p.CategoryName" Title="Category" />
-        <PropertyColumn Property="p => p.PublishDate" Title="Publish Date" />
-        <PropertyColumn Property="p => p.ModifiedDate" Title="Modified Date" />
-        <TemplateColumn CellClass="d-flex justify-end">
-            <CellTemplate>
-                <MudStack Row>
-                    <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePost(context.Item.Id)" StartIcon="@Icons.Material.Filled.Delete" />
-                </MudStack>
-            </CellTemplate>
-        </TemplateColumn>
-    </Columns>
-</MudDataGrid>
+<MudContainer Class="home-container">
+    <MudDataGrid Items="@vm.Posts" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+        <Columns>
+            <PropertyColumn Property="p => p.Title" />
+            <PropertyColumn Property="p => p.Description" Title="Description" />
+            <PropertyColumn Property="p => p.CategoryName" Title="Category" />
+            <PropertyColumn Property="p => p.PublishDate" Title="Publish Date" />
+            <PropertyColumn Property="p => p.ModifiedDate" Title="Modified Date" />
+            <TemplateColumn CellClass="d-flex justify-end">
+                <CellTemplate>
+                    <MudStack Row>
+                        <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePost(context.Item.Id)"
+                                StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small"/>
+                    </MudStack>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+    </MudDataGrid>
+</MudContainer>
+
 
 @code {
     [Inject]
@@ -28,7 +31,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await vm.GetUnclassifiedPosts();
+        await vm.GetAllPosts();
 
         if (authenticationState is not null)
         {
