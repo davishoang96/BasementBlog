@@ -1,5 +1,6 @@
 using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
+using Microsoft.AspNetCore.Components;
 
 namespace BasementBlog.ViewModels;
 
@@ -7,10 +8,14 @@ public class DashboardViewModel : BaseViewModel
 {
     private IPostService postService;
     private IBlogDialogService blogDialogService;
-    public DashboardViewModel(IPostService postService, IBlogDialogService blogDialogService)
+    private readonly NavigationManager navigationManager;
+
+    public DashboardViewModel(IPostService postService, IBlogDialogService blogDialogService,
+        NavigationManager navigationManager)
     {
         this.blogDialogService = blogDialogService;
         this.postService = postService;
+        this.navigationManager = navigationManager;
     }
 
     public List<PostDTO> Posts = new List<PostDTO>();
@@ -42,5 +47,23 @@ public class DashboardViewModel : BaseViewModel
         {
             await blogDialogService.ShowDialog("Warning", $"Unable to delete post with id = {id}");
         }
+    }
+
+    public async Task RestorePost(string id)
+    {
+        if (await postService.RestoreDeletedPost(id))
+        {
+            var p = Posts.Single(s => s.Id == id);
+            p.IsDelete = false;
+        }
+        else
+        {
+            await blogDialogService.ShowDialog("Warning", $"Unable to restore deleted post with id = {id}");
+        }
+    }
+
+    public void ViewPost(string postId)
+    {
+        navigationManager.NavigateTo($"/viewpost/{postId}");
     }
 }

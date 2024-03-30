@@ -58,6 +58,26 @@ public class PostService : IPostService
     }
 
     /// <summary>
+    /// Restore soft deleted post by Id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<bool> RestoreDeletedPost(string id)
+    {
+        var postId = sqidService.DecryptId(id);
+        var model = db.Posts.SingleOrDefault(s => s.Id == postId);
+        if (model is not null)
+        {
+            model.IsDeleted = false;
+            db.Update(model);
+            await db.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Get all posts without body (lightweight posts)
     /// </summary>
     /// <returns></returns>
