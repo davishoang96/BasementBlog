@@ -18,6 +18,11 @@ public class PostService : IPostService
         db = databaseContext;
     }
 
+    /// <summary>
+    /// Hard delete a post by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     public async Task<bool> DeletePost(string id)
     {
         var postId = sqidService.DecryptId(id);
@@ -25,6 +30,26 @@ public class PostService : IPostService
         if (model is not null)
         {
             var result = db.Remove(model);
+            await db.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Mark posts as delete by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    public async Task<bool> SoftDeletePost(string id)
+    {
+        var postId = sqidService.DecryptId(id);
+        var model = db.Posts.SingleOrDefault(s => s.Id == postId);
+        if (model is not null)
+        {
+            model.IsDeleted = true;
+            db.Update(model);
             await db.SaveChangesAsync();
             return true;
         }
@@ -58,6 +83,7 @@ public class PostService : IPostService
                 PublishDate = model.PublishDate,
                 Description = model.Description,
                 ModifiedDate = model.ModifiedDate,
+                IsDelete = model.IsDeleted,
             });
         }
 
@@ -70,7 +96,7 @@ public class PostService : IPostService
     /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetUnclassifiedPosts()
     {
-        var result = db.Posts.Where(s => s.CategoryId == null);
+        var result = db.Posts.Where(s => s.CategoryId == null && s.IsDeleted == false);
 
         if (result == null || result.IsNullOrEmpty())
         {
@@ -211,7 +237,7 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
     {
-        var categoryModels = await db.Categories.Include(c => c.Posts).Where(s => s.Posts.Any()).ToListAsync();
+        var categoryModels = await db.Categories.Include(c => c.Posts).Where(s => s.Posts.Any(s => s.IsDeleted == null || s.IsDeleted == false)).ToListAsync();
         if (!categoryModels.Any())
         {
             return Enumerable.Empty<CategoryDTO>();

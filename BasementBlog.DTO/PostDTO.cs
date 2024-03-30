@@ -11,4 +11,5 @@ public class PostDTO
 
     public DateTime PublishDate { get; set; }
     public DateTime ModifiedDate { get; set; }
+    public bool? IsDelete { get; set; }
 }
