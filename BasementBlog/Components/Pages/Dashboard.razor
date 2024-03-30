@@ -5,7 +5,7 @@
 <MudContainer Class="home-container">
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
         <MudTabPanel Text="Posts">
-            <MudDataGrid Items="@vm.Posts" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+            <MudDataGrid Items="@vm.Posts.Where(s=>s.IsDelete == null || s.IsDelete == false)" Filterable="false" SortMode="@SortMode.None" Groupable="false">
                 <Columns>
                     <PropertyColumn Property="p => p.Title" />
                     <PropertyColumn Property="p => p.Description" Title="Description" />
@@ -15,11 +15,30 @@
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
                             <MudStack Row>
-                                <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.DeletePost(context.Item.Id)"
+                                <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.SoftDeletePost(context.Item.Id)"
                                         StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small" />
                             </MudStack>
                         </CellTemplate>
                     </TemplateColumn>
+                </Columns>
+            </MudDataGrid>
+        </MudTabPanel>
+        <MudTabPanel Text="Deleted Posts">
+            <MudDataGrid Items="@vm.Posts.Where(s=>s.IsDelete.HasValue && s.IsDelete.Value == true)" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+                <Columns>
+                    <PropertyColumn Property="p => p.Title" />
+                    <PropertyColumn Property="p => p.Description" Title="Description" />
+                    <PropertyColumn Property="p => p.CategoryName" Title="Category" />
+                    <PropertyColumn Property="p => p.PublishDate" Title="Publish Date" />
+                    <PropertyColumn Property="p => p.ModifiedDate" Title="Modified Date" />
+                    @* <TemplateColumn CellClass="d-flex justify-end">
+                        <CellTemplate>
+                            <MudStack Row>
+                                <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.SoftDeletePost(context.Item.Id)"
+                                        StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small" />
+                            </MudStack>
+                        </CellTemplate>
+                    </TemplateColumn> *@
                 </Columns>
             </MudDataGrid>
         </MudTabPanel>

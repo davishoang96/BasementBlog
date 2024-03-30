@@ -11,4 +11,5 @@ public interface IPostService
     Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO();
     Task<IEnumerable<CategoryDTO>> GetCategoryDTOs();
     Task<IEnumerable<PostDTO>> GetUnclassifiedPosts();
+    Task<bool> SoftDeletePost(string id);
 }

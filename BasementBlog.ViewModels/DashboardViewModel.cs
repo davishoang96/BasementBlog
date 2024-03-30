@@ -31,12 +31,12 @@ public class DashboardViewModel : BaseViewModel
         }
     }
 
-    // TODO: Mark posts as deleted
-    public async Task DeletePost(string id)
+    public async Task SoftDeletePost(string id)
     {
-        if (await postService.DeletePost(id))
+        if (await postService.SoftDeletePost(id))
         {
-            Posts.Remove(Posts.Single(s => s.Id == id));
+            var p = Posts.Single(s => s.Id == id);
+            p.IsDelete = true;
         }
         else
         {

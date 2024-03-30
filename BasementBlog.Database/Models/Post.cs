@@ -12,4 +12,5 @@ public class Post
     public required string Description { get; set; }
     public DateTime PublishDate { get; set; }
     public DateTime ModifiedDate { get; set; }
+    public bool? IsDeleted { get; set; }
 }

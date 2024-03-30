@@ -186,14 +186,22 @@ public sealed class PostServiceTest : BaseDataContextTest
         // Arrange
         var fixture = new Fixture();
         var id = 1000;
+
         var posts = fixture.Build<Post>().With(s => s.Id, () => id++)
             .Without(s => s.Category)
             .Without(s => s.CategoryId)
             .CreateMany(5);
 
+        var deletedPosts = fixture.Build<Post>().With(s => s.Id, () => id++)
+            .Without(s => s.Category)
+            .Without(s => s.CategoryId)
+            .With(s => s.IsDeleted, true)
+            .CreateMany(5);
+
         using (var context = new DatabaseContext(_dbContextOptions))
         {
             context.AddRange(posts);
+            context.AddRange(deletedPosts);
             await context.SaveChangesAsync();
         }
 
@@ -204,5 +212,40 @@ public sealed class PostServiceTest : BaseDataContextTest
 
         // Assert
         result.All(s => s.Body == null).Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task SoftDeletePost()
+    {
+        // Arrange
+        var post = new Post
+        {
+            Id = 19,
+            Description = "Hello",
+            Body = "Hello",
+            Title = "Hello",
+            PublishDate = DateTime.Now,
+            ModifiedDate = DateTime.Now,
+        };
+
+        MockSqidService.Setup(s => s.DecryptId("TEST91")).Returns(19);
+
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            context.Posts.Add(post);
+            await context.SaveChangesAsync();
+        }
+
+        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+
+        // Act
+        var result = service.SoftDeletePost("TEST91");
+
+        // Assert
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            var thePost = context.Posts.SingleOrDefault(s => s.Id == 19);
+            thePost.IsDeleted.Should().BeTrue();
+        }
     }
 }
