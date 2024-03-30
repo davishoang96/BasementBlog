@@ -13,18 +13,25 @@ public class DashboardViewModel : BaseViewModel
         this.postService = postService;
     }
 
-    private IList<PostDTO> posts;
     public List<PostDTO> Posts = new List<PostDTO>();
+    public List<CategoryDTO> Categories = new List<CategoryDTO>();
 
-    public async Task GetAllPosts()
+    public async Task InitialDashboard()
     {
-        var result = await postService.GetAllPosts();
-        if (result.Any())
+        var posts = await postService.GetAllPosts();
+        if (posts.Any())
         {
-            Posts = result.ToList();
+            Posts = posts.ToList();
+        }
+
+        var cate = await postService.GetCategoryDTOs();
+        if (cate.Any())
+        {
+            Categories = cate.ToList();
         }
     }
 
+    // TODO: Mark posts as deleted
     public async Task DeletePost(string id)
     {
         if (await postService.DeletePost(id))
