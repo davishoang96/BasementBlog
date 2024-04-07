@@ -30,6 +30,9 @@ msbuild.log
 msbuild.err
 msbuild.wrn
 
+# Images
+Images/
+
 # Visual Studio 2015
 .vs/
 

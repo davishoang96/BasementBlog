@@ -2,23 +2,20 @@
 @page "/postEditor/{postId}"
 @using BasementBlog.ViewModels;
 @using BasementBlog.DTO;
+@using System.Text.Json.Serialization
+@using Newtonsoft.Json
+@inject IJSRuntime JSRuntime
 
 @attribute [Authorize(Roles = "Admin")]
 
  <MudContainer Class="home-container">
      <MudGrid>
-         <!-- Title and Description inputs -->
-        @* <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            
-        </MudItem> *@
-
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
-            <MudTextField Label="Title" @bind-Value="@vm.PostTitle" Variant="Variant.Text" />
+            <MudTextField ShrinkLabel Label="Title" @bind-Value="@vm.PostTitle" Variant="Variant.Text" />
         </MudItem>
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
-            <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
-
+            <MudTextField ShrinkLabel Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
         </MudItem>
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
@@ -28,9 +25,9 @@
                              ToStringFunc="@DisplayValue"
                              Variant="Variant.Text" />
         </MudItem>
-
-        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <MudTextField Multiline Rows="19" Immediate="true" AutoGrow Label="Body" @bind-Value="@vm.PostBody" />
+        
+        <MudItem Style="height: auto" xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <MudTextField ShrinkLabel id="drop-area" Multiline Rows="19" Immediate="true" AutoGrow Label="Body" @bind-Value="@vm.PostBody"></MudTextField>
         </MudItem>
 
         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
@@ -44,7 +41,110 @@
      <MudItem xs="12" Class="floating-button">
          <MudFab Color="MudBlazor.Color.Primary" OnClick="@vm.SaveOrUpdatePostCommand" StartIcon="@Icons.Material.Filled.Save" />
      </MudItem>
+
 </MudContainer>
+
+<style>
+    #drop-area {
+
+    }
+
+    #drop-area.highlight {
+        border: 2px dashed #007bff;
+        border-radius: 10px;
+    }
+</style>
+
+<script async>
+    window.setCursorPosition = function (elementId, position) {
+        var element = document.getElementById(elementId);
+        if (element && element.setSelectionRange) {
+            element.focus();
+            element.setSelectionRange(position, position);
+        }
+    };
+
+    window.insertTextAtCursor = function (elementId, text) {
+        var element = document.getElementById(elementId);
+        if (element) {
+            var startPos = element.selectionStart;
+            var endPos = element.selectionEnd;
+            var scrollTop = element.scrollTop;
+            element.value = element.value.substring(0, startPos) + text + element.value.substring(endPos, element.value.length);
+            element.focus();
+            element.setSelectionRange(startPos + text.length, startPos + text.length);
+            element.scrollTop = scrollTop;
+        }
+    };
+
+    window.uploadImage = async function (dotNetObject) {
+        var dropArea = document.getElementById('drop-area');
+        if (dropArea) {
+
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Highlight drop area when dragging over
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight(e) {
+                dropArea.classList.add('highlight');
+            }
+
+            function unhighlight(e) {
+                dropArea.classList.remove('highlight');
+            }
+
+            // Handle dropped files
+            dropArea.addEventListener('drop', handleDrop, false);
+
+            async function handleDrop(e) {
+                e.preventDefault();
+
+                var dt = e.dataTransfer;
+                var files = dt.files;
+
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    await readFile(file);
+                }
+            }
+
+            async function readFile(file) {
+                var reader = new FileReader();
+                reader.onload = async function (event) {
+                    var byteArray = new Uint8Array(event.target.result);
+                    var jsonObject = {
+                        "name": file.name,
+                        "type": file.type,
+                        "data": Array.from(byteArray)
+                    };
+                    dotNetObject.invokeMethodAsync('HandleFiles', jsonObject).then(resolve).catch(reject);
+                };
+
+                reader.onerror = function (event) {
+                    console.error("File could not be read! Code " + event.target.error.code);
+                    reject(event.target.error);
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+        }
+    };
+</script>
 
 @code
 {
@@ -60,5 +160,21 @@
     {
         await vm.GetCategories();
         await vm.GetPostById(PostId);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("uploadImage", dotNetReference);
+        }
+    }
+
+    [JSInvokable("HandleFiles")]
+    public async Task HandleFiles(object value)
+    {
+        var result = await vm.HandleFiles(value);
+        await JSRuntime.InvokeVoidAsync("insertTextAtCursor", "drop-area", result);
     }
 }

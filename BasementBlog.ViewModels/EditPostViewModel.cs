@@ -1,12 +1,15 @@
 ﻿using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
+using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 
 namespace BasementBlog.ViewModels;
 
 public class EditPostViewModel : BaseViewModel
 {
     private readonly IMarkdownService markdownService;
+    private readonly IFileService fileService;
     private readonly IPostService postService;
     private readonly IBlogDialogService blogDialogService;
     private readonly NavigationManager navigationManager;
@@ -14,12 +17,13 @@ public class EditPostViewModel : BaseViewModel
     [Parameter] public string PostId { get; set; }
 
     public EditPostViewModel(IBlogDialogService blogDialogService, NavigationManager navigationManager,
-                             IMarkdownService markdownService, IPostService postService)
+                             IMarkdownService markdownService, IPostService postService, IFileService fileService)
     {
         this.markdownService = markdownService;
         this.postService = postService;
         this.navigationManager = navigationManager;
         this.blogDialogService = blogDialogService;
+        this.fileService = fileService;
     }
 
     public string PostTitle { get; set; }
@@ -107,5 +111,16 @@ public class EditPostViewModel : BaseViewModel
         }
 
         return result;
+    }
+
+    public async Task<string> HandleFiles(object value)
+    {
+        if (value is null)
+        {
+            await blogDialogService.ShowDialog("Warning", "Cannot leave those field empty");
+            return string.Empty;
+        }
+
+        return await fileService.UploadImage(value);
     }
 }

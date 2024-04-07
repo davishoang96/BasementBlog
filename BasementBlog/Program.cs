@@ -9,6 +9,7 @@ using Blazorise;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -30,6 +31,7 @@ builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
@@ -42,6 +44,11 @@ builder.Services
     .AddMudServices()
     .AddBlazorise()
     .AddMudMarkdownServices();
+
+builder.Services.AddServerSideBlazor().AddHubOptions(options =>
+{
+    options.MaximumReceiveMessageSize = null; // no limit or use a number
+});
 
 builder.Services.AddAuth0WebAppAuthentication(o =>
 {
@@ -87,7 +94,13 @@ if (!app.Environment.IsDevelopment())
 app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+var imagesDirectory = Path.Combine(Environment.CurrentDirectory, "Images");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imagesDirectory),
+    RequestPath = "/Images" // Change this to whatever URL path you prefer
+});
+
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
