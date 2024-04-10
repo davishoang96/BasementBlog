@@ -13,7 +13,6 @@
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
             <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
-
         </MudItem>
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4">
@@ -33,7 +32,7 @@
         </MudItem>
 
         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <div class="preview-container">
+            <div class="preview-container inter-text-field">
                 @((MarkupString)vm.PostPreview)
             </div>
         </MudItem>
