@@ -8,7 +8,7 @@
 
 @attribute [Authorize(Roles = "Admin")]
 
- <MudContainer Class="home-container">
+ <MudContainer MaxWidth="MaxWidth.ExtraLarge">
      <MudGrid>
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
             <MudTextField ShrinkLabel Label="Title" @bind-Value="@vm.PostTitle" Variant="Variant.Text" />
@@ -18,7 +18,7 @@
             <MudTextField ShrinkLabel Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
         </MudItem>
 
-        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4">
             <MudAutocomplete T="CategoryDTO" Label="Category"
                              @bind-Value="@vm.SelectedCategory"
                              SearchFunc="@vm.SearchCategories"
@@ -28,6 +28,13 @@
         
         <MudItem Style="height: auto" xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
             <MudTextField ShrinkLabel id="drop-area" Multiline Rows="19" Immediate="true" AutoGrow Label="Body" @bind-Value="@vm.PostBody"></MudTextField>
+
+        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <MudTextField id="post-body"
+                          Immediate="true"
+                          DisableUnderLine="true"
+                          AutoGrow Label="Body"
+                          @bind-Value="@vm.PostBody" />
         </MudItem>
 
         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
