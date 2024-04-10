@@ -11,10 +11,10 @@
             <AuthorizeView Roles="Admin">
                 <Authorized>
                     <MudMenuItem Href="/dashboard" Icon="@Icons.Material.Filled.Create">Dashboard</MudMenuItem>
-                    <MudMenuItem Href="/" Icon="@Icons.Material.Filled.List">Work Logs</MudMenuItem>
+                    <MudMenuItem Href="/" Disabled="true" Icon="@Icons.Material.Filled.List">Work Logs</MudMenuItem>
                 </Authorized>
             </AuthorizeView>
-            <MudMenuItem Href="/about" Icon="@Icons.Material.Filled.ContactMail">Resume</MudMenuItem>
+            <MudMenuItem Href="/about" Icon="@Icons.Material.Filled.ContactMail">About</MudMenuItem>
         </MudMenu>
         <MudSpacer />
         @* <MudSwitch @bind-Checked="@_isDarkMode" Color="MudBlazor.Color.Primary" Class="ma-4" T="bool" Label="@DarkModeToggleText" /> *@

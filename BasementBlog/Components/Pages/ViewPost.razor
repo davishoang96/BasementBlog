@@ -5,7 +5,7 @@
     <MudStack>
         <MudText Typo="Typo.h3">@vm.PostTitle</MudText>
         <MudText Typo="Typo.body1">Publish Date: @vm.PublishDate</MudText>
-        <MudText Class="markdown-body mt-5" Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
+        <MudText Class="markdown-body mt-5 inter-text-field" Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
     </MudStack>
     <!-- Save button -->
     <AuthorizeView Roles="Admin">
