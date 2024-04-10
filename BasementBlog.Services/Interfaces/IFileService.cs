@@ -2,6 +2,6 @@
 {
     public interface IFileService
     {
-        Task<string> UploadImage(object jsonObject, int width = 90);
+        Task<string> UploadImage(object jsonObject, int width = 50);
     }
 }

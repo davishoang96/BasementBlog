@@ -27,14 +27,12 @@
         </MudItem>
         
         <MudItem Style="height: auto" xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <MudTextField ShrinkLabel id="drop-area" Multiline Rows="19" Immediate="true" AutoGrow Label="Body" @bind-Value="@vm.PostBody"></MudTextField>
-
-        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <MudTextField id="post-body"
-                          Immediate="true"
+            <MudTextField ShrinkLabel id="drop-area" Multiline Rows="19" 
+                          Immediate="true" 
                           DisableUnderLine="true"
-                          AutoGrow Label="Body"
-                          @bind-Value="@vm.PostBody" />
+                          AutoGrow Label="Body" 
+                          @bind-Value="@vm.PostBody">
+            </MudTextField>
         </MudItem>
 
         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
