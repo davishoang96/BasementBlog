@@ -7,11 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Remove="wwwroot\fonts.css" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="wwwroot\fonts.css" />
+		<EmbeddedResource Include="wwwroot\fonts.css" />
 	</ItemGroup>
 
 	<ItemGroup>
