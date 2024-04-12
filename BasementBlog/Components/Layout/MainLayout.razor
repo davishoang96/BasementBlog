@@ -5,32 +5,32 @@
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudDrawer @bind-Open="@_drawerOpen">
+    <MudDrawer @bind-Open="@_drawerOpen" Width="250px">
        <MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
-    <MudNavMenu Class="mud-width-full">
-        <MudAvatar Style="width: 100px; height: 100px; margin:10px 10px 10px 70px;">
-            <MudImage Src="https://lh3.googleusercontent.com/a/ACg8ocL4dGVfEEs7YNpO39_69jO419fnW6Rf1lKxQJvPJfaFCM9QfWNrmQ=s634-c-no"></MudImage>
-        </MudAvatar>
-        <MudText Typo="Typo.h6" Class="px-4">The Basement Blog</MudText>
-        <MudText Typo="Typo.overline" Class="px-4" Style="font-size: 10px;font-style: italic;">Personal blog written by Davis Hoang</MudText>
-        <MudDivider Class="my-2" />
-        <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-        <AuthorizeView>
-            <Authorized>      
-                <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
-            </Authorized>
-        </AuthorizeView>
-        <MudNavLink Href="/About" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
-        <AuthorizeView>
-            <Authorized>        
-                <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="MudBlazor.Color.Inherit" Href="Account/Logout">Logout</MudNavLink>
-            </Authorized>
-            <NotAuthorized>
-                <MudNavLink Icon="@Icons.Material.Filled.Login" Color="MudBlazor.Color.Inherit" Href="Account/Login?redirectUri=/">Login</MudNavLink>
-            </NotAuthorized>
-        </AuthorizeView>
-    </MudNavMenu>
-</MudPaper>
+            <MudNavMenu Class="mud-width-full">
+                <MudAvatar Style="width: 100px; height: 100px; margin:10px 10px 10px 70px;">
+                    <MudImage Src="https://lh3.googleusercontent.com/a/ACg8ocL4dGVfEEs7YNpO39_69jO419fnW6Rf1lKxQJvPJfaFCM9QfWNrmQ=s634-c-no"></MudImage>
+                </MudAvatar>
+                <MudText Typo="Typo.h6" Class="px-4">The Basement Blog</MudText>
+                <MudText Typo="Typo.overline" Class="px-4" Style="font-size: 10px;font-style: italic;">Personal blog written by Davis Hoang</MudText>
+                <MudDivider Class="my-2" />
+                <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+                <AuthorizeView>
+                    <Authorized>      
+                        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+                    </Authorized>
+                </AuthorizeView>
+                <MudNavLink Href="/About" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
+                <AuthorizeView>
+                    <Authorized>        
+                        <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="MudBlazor.Color.Inherit" Href="Account/Logout">Logout</MudNavLink>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudNavLink Icon="@Icons.Material.Filled.Login" Color="MudBlazor.Color.Inherit" Href="Account/Login?redirectUri=/">Login</MudNavLink>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </MudNavMenu>
+        </MudPaper>
     </MudDrawer>
     <MudMainContent>
         <div Style="margin-top:-60px; margin-left: 5px">
