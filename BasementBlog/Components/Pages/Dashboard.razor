@@ -34,12 +34,12 @@
                             <MudStack Row>
                                 @if(context.Item.IsDelete.HasValue && context.Item.IsDelete.Value == true)
                                 {
-                                    <MudFab Color="MudBlazor.Color.Primary" OnClick="() => vm.RestorePost(context.Item.Id)"
+                                    <MudFab Color="Color.Primary" OnClick="() => vm.RestorePost(context.Item.Id)"
                                             StartIcon="@Icons.Material.Filled.Restore" Size="@MudBlazor.Size.Small" />
                                 }
                                 else
                                 {
-                                    <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.SoftDeletePost(context.Item.Id)"
+                                    <MudFab Color="Color.Error" OnClick="() => vm.SoftDeletePost(context.Item.Id)"
                                             StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small" />
                                 }
                             </MudStack>

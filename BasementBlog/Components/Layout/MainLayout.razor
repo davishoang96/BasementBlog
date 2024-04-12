@@ -23,10 +23,10 @@
                 <MudNavLink Href="/About" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
                 <AuthorizeView>
                     <Authorized>        
-                        <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="MudBlazor.Color.Inherit" Href="Account/Logout">Logout</MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Href="Account/Logout">Logout</MudNavLink>
                     </Authorized>
                     <NotAuthorized>
-                        <MudNavLink Icon="@Icons.Material.Filled.Login" Color="MudBlazor.Color.Inherit" Href="Account/Login?redirectUri=/">Login</MudNavLink>
+                        <MudNavLink Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Href="Account/Login?redirectUri=/">Login</MudNavLink>
                     </NotAuthorized>
                 </AuthorizeView>
             </MudNavMenu>
@@ -34,7 +34,7 @@
     </MudDrawer>
     <MudMainContent>
         <div Style="margin-top:-60px; margin-left: 5px">
-            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="MudBlazor.Color.Inherit" OnClick="@((e) => DrawerToggle())" />
+            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" />
         </div>
         @Body
     </MudMainContent>
