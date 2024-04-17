@@ -257,7 +257,7 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
     {
-        var categoryModels = await db.Categories.Include(c => c.Posts.Where(p => p.IsDeleted == false)).ToListAsync();
+        var categoryModels = await db.Categories.Include(c => c.Posts.Where(p => p.IsDeleted == null || p.IsDeleted == false)).ToListAsync();
         if (!categoryModels.Any())
         {
             return Enumerable.Empty<CategoryDTO>();
