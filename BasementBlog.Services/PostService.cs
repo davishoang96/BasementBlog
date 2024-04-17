@@ -257,39 +257,23 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
     {
-        var categoryModels = await db.Categories.Include(c => c.Posts.Where(p => p.IsDeleted == null || p.IsDeleted == false)).ToListAsync();
-        if (!categoryModels.Any())
+        return await db.Categories.Include(c => c.Posts)
+        .Select(c => new CategoryDTO
         {
-            return Enumerable.Empty<CategoryDTO>();
-        }
-
-        var categoryDTOs = new List<CategoryDTO>();
-        foreach (var category in categoryModels)
-        {
-            List<PostDTO> postDTOs = new List<PostDTO>();
-
-            foreach (var model in category.Posts)
+            CategoryId = c.CategoryId,
+            Name = c.Name,
+            PostDTOs = c.Posts.Where(p => p.IsDeleted == null || p.IsDeleted == false)
+            .Select(p => new PostDTO
             {
-                var postDTO = new PostDTO
-                {
-                    Id = sqidService.EncryptId(model.Id),
-                    Title = model.Title,
-                    Body = null,
-                    Description = null,
-                    PublishDate = model.PublishDate,
-                };
-
-                postDTOs.Add(postDTO);
-            }
-
-            categoryDTOs.Add(new CategoryDTO
-            {
-                CategoryId = category.CategoryId,
-                Name = category.Name,
-                PostDTOs = postDTOs,
-            });
-        }
-
-        return categoryDTOs;
+                Id = sqidService.EncryptId(p.Id),
+                Title = p.Title,
+                Body = null,
+                Description = null,
+                PublishDate = p.PublishDate
+            })
+            .ToList()
+        })
+        .Where(c => c.PostDTOs.Any())
+        .ToListAsync();
     }
 }
