@@ -66,8 +66,8 @@ public class WorkLogService : IWorkLogService
         {
             workModel = new WorkLog
             {
-                ModifiedDate = DateTime.Now,
-                LoggedDate = DateTime.Now,
+                ModifiedDate = workLogDTO.ModifiedDate,
+                LoggedDate = workLogDTO.LoggedDate,
                 Body = workLogDTO.Body,
             };
 
@@ -75,7 +75,7 @@ public class WorkLogService : IWorkLogService
         }
         else
         {
-            workModel.ModifiedDate = DateTime.Now;
+            workModel.ModifiedDate = workLogDTO.ModifiedDate;
             workModel.Body = workLogDTO.Body;
             db.Update(workModel);
         }

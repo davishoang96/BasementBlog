@@ -1,0 +1,49 @@
+﻿@page "/worklogs";
+@using BasementBlog.ViewModels;
+@using BasementBlog.DTO;
+@attribute [Authorize(Roles = "Admin")]
+
+ <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+     <MudGrid>
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
+            <MudTextField id="post-body" Class="fira-mono-regular"
+                          Immediate="true"
+                          DisableUnderLine="true"
+                          AutoGrow Label="Body"
+                          @bind-Value="@vm.Body" />
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4" Style="margin-top: 27px">
+            <div class="preview-container inter-text-field">
+                @((MarkupString)vm.PreviewBody)
+            </div>
+        </MudItem>
+
+        <MudItem xs="12" sm="2" md="2" lg="2" xl="2" class="mb-4">
+            <ul>
+                @foreach (var wl in vm.WorkLogs)
+                {
+                    <li>
+                        <MudLink OnClick="() => vm.GetWorkLogById(wl.Id)">@wl.LoggedDate.ToString("dd/MM/yyyy")</MudLink>
+                    </li>
+                }
+            </ul>
+        </MudItem>
+
+    </MudGrid>
+     <!-- Save button -->
+     <MudItem xs="12" Class="floating-button">
+         <MudFab Color="Color.Primary" OnClick="@vm.SaveOrUpdateWorkLog" StartIcon="@Icons.Material.Filled.Save" />
+     </MudItem>
+</MudContainer>
+
+@code{
+    
+    [Inject]
+    private WorkLogsViewModel vm { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await vm.GetAllWorkLog();
+    }
+}
