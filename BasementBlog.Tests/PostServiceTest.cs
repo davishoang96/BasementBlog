@@ -10,7 +10,7 @@ using Moq;
 using Xunit;
 using Post = BasementBlog.Database.Models.Post;
 
-namespace BasementBlog.Tests.RepoTest;
+namespace BasementBlog.Tests;
 
 public sealed class PostServiceTest : BaseDataContextTest
 {
