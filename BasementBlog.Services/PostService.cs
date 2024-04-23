@@ -2,6 +2,7 @@
 using BasementBlog.Database.Models;
 using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
+using BasementBlog.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Post = BasementBlog.Database.Models.Post;
@@ -83,31 +84,17 @@ public class PostService : IPostService
     /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetAllPosts()
     {
-        var result = db.Posts.Include(p => p.Category);
-
-        if (result == null || result.IsNullOrEmpty())
+        return await db.Posts.Include(p => p.Category).Select(model => new PostDTO
         {
-            return Enumerable.Empty<PostDTO>();
-        }
-
-        var r = new List<PostDTO>();
-
-        foreach (var model in result)
-        {
-            r.Add(new PostDTO
-            {
-                Id = sqidService.EncryptId(model.Id),
-                Title = model.Title,
-                Body = null,
-                CategoryName = model.Category?.Name,
-                PublishDate = model.PublishDate,
-                Description = model.Description,
-                ModifiedDate = model.ModifiedDate,
-                IsDelete = model.IsDeleted,
-            });
-        }
-
-        return r;
+            Id = sqidService.EncryptId(model.Id),
+            Title = model.Title,
+            Body = null,
+            CategoryName = model.Category != null ? model.Category.Name : null,
+            PublishDate = model.PublishDate,
+            Description = model.Description,
+            ModifiedDate = model.ModifiedDate,
+            IsDelete = model.IsDeleted,
+        }).ToListAsync();
     }
 
     /// <summary>
@@ -257,7 +244,7 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
     {
-        return await db.Categories.Include(c => c.Posts)
+        return await db.Categories.Include(c => c.Posts).Where(s => s.Name != PredefineCategoryNameExt.ToString(PredefineCategoryNames.WorkLog))
         .Select(c => new CategoryDTO
         {
             CategoryId = c.CategoryId,
