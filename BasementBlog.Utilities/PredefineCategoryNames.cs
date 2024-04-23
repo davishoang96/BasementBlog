@@ -6,7 +6,7 @@ public enum PredefineCategoryNames
     Powershell,
     MAUIDevelopment,
     Xamarin,
-    WorkLog,
+    WorkLogs,
     Pipeline,
 }
 
@@ -18,8 +18,8 @@ public static class PredefineCategoryNameExt
         {
             case PredefineCategoryNames.MAUIDevelopment:
                 return "MAUI Development";
-            case PredefineCategoryNames.WorkLog:
-                return "Work Log";
+            case PredefineCategoryNames.WorkLogs:
+                return "Work Logs";
             default:
                 return string.Empty;
         }

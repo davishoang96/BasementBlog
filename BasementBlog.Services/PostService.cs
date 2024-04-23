@@ -244,7 +244,7 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
     {
-        return await db.Categories.Include(c => c.Posts).Where(s => s.Name != PredefineCategoryNameExt.ToString(PredefineCategoryNames.WorkLog))
+        return await db.Categories.Include(c => c.Posts).Where(s => s.Name != PredefineCategoryNameExt.ToString(PredefineCategoryNames.WorkLogs))
         .Select(c => new CategoryDTO
         {
             CategoryId = c.CategoryId,
