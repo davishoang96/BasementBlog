@@ -4,6 +4,7 @@ using BasementBlog.Database.Models;
 using BasementBlog.DTO;
 using BasementBlog.Services;
 using BasementBlog.Services.Interfaces;
+using BasementBlog.Utilities;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -20,13 +21,39 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
     }
 
     [Fact]
+    public async Task ClearAllWorkLogsOK()
+    {
+        // Arrange
+        var fixture = new Fixture();
+        var id = 100;
+        var workLogs = fixture.Build<WorkLog>().With(s => s.Id, () => id++).CreateMany(10);
+
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            context.WorkLogs.AddRange(workLogs);
+            await context.SaveChangesAsync();
+        };
+
+        var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+
+        // Act
+        var result = await service.ClearAllWorkLogs();
+
+        // Assert
+        result.Should().BeTrue();
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            context.WorkLogs.Should().BeEmpty();
+        }
+    }
+
+    [Fact]
     public async Task GetAllWorkLogOK()
     {
         // Arrange
         var fixture = new Fixture();
         var id = 100;
-        var workLogs = fixture.Build<WorkLog>()
-            .With(s => s.Id, () => id++).CreateMany(10);
+        var workLogs = fixture.Build<WorkLog>().With(s => s.Id, () => id++).CreateMany(10);
 
         using (var context = new DatabaseContext(_dbContextOptions))
         {
@@ -79,6 +106,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         var dto = new WorkLogDTO
         {
             Body = "Hello",
+            LoggedDate = DateTime.Now.ToString(Common.DefaultDateTimeFormat),
         };
 
         // Act
@@ -89,8 +117,8 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         {
             context.WorkLogs.Should().HaveCount(1);
             var model = context.WorkLogs.First(); 
-            model.Id.Should().Be(1);
             model.Body.Should().Be(dto.Body);
+            model.LoggedDate.Should().Be(dto.LoggedDate);
         }
     }
 

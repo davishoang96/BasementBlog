@@ -5,7 +5,12 @@
 
  <MudContainer MaxWidth="MaxWidth.ExtraLarge">
      <MudGrid>
+
+        
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
+
+            <MudDatePicker Label="Log Date" @bind-Date="vm.SelectedDate" />
+
             <MudTextField id="post-body" Class="fira-mono-regular"
                           Immediate="true"
                           DisableUnderLine="true"
@@ -21,10 +26,10 @@
 
         <MudItem xs="12" sm="2" md="2" lg="2" xl="2" class="mb-4">
             <ul>
-                @foreach (var wl in vm.WorkLogs)
+                @foreach (var wl in vm.WorkLogs.OrderByDescending(s => DateTime.ParseExact(s.LoggedDate, Common.DefaultDateTimeFormat, null)))
                 {
                     <li>
-                        <MudLink OnClick="() => vm.GetWorkLogById(wl.Id)">@wl.LoggedDate.ToString("dd/MM/yyyy")</MudLink>
+                        <MudLink OnClick="() => vm.GetWorkLogById(wl.Id)">@wl.LoggedDate</MudLink>
                     </li>
                 }
             </ul>
@@ -41,7 +46,6 @@
     
     [Inject]
     private WorkLogsViewModel vm { get; set; }
-
     protected override async Task OnInitializedAsync()
     {
         await vm.GetAllWorkLog();

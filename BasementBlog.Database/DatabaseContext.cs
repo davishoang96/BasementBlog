@@ -22,11 +22,20 @@ public class DatabaseContext : DbContext
             .HasKey(s => s.Id);
         modelBuilder.Entity<WorkLog>()
             .HasIndex(s => s.Id);
+        modelBuilder.Entity<WorkLog>()
+            .HasKey(s => s.LoggedDate);
             
         modelBuilder.Entity<Post>()
             .HasOne(p => p.Category);
         modelBuilder.Entity<Category>()
             .HasIndex(p => p.CategoryId);
+
+        modelBuilder.Entity<WorkLog>().HasData(new WorkLog{
+            Id = 1,
+            Body = "Test",
+            LoggedDate = "11/04/1996",
+            ModifiedDate = DateTime.Now,
+        });
 
         modelBuilder.Entity<Post>().HasData(new()
         {

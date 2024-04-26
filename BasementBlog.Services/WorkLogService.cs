@@ -16,6 +16,17 @@ public class WorkLogService : IWorkLogService
         db = databaseContext;
     }
 
+    public async Task<bool> ClearAllWorkLogs()
+    {
+        var res = await db.WorkLogs.ExecuteDeleteAsync();
+        if(res < 0)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public async Task<IEnumerable<WorkLogDTO>> GetAllWorkLogs()
     {
         return await db.WorkLogs.Select(model => new WorkLogDTO

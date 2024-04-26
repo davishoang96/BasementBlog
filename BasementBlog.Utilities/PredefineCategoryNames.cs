@@ -10,6 +10,7 @@ public enum PredefineCategoryNames
     Pipeline,
 }
 
+// TODO: Remove work log category out of its existent
 public static class PredefineCategoryNameExt
 {
     public static string ToString(this PredefineCategoryNames name)

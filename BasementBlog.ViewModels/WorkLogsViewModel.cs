@@ -1,5 +1,6 @@
 ﻿using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
+using BasementBlog.Utilities;
 
 namespace BasementBlog.ViewModels;
 
@@ -14,11 +15,57 @@ public class WorkLogsViewModel : BaseViewModel
     }
 
     public List<WorkLogDTO> WorkLogs = new List<WorkLogDTO>();
-    public WorkLogDTO SelectedWorkLog { get; set; }
 
-    private string WorkLogId { get; set; }
-    public string Body { get; set; }
-    public string PreviewBody => string.IsNullOrEmpty(Body) ? "Type here" : markdownService.TextToHtml(Body);
+    private WorkLogDTO selectedWorkLog;
+    public WorkLogDTO SelectedWorkLog
+    {
+        get => selectedWorkLog;
+        set
+        {
+            selectedWorkLog = value;
+            if(selectedWorkLog != null)
+            {
+                Body = selectedWorkLog.Body;
+            }
+
+            OnPropertyChanged();
+        }
+    }
+
+    private string body;
+    public string Body
+    {
+        get => body;
+        set
+        {
+            body = value;
+            OnPropertyChanged();
+        }
+    }
+
+    private DateTime? dateTime;
+    public DateTime? SelectedDate 
+    { 
+        get => dateTime;
+        set 
+        {
+            dateTime = value;
+            if(WorkLogs.Any() && value != null)
+            {
+                SelectedWorkLog = WorkLogs.SingleOrDefault(s=>s.LoggedDate == SelectedDate.Value.ToString(Common.DefaultDateTimeFormat));
+            }
+
+            if(SelectedWorkLog == null)
+            {
+                SelectedWorkLog = null;
+                Body = null;
+            }
+
+            OnPropertyChanged();
+        } 
+    }
+    
+    public string PreviewBody => string.IsNullOrEmpty(Body) ? string.Empty : markdownService.TextToHtml(Body);
 
     public async Task GetAllWorkLog()
     {
@@ -34,8 +81,16 @@ public class WorkLogsViewModel : BaseViewModel
         var res = await workLogService.GetWorkLogById(id);
         if (res is not null)
         {
-            WorkLogId = res.Id;
-            Body = res.Body;
+            SelectedWorkLog = new WorkLogDTO
+            {
+                Id = res.Id,
+                Body = Body = res.Body,
+                ModifiedDate = res.ModifiedDate,
+                LoggedDate = res.LoggedDate,
+            };
+
+            var dt = DateTime.Parse(SelectedWorkLog.LoggedDate);
+            SelectedDate = dt;
         }
     }
 
@@ -43,21 +98,35 @@ public class WorkLogsViewModel : BaseViewModel
     {
         if (string.IsNullOrEmpty(Body))
         {
+            Body = string.Empty;
             return;
         }
 
-        var dto = new WorkLogDTO
+        if(SelectedWorkLog == null)
         {
-            Id = WorkLogId,
-            Body = Body,
-            ModifiedDate = DateTime.Now,
-            LoggedDate = DateTime.Now,
-        };
+            SelectedWorkLog = new WorkLogDTO
+            {
+                Body = Body,
+                ModifiedDate = DateTime.Now,
+            };
+        }
+        else
+        {
+            SelectedWorkLog.Body = Body;
+            SelectedWorkLog.ModifiedDate = DateTime.Now;
+        }
 
-        var result = await workLogService.SaveOrUpdateWorkLog(dto);
-        if (result && WorkLogs.Any(s => s.Id != WorkLogId))
+        SelectedWorkLog.LoggedDate = SelectedDate.Value.ToString(Common.DefaultDateTimeFormat);
+
+        var result = await workLogService.SaveOrUpdateWorkLog(SelectedWorkLog);
+        if (result)
         {
-            WorkLogs.Add(dto);
+            if(WorkLogs.Contains(SelectedWorkLog))
+            {
+                WorkLogs.Remove(SelectedWorkLog);
+            }
+
+            WorkLogs.Add(SelectedWorkLog);
         }
     }
 }
