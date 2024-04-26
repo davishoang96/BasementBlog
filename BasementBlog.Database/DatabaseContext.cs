@@ -30,13 +30,6 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Category>()
             .HasIndex(p => p.CategoryId);
 
-        modelBuilder.Entity<WorkLog>().HasData(new WorkLog{
-            Id = 1,
-            Body = "Test",
-            LoggedDate = "11/04/1996",
-            ModifiedDate = DateTime.Now,
-        });
-
         modelBuilder.Entity<Post>().HasData(new()
         {
             Id = 1,

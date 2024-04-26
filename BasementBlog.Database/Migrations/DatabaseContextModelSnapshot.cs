@@ -117,14 +117,6 @@ namespace BasementBlog.Database.Migrations
 
                     b.ToTable("WorkLogs");
 
-                    b.HasData(
-                        new
-                        {
-                            LoggedDate = "11/04/1996",
-                            Body = "Test",
-                            Id = 1,
-                            ModifiedDate = new DateTime(2024, 4, 27, 0, 39, 53, 642, DateTimeKind.Local).AddTicks(3480)
-                        });
                 });
 
             modelBuilder.Entity("BasementBlog.Database.Models.Post", b =>

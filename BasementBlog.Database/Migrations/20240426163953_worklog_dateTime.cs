@@ -42,11 +42,6 @@ namespace BasementBlog.Database.Migrations
                 keyValue: 2,
                 columns: new[] { "ModifiedDate", "PublishDate" },
                 values: new object[] { new DateTime(2024, 4, 27, 0, 39, 53, 642, DateTimeKind.Local).AddTicks(3610), new DateTime(2024, 4, 27, 0, 39, 53, 642, DateTimeKind.Local).AddTicks(3610) });
-
-            migrationBuilder.InsertData(
-                table: "WorkLogs",
-                columns: new[] { "LoggedDate", "Body", "Id", "IsDeleted", "ModifiedDate" },
-                values: new object[] { "11/04/1996", "Test", 1, null, new DateTime(2024, 4, 27, 0, 39, 53, 642, DateTimeKind.Local).AddTicks(3480) });
         }
 
         /// <inheritdoc />
