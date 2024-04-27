@@ -21,9 +21,9 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<WorkLog>()
             .HasKey(s => s.Id);
         modelBuilder.Entity<WorkLog>()
-            .HasIndex(s => s.Id);
-        modelBuilder.Entity<WorkLog>()
-            .HasKey(s => s.LoggedDate);
+            .HasIndex(s => s.LoggedDate)
+            .HasDatabaseName("IX_Unique_LoggedDate")
+            .IsUnique();
             
         modelBuilder.Entity<Post>()
             .HasOne(p => p.Category);

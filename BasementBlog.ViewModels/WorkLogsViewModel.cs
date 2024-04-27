@@ -1,9 +1,9 @@
-﻿using BasementBlog.DTO;
+﻿using System.Collections.ObjectModel;
+using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using BasementBlog.Utilities;
 
 namespace BasementBlog.ViewModels;
-
 public class WorkLogsViewModel : BaseViewModel
 {
     private readonly IWorkLogService workLogService;
@@ -14,7 +14,16 @@ public class WorkLogsViewModel : BaseViewModel
         this.markdownService = markdownService;
     }
 
-    public List<WorkLogDTO> WorkLogs = new List<WorkLogDTO>();
+    private ObservableCollection<WorkLogDTO> workLogs;
+    public ObservableCollection<WorkLogDTO> WorkLogs
+    {
+        get => workLogs;
+        set
+        {
+            workLogs = value;
+            OnPropertyChanged();
+        }
+    }
 
     private WorkLogDTO selectedWorkLog;
     public WorkLogDTO SelectedWorkLog
@@ -72,7 +81,7 @@ public class WorkLogsViewModel : BaseViewModel
         var workLogs = await workLogService.GetAllWorkLogs();
         if (workLogs.Any())
         {
-            WorkLogs = workLogs.ToList();
+            WorkLogs = new ObservableCollection<WorkLogDTO>(workLogs);
         }
     }
 
@@ -118,14 +127,15 @@ public class WorkLogsViewModel : BaseViewModel
 
         SelectedWorkLog.LoggedDate = SelectedDate.Value.ToString(Common.DefaultDateTimeFormat);
 
-        var result = await workLogService.SaveOrUpdateWorkLog(SelectedWorkLog);
-        if (result)
+        var id = await workLogService.SaveOrUpdateWorkLog(SelectedWorkLog);
+        if (!string.IsNullOrEmpty(id))
         {
             if(WorkLogs.Contains(SelectedWorkLog))
             {
                 WorkLogs.Remove(SelectedWorkLog);
             }
 
+            SelectedWorkLog.Id = id;
             WorkLogs.Add(SelectedWorkLog);
         }
     }

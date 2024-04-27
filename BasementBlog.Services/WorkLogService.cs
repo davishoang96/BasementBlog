@@ -58,11 +58,11 @@ public class WorkLogService : IWorkLogService
         };
     }
 
-    public async Task<bool> SaveOrUpdateWorkLog(WorkLogDTO workLogDTO)
+    public async Task<string> SaveOrUpdateWorkLog(WorkLogDTO workLogDTO)
     {
         if (workLogDTO is null)
         {
-            return false;
+            return string.Empty;
         }
 
         WorkLog? workModel = null;
@@ -92,6 +92,6 @@ public class WorkLogService : IWorkLogService
         }
 
         await db.SaveChangesAsync();
-        return true;
+        return sqidService.EncryptId(workModel.Id);
     }
 }
