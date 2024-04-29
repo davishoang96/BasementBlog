@@ -5,12 +5,7 @@
 
  <MudContainer MaxWidth="MaxWidth.ExtraLarge">
      <MudGrid>
-
-        
-        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
-
-            <MudDatePicker Label="Log Date" @bind-Date="vm.SelectedDate" />
-
+        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
             <MudTextField id="post-body" Class="fira-mono-regular"
                           Immediate="true"
                           DisableUnderLine="true"
@@ -19,23 +14,19 @@
         </MudItem>
 
         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4" Style="margin-top: 27px">
-            <div class="preview-container inter-text-field">
+            <MudText class="preview-container inter-text-field" >
                 @((MarkupString)vm.PreviewBody)
-            </div>
+            </MudText>
         </MudItem>
-
-        <MudItem xs="12" sm="2" md="2" lg="2" xl="2" class="mb-4">
-            <ul>
-                @foreach (var wl in vm.WorkLogs.OrderByDescending(s => DateTime.ParseExact(s.LoggedDate, Common.DefaultDateTimeFormat, null)))
-                {
-                    <li>
-                        <MudLink OnClick="() => vm.GetWorkLogById(wl.Id)">@wl.LoggedDate</MudLink>
-                    </li>
-                }
-            </ul>
+        <MudItem xs="12" Class="floating-button">
+            <MudDatePicker PickerVariant="PickerVariant.Static"
+                           Rounded="true"
+                           AdditionalDateClassesFunc="@((DateTime dt)=>(vm.WorkLogs.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "green-text text-accent-4" : ""))"
+                           @bind-Date="vm.SelectedDate" />
         </MudItem>
-
     </MudGrid>
+
+   
      <!-- Save button -->
      <MudItem xs="12" Class="floating-button">
          <MudFab Color="Color.Primary" OnClick="@vm.SaveOrUpdateWorkLog" StartIcon="@Icons.Material.Filled.Save" />
@@ -48,6 +39,6 @@
     private WorkLogsViewModel vm { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        await vm.GetAllWorkLog();
+        await vm.Setup();
     }
 }

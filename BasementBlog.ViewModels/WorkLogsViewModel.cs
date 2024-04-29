@@ -76,13 +76,19 @@ public class WorkLogsViewModel : BaseViewModel
     
     public string PreviewBody => string.IsNullOrEmpty(Body) ? string.Empty : markdownService.TextToHtml(Body);
 
-    public async Task GetAllWorkLog()
+    public async Task Setup()
     {
         var workLogs = await workLogService.GetAllWorkLogs();
         if (workLogs.Any())
         {
             WorkLogs = new ObservableCollection<WorkLogDTO>(workLogs);
         }
+        else
+        {
+            WorkLogs = new ObservableCollection<WorkLogDTO>();
+        }
+
+        SelectedDate = DateTime.Now;
     }
 
     public async Task GetWorkLogById(string id)
