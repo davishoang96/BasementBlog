@@ -12,5 +12,6 @@ public class ServiceModules : Module
         builder.RegisterType<PostService>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterType<BlogDialogService>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterType<SqidService>().AsImplementedInterfaces().InstancePerDependency();
+        builder.RegisterType<WorkLogService>().AsImplementedInterfaces().InstancePerDependency();
     }
 }

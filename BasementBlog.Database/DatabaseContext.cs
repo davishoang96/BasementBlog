@@ -9,6 +9,7 @@ public class DatabaseContext : DbContext
 
     public DbSet<Post> Posts { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<WorkLog> WorkLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -16,9 +17,16 @@ public class DatabaseContext : DbContext
             .HasKey(s => s.Id);
         modelBuilder.Entity<Post>()
             .HasIndex(s => s.Id);
+
+        modelBuilder.Entity<WorkLog>()
+            .HasKey(s => s.Id);
+        modelBuilder.Entity<WorkLog>()
+            .HasIndex(s => s.LoggedDate)
+            .HasDatabaseName("IX_Unique_LoggedDate")
+            .IsUnique();
+            
         modelBuilder.Entity<Post>()
             .HasOne(p => p.Category);
-
         modelBuilder.Entity<Category>()
             .HasIndex(p => p.CategoryId);
 
@@ -39,7 +47,6 @@ public class DatabaseContext : DbContext
             Description = "Test",
             ModifiedDate = DateTime.Now,
             PublishDate = DateTime.Now,
-        }
-        );
+        });
     }
 }

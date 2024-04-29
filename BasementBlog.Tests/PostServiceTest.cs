@@ -10,7 +10,7 @@ using Moq;
 using Xunit;
 using Post = BasementBlog.Database.Models.Post;
 
-namespace BasementBlog.Tests.RepoTest;
+namespace BasementBlog.Tests;
 
 public sealed class PostServiceTest : BaseDataContextTest
 {
@@ -30,6 +30,7 @@ public sealed class PostServiceTest : BaseDataContextTest
         var posts = fixture.Build<Post>()
             .Without(s => s.Category)
             .With(s => s.Id, () => postId++)
+            .With(s=>s.IsDeleted, false)
             .With(s => s.CategoryId, 25).CreateMany(17);
 
         using (var context = new DatabaseContext(_dbContextOptions))

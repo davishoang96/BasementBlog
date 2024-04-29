@@ -2,7 +2,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace BasementBlog.Tests.RepoTest;
+namespace BasementBlog.Tests;
 
 public class BaseDataContextTest : IDisposable
 {
