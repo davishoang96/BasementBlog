@@ -3,25 +3,28 @@
 @using BasementBlog.DTO;
 @attribute [Authorize(Roles = "Admin")]
 
- <MudContainer MaxWidth="MaxWidth.ExtraLarge">
-     <MudGrid>
-        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <MudTextField id="post-body" Class="fira-mono-regular"
-                          Immediate="true"
-                          DisableUnderLine="true"
-                          AutoGrow Label="Body"
-                          @bind-Value="@vm.Body" />
-        </MudItem>
+<PageTitle>Worklogs</PageTitle>
 
-        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4" Style="margin-top: 27px">
-            <MudText class="preview-container inter-text-field" >
+ <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+
+     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+         <MudTabPanel Text="Description">
+            <MudTextField id="post-body" Class="fira-mono-regular"
+                          Immediate="true" DisableUnderLine="true" AutoGrow 
+                          @bind-Value="@vm.Body" />
+         </MudTabPanel>
+        <MudTabPanel Text="Preview">
+            <MudText class="preview-container inter-text-field">
                 @((MarkupString)vm.PreviewBody)
             </MudText>
-        </MudItem>
-        <MudItem xs="12" Class="floating-button">
+        </MudTabPanel>
+     </MudTabs>
+
+     <MudGrid>
+        <MudItem xs="12" Class="floating-button" Style="margin-right: -12px; margin-bottom: 30px">
             <MudDatePicker PickerVariant="PickerVariant.Static"
-                           Rounded="true"
-                           AdditionalDateClassesFunc="@((DateTime dt)=>(vm.WorkLogs.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "green-text text-accent-4" : ""))"
+                           Rounded="true" DisableToolbar="true" hidden="@hideCalendar"
+                           AdditionalDateClassesFunc="@((DateTime dt)=>(vm.WorkLogs.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))"
                            @bind-Date="vm.SelectedDate" />
         </MudItem>
     </MudGrid>
@@ -29,16 +32,25 @@
    
      <!-- Save button -->
      <MudItem xs="12" Class="floating-button">
-         <MudFab Color="Color.Primary" OnClick="@vm.SaveOrUpdateWorkLog" StartIcon="@Icons.Material.Filled.Save" />
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+            <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@vm.SaveOrUpdateWorkLog"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.CalendarToday" OnClick="@ToggleCalendar"></MudIconButton>
+        </MudButtonGroup>
      </MudItem>
 </MudContainer>
 
 @code{
-    
+
     [Inject]
     private WorkLogsViewModel vm { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await vm.Setup();
+    }
+
+    bool hideCalendar = true;
+    private void ToggleCalendar()
+    {
+        hideCalendar = !hideCalendar;
     }
 }
