@@ -12,7 +12,7 @@ public class BlogDialogService : IBlogDialogService
         this.dialogService = dialogService;
     }
 
-    public async Task ShowDialog(string title, string message, string buttonText = "OK")
+    public async Task<DialogResult> ShowDialog(string title, string message, string buttonText = "OK")
     {
         var parameters = new DialogParameters<Dialog>
         {
@@ -21,6 +21,7 @@ public class BlogDialogService : IBlogDialogService
             { x => x.Color, Color.Primary }
         };
 
-        await dialogService.ShowAsync<Dialog>(title, parameters, new DialogOptions { CloseOnEscapeKey = true });
+        var dialog = await dialogService.ShowAsync<Dialog>(title, parameters, new DialogOptions { CloseOnEscapeKey = true });
+        return await dialog.Result;
     }
 }

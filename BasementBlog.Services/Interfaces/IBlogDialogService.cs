@@ -1,6 +1,8 @@
-﻿namespace BasementBlog.Services.Interfaces;
+﻿using MudBlazor;
+
+namespace BasementBlog.Services.Interfaces;
 
 public interface IBlogDialogService
 {
-    Task ShowDialog(string title, string message, string buttonText = "OK");
+    Task<DialogResult> ShowDialog(string title, string message, string buttonText = "OK");
 }
