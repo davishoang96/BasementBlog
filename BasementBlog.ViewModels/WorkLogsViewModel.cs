@@ -2,16 +2,19 @@
 using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using BasementBlog.Utilities;
+using MudBlazor;
 
 namespace BasementBlog.ViewModels;
 public class WorkLogsViewModel : BaseViewModel
 {
     private readonly IWorkLogService workLogService;
     private readonly IMarkdownService markdownService;
-    public WorkLogsViewModel(IWorkLogService workLogService, IMarkdownService markdownService)
+    private readonly ISnackbar snackbar;
+    public WorkLogsViewModel(IWorkLogService workLogService, IMarkdownService markdownService, ISnackbar snackbar)
     {
         this.workLogService = workLogService;
         this.markdownService = markdownService;
+        this.snackbar = snackbar;
     }
 
     private ObservableCollection<WorkLogDTO> workLogs;
@@ -144,5 +147,13 @@ public class WorkLogsViewModel : BaseViewModel
             SelectedWorkLog.Id = id;
             WorkLogs.Add(SelectedWorkLog);
         }
+
+        snackbar.Add("Save work log successfully", Severity.Success, config =>
+        {
+            config.CloseAfterNavigation = true;
+            config.ShowTransitionDuration = 250;
+            config.HideTransitionDuration = 250;
+            config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+        });
     }
 }
