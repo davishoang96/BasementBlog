@@ -1,32 +1,74 @@
 using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using System.Collections.ObjectModel;
 
 namespace BasementBlog.ViewModels;
 
 public class DashboardViewModel : BaseViewModel
 {
     private IPostService postService;
+    private ISnackbar snackbar;
     private IBlogDialogService blogDialogService;
     private readonly NavigationManager navigationManager;
 
     public DashboardViewModel(IPostService postService, IBlogDialogService blogDialogService,
-        NavigationManager navigationManager)
+        NavigationManager navigationManager, ISnackbar snackbar)
     {
         this.blogDialogService = blogDialogService;
         this.postService = postService;
         this.navigationManager = navigationManager;
+        this.snackbar = snackbar;
     }
 
-    public List<PostDTO> Posts = new List<PostDTO>();
+    private ObservableCollection<PostDTO> posts = new ObservableCollection<PostDTO>();
+    public ObservableCollection<PostDTO> Posts
+    {
+        get => posts;
+        set
+        {
+            posts = value;
+            OnPropertyChanged();
+        }
+    }
+
     public List<CategoryDTO> Categories = new List<CategoryDTO>();
+
+    public async Task WipeAllIsDeletedPosts()
+    {
+        var result = await blogDialogService.ShowDialog("Warning", "Do you want to wipe all 'IsDeleted' posts?");
+        if (!result.Cancelled)
+        {
+            var num = await postService.WipeAllSoftDeletedPost();
+            if (num > 0)
+            {
+                var p = Posts.Where(s => s.IsDelete == null || s.IsDelete == false);
+                Posts = new ObservableCollection<PostDTO>(p);
+
+                // TODO: Somehow throw exception about threading. Pls investigate this.
+                //foreach(var p in Posts.Where(s => s.IsDelete == true))
+                //{
+                //    Posts.Remove(p);
+                //}
+
+                snackbar.Add($"Deleted {num} posts", Severity.Success, config =>
+                {
+                    config.CloseAfterNavigation = true;
+                    config.ShowTransitionDuration = 250;
+                    config.HideTransitionDuration = 250;
+                    config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+                });
+            }
+        }
+    }
 
     public async Task InitialDashboard()
     {
         var posts = await postService.GetAllPosts();
         if (posts.Any())
         {
-            Posts = posts.ToList();
+            Posts = new ObservableCollection<PostDTO>(posts);
         }
 
         var cate = await postService.GetCategoryDTOs();

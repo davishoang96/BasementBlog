@@ -263,4 +263,22 @@ public class PostService : IPostService
         .Where(c => c.PostDTOs.Any())
         .ToListAsync();
     }
+
+    /// <summary>
+    /// Permanent delete all posts from db (Use with caution)
+    /// </summary>
+    /// <returns>Number of deleted post</returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<int> WipeAllSoftDeletedPost()
+    {
+        var posts = await db.Posts.Where(s=>s.IsDeleted != null && s.IsDeleted == true).ToListAsync();
+        foreach(var p in posts)
+        {
+            db.Remove(p);
+        }
+
+        await db.SaveChangesAsync();
+
+        return posts.Count;
+    }
 }

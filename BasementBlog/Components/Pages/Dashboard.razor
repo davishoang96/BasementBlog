@@ -47,6 +47,10 @@
                     </TemplateColumn>
                 </Columns>
             </MudDataGrid>
+
+            <MudButton Style="margin-top: 10px" Color="Color.Error" Variant="Variant.Filled" OnClick="@vm.WipeAllIsDeletedPosts">Delete Posts</MudButton>
+
+
         </MudTabPanel>
         <MudTabPanel Text="Categories">
             <MudDataGrid Items="@vm.Categories" Filterable="false" SortMode="@SortMode.None" Groupable="false">

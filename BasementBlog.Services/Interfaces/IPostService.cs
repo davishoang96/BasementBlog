@@ -13,4 +13,5 @@ public interface IPostService
     Task<IEnumerable<PostDTO>> GetUnclassifiedPosts();
     Task<bool> SoftDeletePost(string id);
     Task<bool> RestoreDeletedPost(string id);
+    Task<int> WipeAllSoftDeletedPost();
 }
