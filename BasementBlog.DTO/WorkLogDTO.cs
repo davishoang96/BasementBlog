@@ -1,4 +1,4 @@
-namespace BasementBlog.DTO;
+namespace Blog.DTO;
 
 public class WorkLogDTO
 {

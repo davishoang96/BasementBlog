@@ -1,8 +1,8 @@
-﻿using BasementBlog.Services.Interfaces;
-using BasementBlog.Views;
+﻿using BasementBlog.Views;
+using Blog.Services.Interfaces;
 using MudBlazor;
 
-namespace BasementBlog.Services;
+namespace Blog.Services;
 
 public class BlogDialogService : IBlogDialogService
 {

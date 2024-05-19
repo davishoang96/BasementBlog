@@ -10,6 +10,7 @@
 		<PackageReference Include="AutoFixture" Version="4.18.1" />
 		<PackageReference Include="FluentAssertions" Version="6.12.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
 		<PackageReference Include="Moq" Version="4.20.70" />
 		<PackageReference Include="xunit" Version="2.7.0" />
@@ -26,7 +27,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\BasementBlog.Database\Blog.Database.csproj" />
-		<ProjectReference Include="..\BasementBlog.Services\BasementBlog.Services.csproj" />
+		<ProjectReference Include="..\BasementBlog.Services\Blog.Services.csproj" />
 	</ItemGroup>
-
 </Project>

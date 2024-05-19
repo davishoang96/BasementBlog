@@ -1,10 +1,10 @@
-﻿using System.Collections.ObjectModel;
-using BasementBlog.DTO;
-using BasementBlog.Services.Interfaces;
-using BasementBlog.Utilities;
+﻿using Blog.DTO;
+using Blog.Services.Interfaces;
+using Blog.Utilities;
 using MudBlazor;
+using System.Collections.ObjectModel;
 
-namespace BasementBlog.ViewModels;
+namespace Blog.ViewModels;
 public class WorkLogsViewModel : BaseViewModel
 {
     private readonly IWorkLogService workLogService;
@@ -35,7 +35,7 @@ public class WorkLogsViewModel : BaseViewModel
         set
         {
             selectedWorkLog = value;
-            if(selectedWorkLog != null)
+            if (selectedWorkLog != null)
             {
                 Body = selectedWorkLog.Body;
             }
@@ -56,27 +56,27 @@ public class WorkLogsViewModel : BaseViewModel
     }
 
     private DateTime? dateTime;
-    public DateTime? SelectedDate 
-    { 
+    public DateTime? SelectedDate
+    {
         get => dateTime;
-        set 
+        set
         {
             dateTime = value;
-            if(WorkLogs.Any() && value != null)
+            if (WorkLogs.Any() && value != null)
             {
-                SelectedWorkLog = WorkLogs.SingleOrDefault(s=>s.LoggedDate == SelectedDate.Value.ToString(Common.DefaultDateTimeFormat));
+                SelectedWorkLog = WorkLogs.SingleOrDefault(s => s.LoggedDate == SelectedDate.Value.ToString(Common.DefaultDateTimeFormat));
             }
 
-            if(SelectedWorkLog == null)
+            if (SelectedWorkLog == null)
             {
                 SelectedWorkLog = null;
                 Body = null;
             }
 
             OnPropertyChanged();
-        } 
+        }
     }
-    
+
     public string PreviewBody => string.IsNullOrEmpty(Body) ? string.Empty : markdownService.TextToHtml(Body);
 
     public async Task Setup()
@@ -120,7 +120,7 @@ public class WorkLogsViewModel : BaseViewModel
             return;
         }
 
-        if(SelectedWorkLog == null)
+        if (SelectedWorkLog == null)
         {
             SelectedWorkLog = new WorkLogDTO
             {
@@ -139,7 +139,7 @@ public class WorkLogsViewModel : BaseViewModel
         var id = await workLogService.SaveOrUpdateWorkLog(SelectedWorkLog);
         if (!string.IsNullOrEmpty(id))
         {
-            if(WorkLogs.Contains(SelectedWorkLog))
+            if (WorkLogs.Contains(SelectedWorkLog))
             {
                 WorkLogs.Remove(SelectedWorkLog);
             }

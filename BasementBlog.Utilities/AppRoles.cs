@@ -1,4 +1,4 @@
-﻿namespace BasementBlog.Utilities;
+﻿namespace Blog.Utilities;
 
 public enum AppRoles
 {

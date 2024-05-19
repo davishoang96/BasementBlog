@@ -1,9 +1,10 @@
-﻿using BasementBlog.DTO;
-using BasementBlog.Services.Interfaces;
+﻿using Blog.DTO;
+using Blog.Services;
+using Blog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace BasementBlog.ViewModels;
+namespace Blog.ViewModels;
 
 public class EditPostViewModel : BaseViewModel
 {
@@ -22,7 +23,7 @@ public class EditPostViewModel : BaseViewModel
         this.postService = postService;
         this.navigationManager = navigationManager;
         this.blogDialogService = blogDialogService;
-        this.snackbar = snackbar;   
+        this.snackbar = snackbar;
     }
 
     public string PostTitle { get; set; }

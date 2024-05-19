@@ -9,13 +9,17 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="8.0.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components" Version="8.0.1" />
+		<PackageReference Include="Markdig" Version="0.34.0" />
+		<PackageReference Include="Markdig.SyntaxHighlighting" Version="1.1.7" />
+		<PackageReference Include="Microsoft.Graph" Version="5.40.0" />
 		<PackageReference Include="MudBlazor" Version="6.15.0" />
+		<PackageReference Include="Sqids" Version="3.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BasementBlog.Services\BasementBlog.Services.csproj" />
+		<ProjectReference Include="..\BasementBlog.Database\Blog.Database.csproj" />
+		<ProjectReference Include="..\BasementBlog.DTO\Blog.DTO.csproj" />
+		<ProjectReference Include="..\BasementBlog.Utilities\Blog.Utilities.csproj" />
 		<ProjectReference Include="..\BasementBlog.Views\BasementBlog.Views.csproj" />
 	</ItemGroup>
 

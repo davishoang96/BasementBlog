@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace BasementBlog.ViewModels;
+namespace Blog.ViewModels;
 
 public class BaseViewModel : ObservableObject
 {

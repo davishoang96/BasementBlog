@@ -1,8 +1,8 @@
-﻿using BasementBlog.Services.Interfaces;
+﻿using Blog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 
-namespace BasementBlog.ViewModels;
+namespace Blog.ViewModels;
 
 public class PostViewModel : BaseViewModel
 {

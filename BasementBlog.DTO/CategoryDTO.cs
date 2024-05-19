@@ -1,4 +1,6 @@
-﻿namespace BasementBlog.DTO;
+﻿using Blog.DTO;
+
+namespace Blog.Services;
 
 public class CategoryDTO
 {

@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace BasementBlog.ViewModels;
+namespace Blog.ViewModels;
 
 public class ViewModelModule : Module
 {

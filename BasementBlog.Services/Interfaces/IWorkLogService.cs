@@ -1,6 +1,6 @@
-using BasementBlog.DTO;
+using Blog.DTO;
 
-namespace BasementBlog.Services.Interfaces;
+namespace Blog.Services.Interfaces;
 
 public interface IWorkLogService
 {

@@ -1,10 +1,10 @@
-using BasementBlog.DTO;
-using BasementBlog.Services.Interfaces;
 using Blog.Database;
 using Blog.Database.Models;
+using Blog.DTO;
+using Blog.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace BasementBlog.Services;
+namespace Blog.Services;
 
 public class WorkLogService : IWorkLogService
 {
