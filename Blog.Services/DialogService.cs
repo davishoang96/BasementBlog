@@ -1,5 +1,5 @@
-﻿using BasementBlog.Views;
-using Blog.Services.Interfaces;
+﻿using Blog.Services.Interfaces;
+using Blog.Views;
 using MudBlazor;
 
 namespace Blog.Services;

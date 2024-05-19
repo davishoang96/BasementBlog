@@ -17,10 +17,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BasementBlog.Database\Blog.Database.csproj" />
-		<ProjectReference Include="..\BasementBlog.DTO\Blog.DTO.csproj" />
-		<ProjectReference Include="..\BasementBlog.Utilities\Blog.Utilities.csproj" />
-		<ProjectReference Include="..\BasementBlog.Views\BasementBlog.Views.csproj" />
+		<ProjectReference Include="..\Blog.Database\Blog.Database.csproj" />
+		<ProjectReference Include="..\Blog.DTO\Blog.DTO.csproj" />
+		<ProjectReference Include="..\Blog.Utilities\Blog.Utilities.csproj" />
+		<ProjectReference Include="..\Blog.Views\Blog.Views.csproj" />
 	</ItemGroup>
 
 </Project>
