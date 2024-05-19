@@ -1,4 +1,4 @@
-﻿using BasementBlog.Database;
+﻿using Blog.Database;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 

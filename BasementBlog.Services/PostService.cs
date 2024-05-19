@@ -1,11 +1,10 @@
-﻿using BasementBlog.Database;
-using BasementBlog.Database.Models;
-using BasementBlog.DTO;
+﻿using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using BasementBlog.Utilities;
+using Blog.Database;
+using Blog.Database.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Post = BasementBlog.Database.Models.Post;
 
 namespace BasementBlog.Services;
 
@@ -271,8 +270,8 @@ public class PostService : IPostService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<int> WipeAllSoftDeletedPost()
     {
-        var posts = await db.Posts.Where(s=>s.IsDeleted != null && s.IsDeleted == true).ToListAsync();
-        foreach(var p in posts)
+        var posts = await db.Posts.Where(s => s.IsDeleted != null && s.IsDeleted == true).ToListAsync();
+        foreach (var p in posts)
         {
             db.Remove(p);
         }

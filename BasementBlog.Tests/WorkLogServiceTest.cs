@@ -1,10 +1,10 @@
 using AutoFixture;
-using BasementBlog.Database;
-using BasementBlog.Database.Models;
 using BasementBlog.DTO;
 using BasementBlog.Services;
 using BasementBlog.Services.Interfaces;
 using BasementBlog.Utilities;
+using Blog.Database;
+using Blog.Database.Models;
 using FluentAssertions;
 using Moq;
 using Xunit;
@@ -75,7 +75,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
     {
         // Arrange
         var fixture = new Fixture();
-        var worklog = fixture.Build<WorkLog>().With(s=>s.Id, 1).Create();
+        var worklog = fixture.Build<WorkLog>().With(s => s.Id, 1).Create();
 
         using (var context = new DatabaseContext(_dbContextOptions))
         {
@@ -84,8 +84,8 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         }
 
         var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
-        MockSqidService.Setup(s=>s.DecryptId(It.IsAny<string>())).Returns(1); 
-        MockSqidService.Setup(s=>s.EncryptId(It.IsAny<int>())).Returns("%34oijf");
+        MockSqidService.Setup(s => s.DecryptId(It.IsAny<string>())).Returns(1);
+        MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("%34oijf");
 
         // Act
         var result = await service.GetWorkLogById("%34oijf");
@@ -101,7 +101,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
     {
         // Arrange
         var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
-        MockSqidService.Setup(s=>s.DecryptId(It.IsAny<string>())).Returns(1); 
+        MockSqidService.Setup(s => s.DecryptId(It.IsAny<string>())).Returns(1);
 
         var dto = new WorkLogDTO
         {
@@ -116,7 +116,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         using (var context = new DatabaseContext(_dbContextOptions))
         {
             context.WorkLogs.Should().HaveCount(1);
-            var model = context.WorkLogs.First(); 
+            var model = context.WorkLogs.First();
             model.Body.Should().Be(dto.Body);
             model.LoggedDate.Should().Be(dto.LoggedDate);
         }
@@ -128,8 +128,8 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         // Arrange
         var fixture = new Fixture();
         var worklog = fixture.Build<WorkLog>()
-                             .With(s=>s.Body, "Homework")
-                             .With(s=>s.Id, 1).Create();
+                             .With(s => s.Body, "Homework")
+                             .With(s => s.Id, 1).Create();
 
         using (var context = new DatabaseContext(_dbContextOptions))
         {
@@ -143,7 +143,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
             Body = "Hello",
         };
 
-        MockSqidService.Setup(s=>s.DecryptId(It.IsAny<string>())).Returns(1); 
+        MockSqidService.Setup(s => s.DecryptId(It.IsAny<string>())).Returns(1);
         var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
 
         // Act
@@ -153,7 +153,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         using (var context = new DatabaseContext(_dbContextOptions))
         {
             context.WorkLogs.Should().HaveCount(1);
-            var model = context.WorkLogs.First(); 
+            var model = context.WorkLogs.First();
             model.Id.Should().Be(1);
             model.Body.Should().Be(dto.Body);
         }

@@ -1,15 +1,13 @@
 ﻿using AutoFixture;
-using BasementBlog.Database;
-using BasementBlog.Database.Models;
 using BasementBlog.DTO;
 using BasementBlog.Services;
 using BasementBlog.Services.Interfaces;
+using Blog.Database;
+using Blog.Database.Models;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph.Models;
 using Moq;
 using Xunit;
-using Post = BasementBlog.Database.Models.Post;
 
 namespace BasementBlog.Tests;
 
@@ -261,8 +259,8 @@ public sealed class PostServiceTest : BaseDataContextTest
         var posts = fixture.Build<Post>()
             .Without(s => s.Category)
             .Without(s => s.CategoryId)
-            .With(s=>s.IsDeleted, true)
-            .With(s=>s.Id, () => id++).CreateMany(50);
+            .With(s => s.IsDeleted, true)
+            .With(s => s.Id, () => id++).CreateMany(50);
 
         using (var context = new DatabaseContext(_dbContextOptions))
         {

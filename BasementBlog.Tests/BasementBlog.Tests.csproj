@@ -25,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BasementBlog.Database\BasementBlog.Database.csproj" />
+    <ProjectReference Include="..\BasementBlog.Database\Blog.Database.csproj" />
     <ProjectReference Include="..\BasementBlog.Services\BasementBlog.Services.csproj" />
   </ItemGroup>
 

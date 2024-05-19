@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BasementBlog.Database\BasementBlog.Database.csproj" />
+    <ProjectReference Include="..\..\BasementBlog.Database\Blog.Database.csproj" />
     <ProjectReference Include="..\Blog.Client\Blog.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
   </ItemGroup>
