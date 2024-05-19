@@ -1,12 +1,12 @@
-﻿using BasementBlog.DTO;
-using BasementBlog.Services.Interfaces;
-using BasementBlog.Utilities;
-using Blog.Database;
+﻿using Blog.Database;
 using Blog.Database.Models;
+using Blog.DTO;
+using Blog.Services.Interfaces;
+using Blog.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace BasementBlog.Services;
+namespace Blog.Services;
 
 public class PostService : IPostService
 {

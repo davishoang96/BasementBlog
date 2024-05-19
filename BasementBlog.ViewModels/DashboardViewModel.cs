@@ -1,10 +1,11 @@
-using BasementBlog.DTO;
-using BasementBlog.Services.Interfaces;
+using Blog.DTO;
+using Blog.Services;
+using Blog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using System.Collections.ObjectModel;
 
-namespace BasementBlog.ViewModels;
+namespace Blog.ViewModels;
 
 public class DashboardViewModel : BaseViewModel
 {

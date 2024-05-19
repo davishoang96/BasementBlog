@@ -1,6 +1,6 @@
 ﻿using MudBlazor;
 
-namespace BasementBlog.Services.Interfaces;
+namespace Blog.Services.Interfaces;
 
 public interface IBlogDialogService
 {

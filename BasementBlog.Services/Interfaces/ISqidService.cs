@@ -1,8 +1,7 @@
-﻿namespace BasementBlog.Services.Interfaces
+﻿namespace Blog.Services.Interfaces;
+
+public interface ISqidService
 {
-    public interface ISqidService
-    {
-        string EncryptId(int id);
-        int DecryptId(string value);
-    }
+    string EncryptId(int id);
+    int DecryptId(string value);
 }

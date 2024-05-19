@@ -7,17 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog", "BasementBlo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Database", "BasementBlog.Database\Blog.Database.csproj", "{2FA66B87-842E-4387-841D-7732BA983B82}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.DTO", "BasementBlog.DTO\BasementBlog.DTO.csproj", "{E012F4AB-DFD4-4FE6-BEB4-DF1086CC99BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.DTO", "BasementBlog.DTO\Blog.DTO.csproj", "{E012F4AB-DFD4-4FE6-BEB4-DF1086CC99BC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Services", "BasementBlog.Services\BasementBlog.Services.csproj", "{85F035BD-F0A9-4485-8147-CCDB54AB8A43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Services", "BasementBlog.Services\Blog.Services.csproj", "{85F035BD-F0A9-4485-8147-CCDB54AB8A43}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.ViewModels", "BasementBlog.ViewModels\BasementBlog.ViewModels.csproj", "{B9978FFB-6882-4197-A7C2-0F22A828BFAF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.ViewModels", "BasementBlog.ViewModels\Blog.ViewModels.csproj", "{B9978FFB-6882-4197-A7C2-0F22A828BFAF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Views", "BasementBlog.Views\BasementBlog.Views.csproj", "{3CAABA12-71CE-4025-9C77-4983FEBE57E5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Utilities", "BasementBlog.Utilities\BasementBlog.Utilities.csproj", "{AC648F77-28DB-4FF6-88BD-C8402F79A909}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Utilities", "BasementBlog.Utilities\Blog.Utilities.csproj", "{AC648F77-28DB-4FF6-88BD-C8402F79A909}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Tests", "BasementBlog.Tests\BasementBlog.Tests.csproj", "{AD65C7FD-FEF6-4630-B628-1041E15129FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Tests", "BasementBlog.Tests\Blog.Tests.csproj", "{AD65C7FD-FEF6-4630-B628-1041E15129FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog", "Blog\Blog\Blog.csproj", "{E28DD785-C2DA-4E56-B92B-D7429EBC741F}"
 EndProject

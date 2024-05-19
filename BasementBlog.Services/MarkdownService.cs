@@ -1,7 +1,7 @@
-﻿using BasementBlog.Services.Interfaces;
+﻿using Blog.Services.Interfaces;
 using Markdig;
 
-namespace BasementBlog.Services;
+namespace Blog.Services;
 
 public class MarkdownService : IMarkdownService
 {

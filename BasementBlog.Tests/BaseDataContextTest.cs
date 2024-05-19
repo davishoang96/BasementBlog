@@ -1,8 +1,7 @@
 ﻿using Blog.Database;
 using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 
-namespace BasementBlog.Tests;
+namespace Blog.Tests;
 
 public class BaseDataContextTest : IDisposable
 {

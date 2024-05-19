@@ -22,11 +22,4 @@
 		<PackageReference Include="MudBlazor.Markdown" Version="0.1.3" />
 		<PackageReference Include="Sqids" Version="3.1.0" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<ProjectReference Include="..\BasementBlog.Services\BasementBlog.Services.csproj" />
-		<ProjectReference Include="..\BasementBlog.Utilities\BasementBlog.Utilities.csproj" />
-		<ProjectReference Include="..\BasementBlog.ViewModels\BasementBlog.ViewModels.csproj" />
-	</ItemGroup>
-
 </Project>

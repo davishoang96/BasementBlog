@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace BasementBlog.Services.Modules;
+namespace Blog.Services.Modules;
 
 public class ServiceModules : Module
 {

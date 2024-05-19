@@ -1,6 +1,7 @@
-﻿using BasementBlog.DTO;
+﻿using Blog.DTO;
+using Blog.Services;
 
-namespace BasementBlog.Services.Interfaces;
+namespace Blog.Services.Interfaces;
 
 public interface IPostService
 {

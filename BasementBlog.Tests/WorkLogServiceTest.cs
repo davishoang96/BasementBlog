@@ -1,15 +1,15 @@
 using AutoFixture;
-using BasementBlog.DTO;
-using BasementBlog.Services;
-using BasementBlog.Services.Interfaces;
-using BasementBlog.Utilities;
 using Blog.Database;
 using Blog.Database.Models;
+using Blog.DTO;
+using Blog.Services;
+using Blog.Services.Interfaces;
+using Blog.Utilities;
 using FluentAssertions;
 using Moq;
 using Xunit;
 
-namespace BasementBlog.Tests;
+namespace Blog.Tests;
 
 public sealed class WorkLogServiceTest : BaseDataContextTest
 {

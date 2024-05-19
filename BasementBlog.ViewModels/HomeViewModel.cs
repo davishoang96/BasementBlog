@@ -1,9 +1,10 @@
-﻿using BasementBlog.DTO;
-using BasementBlog.Services.Interfaces;
+﻿using Blog.DTO;
+using Blog.Services;
+using Blog.Services.Interfaces;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.Components;
 
-namespace BasementBlog.ViewModels;
+namespace Blog.ViewModels;
 
 public partial class HomeViewModel : BaseViewModel
 {
