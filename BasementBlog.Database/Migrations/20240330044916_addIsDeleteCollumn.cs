@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BasementBlog.Database.Migrations
+namespace Blog.Database.Migrations
 {
     /// <inheritdoc />
     public partial class addIsDeleteCollumn : Migration

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace BasementBlog.Database.Models;
+namespace Blog.Database.Models;
 
 public class WorkLog
 {
