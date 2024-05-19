@@ -7,16 +7,12 @@ namespace BasementBlog.Tests;
 public class BaseDataContextTest : IDisposable
 {
     internal SqliteConnection _connection;
-    internal DbContextOptions<DatabaseContext> _dbContextOptions;
 
     public BaseDataContextTest()
     {
         _connection = new SqliteConnection("DataSource=:memory:");
         _connection.Open();
-
-        _dbContextOptions = new DbContextOptionsBuilder<DatabaseContext>().UseSqlite(_connection).Options;
-
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.Database.EnsureCreated();
         }

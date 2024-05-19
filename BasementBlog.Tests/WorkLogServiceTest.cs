@@ -28,20 +28,20 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         var id = 100;
         var workLogs = fixture.Build<WorkLog>().With(s => s.Id, () => id++).CreateMany(10);
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.WorkLogs.AddRange(workLogs);
             await context.SaveChangesAsync();
         };
 
-        var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new WorkLogService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         var result = await service.ClearAllWorkLogs();
 
         // Assert
         result.Should().BeTrue();
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.WorkLogs.Should().BeEmpty();
         }
@@ -55,13 +55,13 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         var id = 100;
         var workLogs = fixture.Build<WorkLog>().With(s => s.Id, () => id++).CreateMany(10);
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.WorkLogs.AddRange(workLogs);
             await context.SaveChangesAsync();
         }
 
-        var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new WorkLogService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         var result = await service.GetAllWorkLogs();
@@ -77,13 +77,13 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         var fixture = new Fixture();
         var worklog = fixture.Build<WorkLog>().With(s => s.Id, 1).Create();
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.WorkLogs.Add(worklog);
             await context.SaveChangesAsync();
         }
 
-        var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new WorkLogService(new DatabaseContext(_connection), MockSqidService.Object);
         MockSqidService.Setup(s => s.DecryptId(It.IsAny<string>())).Returns(1);
         MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("%34oijf");
 
@@ -100,7 +100,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
     public async Task SaveWorkLogOK()
     {
         // Arrange
-        var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new WorkLogService(new DatabaseContext(_connection), MockSqidService.Object);
         MockSqidService.Setup(s => s.DecryptId(It.IsAny<string>())).Returns(1);
 
         var dto = new WorkLogDTO
@@ -113,7 +113,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         var result = await service.SaveOrUpdateWorkLog(dto);
 
         // Assert
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.WorkLogs.Should().HaveCount(1);
             var model = context.WorkLogs.First();
@@ -131,7 +131,7 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
                              .With(s => s.Body, "Homework")
                              .With(s => s.Id, 1).Create();
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.WorkLogs.Add(worklog);
             await context.SaveChangesAsync();
@@ -144,13 +144,13 @@ public sealed class WorkLogServiceTest : BaseDataContextTest
         };
 
         MockSqidService.Setup(s => s.DecryptId(It.IsAny<string>())).Returns(1);
-        var service = new WorkLogService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new WorkLogService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         var result = await service.SaveOrUpdateWorkLog(dto);
 
         // Assert
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.WorkLogs.Should().HaveCount(1);
             var model = context.WorkLogs.First();

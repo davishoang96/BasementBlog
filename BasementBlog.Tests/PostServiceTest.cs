@@ -32,7 +32,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             .With(s => s.IsDeleted, false)
             .With(s => s.CategoryId, 25).CreateMany(17);
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.Categories.Add(new Category
             {
@@ -44,7 +44,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new PostService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         var result = await service.GetCategoriesWithLightPostDTO();
@@ -57,7 +57,7 @@ public sealed class PostServiceTest : BaseDataContextTest
     public async Task AddPostOK()
     {
         // Arrange
-        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new PostService(new DatabaseContext(_connection), MockSqidService.Object);
         MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
         // Act
         var id = await service.SaveOrUpdatePost(new PostDTO
@@ -71,7 +71,7 @@ public sealed class PostServiceTest : BaseDataContextTest
 
         // Assert
         id.Should().Be("GOAIwe");
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             var model = context.Posts.SingleOrDefault(s => s.Title == "Hello");
             model.Body.Should().Be("Hello");
@@ -82,7 +82,7 @@ public sealed class PostServiceTest : BaseDataContextTest
     public async Task AddPostWithCategory()
     {
         // Arrange
-        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new PostService(new DatabaseContext(_connection), MockSqidService.Object);
         MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
 
         // Act
@@ -96,7 +96,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             ModifiedDate = DateTime.Now,
         });
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             var rs = context.Posts
                 .Include(s => s.Category)
@@ -123,7 +123,7 @@ public sealed class PostServiceTest : BaseDataContextTest
 
         MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.Posts.Add(post);
             await context.SaveChangesAsync();
@@ -134,7 +134,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             thePost.Description.Should().Be("Hello");
         }
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             var description = post.Description = "Test";
             var body = post.Body = "I'm testing something new";
@@ -164,13 +164,13 @@ public sealed class PostServiceTest : BaseDataContextTest
             .Without(s => s.Posts)
             .CreateMany(5);
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.AddRange(categoryModel);
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new PostService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         var result = await service.GetCategoryDTOs();
@@ -198,14 +198,14 @@ public sealed class PostServiceTest : BaseDataContextTest
             .With(s => s.IsDeleted, true)
             .CreateMany(5);
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.AddRange(posts);
             context.AddRange(deletedPosts);
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new PostService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         var result = await service.GetAllPosts();
@@ -230,19 +230,19 @@ public sealed class PostServiceTest : BaseDataContextTest
 
         MockSqidService.Setup(s => s.DecryptId("TEST91")).Returns(19);
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             await context.Posts.AddAsync(post);
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new PostService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         var result = service.SoftDeletePost("TEST91");
 
         // Assert
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             var thePost = context.Posts.SingleOrDefault(s => s.Id == 19);
             thePost.IsDeleted.Should().BeTrue();
@@ -262,19 +262,19 @@ public sealed class PostServiceTest : BaseDataContextTest
             .With(s => s.IsDeleted, true)
             .With(s => s.Id, () => id++).CreateMany(50);
 
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             await context.Posts.AddRangeAsync(posts);
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+        var service = new PostService(new DatabaseContext(_connection), MockSqidService.Object);
 
         // Act
         await service.WipeAllSoftDeletedPost();
 
         // Assert
-        using (var context = new DatabaseContext(_dbContextOptions))
+        using (var context = new DatabaseContext(_connection))
         {
             context.Posts.Count().Should().Be(2);
         }
