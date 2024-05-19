@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog", "BasementBlog\BasementBlog.csproj", "{57BE8289-4495-4EEE-A940-3F410D0598C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Database", "BasementBlog.Database\BasementBlog.Database.csproj", "{2FA66B87-842E-4387-841D-7732BA983B82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Database", "BasementBlog.Database\Blog.Database.csproj", "{2FA66B87-842E-4387-841D-7732BA983B82}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.DTO", "BasementBlog.DTO\BasementBlog.DTO.csproj", "{E012F4AB-DFD4-4FE6-BEB4-DF1086CC99BC}"
 EndProject

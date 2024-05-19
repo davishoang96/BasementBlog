@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BasementBlog.Database.Models;
+namespace Blog.Database.Models;
 
 public class Post
 {

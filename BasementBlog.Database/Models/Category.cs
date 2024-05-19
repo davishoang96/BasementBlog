@@ -1,4 +1,4 @@
-﻿namespace BasementBlog.Database.Models;
+﻿namespace Blog.Database.Models;
 
 public class Category
 {

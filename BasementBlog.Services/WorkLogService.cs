@@ -1,7 +1,7 @@
-using BasementBlog.Database;
-using BasementBlog.Database.Models;
 using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
+using Blog.Database;
+using Blog.Database.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BasementBlog.Services;
@@ -19,7 +19,7 @@ public class WorkLogService : IWorkLogService
     public async Task<bool> ClearAllWorkLogs()
     {
         var res = await db.WorkLogs.ExecuteDeleteAsync();
-        if(res < 0)
+        if (res < 0)
         {
             return false;
         }
@@ -34,16 +34,16 @@ public class WorkLogService : IWorkLogService
             Id = sqidService.EncryptId(model.Id),
             Body = model.Body,
             IsDeleted = model.IsDeleted,
-            LoggedDate = model.LoggedDate, 
-            ModifiedDate = model.ModifiedDate,  
+            LoggedDate = model.LoggedDate,
+            ModifiedDate = model.ModifiedDate,
         }).ToListAsync();
     }
 
     public async Task<WorkLogDTO> GetWorkLogById(string id)
     {
         var scr = sqidService.DecryptId(id);
-        var model = await db.WorkLogs.SingleOrDefaultAsync(s=>s.Id == scr);
-        if(model is null)
+        var model = await db.WorkLogs.SingleOrDefaultAsync(s => s.Id == scr);
+        if (model is null)
         {
             return null;
         }
@@ -53,7 +53,7 @@ public class WorkLogService : IWorkLogService
             Id = sqidService.EncryptId(model.Id),
             Body = model.Body,
             IsDeleted = model.IsDeleted,
-            LoggedDate = model.LoggedDate, 
+            LoggedDate = model.LoggedDate,
             ModifiedDate = model.ModifiedDate,
         };
     }

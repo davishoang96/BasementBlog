@@ -1,7 +1,9 @@
-using Blog.Client.Pages;
 using Blog.Components;
+using Blog.Database;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddTransient<DatabaseContext>();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -9,6 +11,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 var app = builder.Build();
+
+// Apply migration
+using (var scope = ((IApplicationBuilder)app).ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

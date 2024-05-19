@@ -17,7 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\BasementBlog.Database\BasementBlog.Database.csproj" />
+		<ProjectReference Include="..\BasementBlog.Database\Blog.Database.csproj" />
 		<ProjectReference Include="..\BasementBlog.DTO\BasementBlog.DTO.csproj" />
 		<ProjectReference Include="..\BasementBlog.Utilities\BasementBlog.Utilities.csproj" />
 		<ProjectReference Include="..\BasementBlog.Views\BasementBlog.Views.csproj" />
