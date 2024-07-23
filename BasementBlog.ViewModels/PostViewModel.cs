@@ -43,8 +43,8 @@ public class PostViewModel : BaseViewModel
         }
     }
 
-    private DateTime publishDate;
-    public DateTime PublishDate
+    private string publishDate;
+    public string PublishDate
     {
         get => publishDate;
         set
@@ -61,7 +61,7 @@ public class PostViewModel : BaseViewModel
         {
             PostTitle = post.Title;
             PostBody = string.IsNullOrEmpty(post.Body) ? string.Empty : markdownService.TextToHtml(post.Body);
-            PublishDate = post.PublishDate;
+            PublishDate = post.PublishDate.ToString("dd/MM/yyyy");
             PostId = postId;
         }
     }

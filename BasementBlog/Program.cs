@@ -62,7 +62,6 @@ app.MapGet("/Account/Login", async (HttpContext httpContext, string redirectUri 
     var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
             .WithRedirectUri(redirectUri)
             .Build();
-
     await httpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
 });
 

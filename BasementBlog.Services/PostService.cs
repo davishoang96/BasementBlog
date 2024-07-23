@@ -2,6 +2,7 @@
 using BasementBlog.Database.Models;
 using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
+using BasementBlog.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Post = BasementBlog.Database.Models.Post;
@@ -83,31 +84,17 @@ public class PostService : IPostService
     /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetAllPosts()
     {
-        var result = db.Posts.Include(p => p.Category);
-
-        if (result == null || result.IsNullOrEmpty())
+        return await db.Posts.Include(p => p.Category).Select(model => new PostDTO
         {
-            return Enumerable.Empty<PostDTO>();
-        }
-
-        var r = new List<PostDTO>();
-
-        foreach (var model in result)
-        {
-            r.Add(new PostDTO
-            {
-                Id = sqidService.EncryptId(model.Id),
-                Title = model.Title,
-                Body = null,
-                CategoryName = model.Category?.Name,
-                PublishDate = model.PublishDate,
-                Description = model.Description,
-                ModifiedDate = model.ModifiedDate,
-                IsDelete = model.IsDeleted,
-            });
-        }
-
-        return r;
+            Id = sqidService.EncryptId(model.Id),
+            Title = model.Title,
+            Body = null,
+            CategoryName = model.Category != null ? model.Category.Name : null,
+            PublishDate = model.PublishDate,
+            Description = model.Description,
+            ModifiedDate = model.ModifiedDate,
+            IsDelete = model.IsDeleted,
+        }).ToListAsync();
     }
 
     /// <summary>
@@ -257,39 +244,41 @@ public class PostService : IPostService
 
     public async Task<IEnumerable<CategoryDTO>> GetCategoriesWithLightPostDTO()
     {
-        var categoryModels = await db.Categories.Include(c => c.Posts).Where(s => s.Posts.Any(s => s.IsDeleted == null || s.IsDeleted == false)).ToListAsync();
-        if (!categoryModels.Any())
+        return await db.Categories.Include(c => c.Posts).Where(s => s.Name != PredefineCategoryNameExt.ToString(PredefineCategoryNames.WorkLogs))
+        .Select(c => new CategoryDTO
         {
-            return Enumerable.Empty<CategoryDTO>();
+            CategoryId = c.CategoryId,
+            Name = c.Name,
+            PostDTOs = c.Posts.Where(p => p.IsDeleted == null || p.IsDeleted == false)
+            .Select(p => new PostDTO
+            {
+                Id = sqidService.EncryptId(p.Id),
+                Title = p.Title,
+                Body = null,
+                Description = null,
+                PublishDate = p.PublishDate
+            })
+            .ToList()
+        })
+        .Where(c => c.PostDTOs.Any())
+        .ToListAsync();
+    }
+
+    /// <summary>
+    /// Permanent delete all posts from db (Use with caution)
+    /// </summary>
+    /// <returns>Number of deleted post</returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<int> WipeAllSoftDeletedPost()
+    {
+        var posts = await db.Posts.Where(s=>s.IsDeleted != null && s.IsDeleted == true).ToListAsync();
+        foreach(var p in posts)
+        {
+            db.Remove(p);
         }
 
-        var categoryDTOs = new List<CategoryDTO>();
-        foreach (var category in categoryModels)
-        {
-            List<PostDTO> postDTOs = new List<PostDTO>();
+        await db.SaveChangesAsync();
 
-            foreach (var model in category.Posts)
-            {
-                var postDTO = new PostDTO
-                {
-                    Id = sqidService.EncryptId(model.Id),
-                    Title = model.Title,
-                    Body = null,
-                    Description = null,
-                    PublishDate = model.PublishDate,
-                };
-
-                postDTOs.Add(postDTO);
-            }
-
-            categoryDTOs.Add(new CategoryDTO
-            {
-                CategoryId = category.CategoryId,
-                Name = category.Name,
-                PostDTOs = postDTOs,
-            });
-        }
-
-        return categoryDTOs;
+        return posts.Count;
     }
 }

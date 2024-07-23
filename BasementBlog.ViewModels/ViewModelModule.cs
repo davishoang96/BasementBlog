@@ -11,5 +11,6 @@ public class ViewModelModule : Module
         builder.RegisterType<PostViewModel>().InstancePerDependency();
         builder.RegisterType<EditPostViewModel>().InstancePerDependency();
         builder.RegisterType<DashboardViewModel>().InstancePerDependency();
+        builder.RegisterType<WorkLogsViewModel>().InstancePerDependency();
     }
 }

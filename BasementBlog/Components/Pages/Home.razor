@@ -4,19 +4,6 @@
 <PageTitle>VhDevBlog</PageTitle>
 
 <div class="home-container">
-    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-        <MudText>
-            Hello, I'm Davis, a versatile individual fueled by a passion for photography,
-            hiking, piano, and coding. Behind the camera,
-            I find joy in capturing the essence of life through unique visual narratives. \
-            Whether exploring nature's trails, playing melodies on the piano for relaxation,
-            or delving into the world of coding to craft innovative solutions,
-            each interest contributes to a harmonious blend of creativity and exploration in my life.
-            This diverse tapestry reflects my continuous journey of self-discovery and growth,
-            where each pursuit adds a unique color to the canvas of my experiences.
-        </MudText>
-    </MudItem>
-
     @foreach (var category in vm.Categoroies)
     {
         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
@@ -47,7 +34,7 @@
 <AuthorizeView Roles="Admin">
     <Authorized>
         <MudItem xs="12" Class="floating-button">
-            <MudFab Color="MudBlazor.Color.Primary" Link="/postEditor" StartIcon="@Icons.Material.Filled.Create" />
+            <MudFab Color="Color.Primary" Link="/postEditor" StartIcon="@Icons.Material.Filled.Create" />
         </MudItem>
     </Authorized>
 </AuthorizeView>

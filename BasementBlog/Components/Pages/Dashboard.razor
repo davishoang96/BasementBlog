@@ -6,7 +6,9 @@
 <MudContainer Class="home-container">
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
         <MudTabPanel Text="Posts">
-            <MudDataGrid T="PostDTO" RowClick="(e) => OnRowClick(e.Item.Id)" Items="@vm.Posts" Filterable="false" SortMode="@SortMode.None" Groupable="false">
+            <MudDataGrid T="PostDTO" RowClick="(e) => OnRowClick(e.Item.Id)" Items="@vm.Posts" 
+                         Filterable="false" SortMode="@SortMode.None" 
+                         Groupable="false" Dense="true" Hover="true">
                 <Columns>
                     <PropertyColumn Property="p => p.Title" Title="Title" />
                     <PropertyColumn Property="p => p.Description" Title="Description" />
@@ -32,12 +34,12 @@
                             <MudStack Row>
                                 @if(context.Item.IsDelete.HasValue && context.Item.IsDelete.Value == true)
                                 {
-                                    <MudFab Color="MudBlazor.Color.Primary" OnClick="() => vm.RestorePost(context.Item.Id)"
+                                    <MudFab Color="Color.Primary" OnClick="() => vm.RestorePost(context.Item.Id)"
                                             StartIcon="@Icons.Material.Filled.Restore" Size="@MudBlazor.Size.Small" />
                                 }
                                 else
                                 {
-                                    <MudFab Color="MudBlazor.Color.Error" OnClick="() => vm.SoftDeletePost(context.Item.Id)"
+                                    <MudFab Color="Color.Error" OnClick="() => vm.SoftDeletePost(context.Item.Id)"
                                             StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small" />
                                 }
                             </MudStack>
@@ -45,6 +47,10 @@
                     </TemplateColumn>
                 </Columns>
             </MudDataGrid>
+
+            <MudButton Style="margin-top: 10px" Color="Color.Error" Variant="Variant.Filled" OnClick="@vm.WipeAllIsDeletedPosts">Delete Posts</MudButton>
+
+
         </MudTabPanel>
         <MudTabPanel Text="Categories">
             <MudDataGrid Items="@vm.Categories" Filterable="false" SortMode="@SortMode.None" Groupable="false">

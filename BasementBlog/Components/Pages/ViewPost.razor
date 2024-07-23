@@ -5,13 +5,13 @@
     <MudStack>
         <MudText Typo="Typo.h3">@vm.PostTitle</MudText>
         <MudText Typo="Typo.body1">Publish Date: @vm.PublishDate</MudText>
-        <MudText Class="markdown-body mt-5" Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
+        <MudText Class="markdown-body mt-5 inter-text-field" Typo="Typo.body1">@((MarkupString)vm.PostBody)</MudText>
     </MudStack>
     <!-- Save button -->
     <AuthorizeView Roles="Admin">
         <Authorized>
             <MudItem xs="12" Class="floating-button">
-                <MudFab Color="MudBlazor.Color.Primary" OnClick="@vm.EditPost" StartIcon="@Icons.Material.Filled.Edit" />
+                <MudFab Color="Color.Primary" OnClick="@vm.EditPost" StartIcon="@Icons.Material.Filled.Edit" />
             </MudItem>
         </Authorized>
     </AuthorizeView>

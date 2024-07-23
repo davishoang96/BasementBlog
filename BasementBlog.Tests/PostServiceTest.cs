@@ -6,11 +6,12 @@ using BasementBlog.Services;
 using BasementBlog.Services.Interfaces;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Graph.Models;
 using Moq;
 using Xunit;
 using Post = BasementBlog.Database.Models.Post;
 
-namespace BasementBlog.Tests.RepoTest;
+namespace BasementBlog.Tests;
 
 public sealed class PostServiceTest : BaseDataContextTest
 {
@@ -30,6 +31,7 @@ public sealed class PostServiceTest : BaseDataContextTest
         var posts = fixture.Build<Post>()
             .Without(s => s.Category)
             .With(s => s.Id, () => postId++)
+            .With(s => s.IsDeleted, false)
             .With(s => s.CategoryId, 25).CreateMany(17);
 
         using (var context = new DatabaseContext(_dbContextOptions))
@@ -232,7 +234,7 @@ public sealed class PostServiceTest : BaseDataContextTest
 
         using (var context = new DatabaseContext(_dbContextOptions))
         {
-            context.Posts.Add(post);
+            await context.Posts.AddAsync(post);
             await context.SaveChangesAsync();
         }
 
@@ -246,6 +248,37 @@ public sealed class PostServiceTest : BaseDataContextTest
         {
             var thePost = context.Posts.SingleOrDefault(s => s.Id == 19);
             thePost.IsDeleted.Should().BeTrue();
+        }
+    }
+
+    [Fact]
+    public async Task DeleteAllPostOK()
+    {
+        // Arrange
+        var fixture = new Fixture();
+        var id = 1000;
+
+        var posts = fixture.Build<Post>()
+            .Without(s => s.Category)
+            .Without(s => s.CategoryId)
+            .With(s=>s.IsDeleted, true)
+            .With(s=>s.Id, () => id++).CreateMany(50);
+
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            await context.Posts.AddRangeAsync(posts);
+            await context.SaveChangesAsync();
+        }
+
+        var service = new PostService(new DatabaseContext(_dbContextOptions), MockSqidService.Object);
+
+        // Act
+        await service.WipeAllSoftDeletedPost();
+
+        // Assert
+        using (var context = new DatabaseContext(_dbContextOptions))
+        {
+            context.Posts.Count().Should().Be(2);
         }
     }
 }

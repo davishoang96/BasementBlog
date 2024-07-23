@@ -5,6 +5,7 @@
         @ContentText
     </DialogContent>
     <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
         <MudButton Color="@Color" OnClick="Submit">@ButtonText</MudButton>
     </DialogActions>
 </MudDialog>
@@ -19,6 +20,8 @@
 
     [Parameter] public Color Color { get; set; }
 
+    void Cancel() => MudDialog.Cancel();
+    
     void Submit() => MudDialog.Close(DialogResult.Ok(true));
 }
 

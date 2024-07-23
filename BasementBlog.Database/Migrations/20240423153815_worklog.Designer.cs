@@ -3,6 +3,7 @@ using System;
 using BasementBlog.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BasementBlog.Database.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240423153815_worklog")]
+    partial class worklog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.1");
@@ -78,8 +81,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 1,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 4, 28, 0, 21, 2, 437, DateTimeKind.Local).AddTicks(9920),
-                            PublishDate = new DateTime(2024, 4, 28, 0, 21, 2, 437, DateTimeKind.Local).AddTicks(9980),
+                            ModifiedDate = new DateTime(2024, 4, 23, 23, 38, 15, 151, DateTimeKind.Local).AddTicks(2726),
+                            PublishDate = new DateTime(2024, 4, 23, 23, 38, 15, 151, DateTimeKind.Local).AddTicks(2738),
                             Title = "Make the world better"
                         },
                         new
@@ -87,8 +90,8 @@ namespace BasementBlog.Database.Migrations
                             Id = 2,
                             Body = "Test",
                             Description = "Test",
-                            ModifiedDate = new DateTime(2024, 4, 28, 0, 21, 2, 437, DateTimeKind.Local).AddTicks(9990),
-                            PublishDate = new DateTime(2024, 4, 28, 0, 21, 2, 437, DateTimeKind.Local).AddTicks(9990),
+                            ModifiedDate = new DateTime(2024, 4, 23, 23, 38, 15, 151, DateTimeKind.Local).AddTicks(2739),
+                            PublishDate = new DateTime(2024, 4, 23, 23, 38, 15, 151, DateTimeKind.Local).AddTicks(2740),
                             Title = "AI take over the world"
                         });
                 });
@@ -106,8 +109,7 @@ namespace BasementBlog.Database.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("LoggedDate")
-                        .IsRequired()
+                    b.Property<DateTime>("LoggedDate")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -115,9 +117,7 @@ namespace BasementBlog.Database.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LoggedDate")
-                        .IsUnique()
-                        .HasDatabaseName("IX_Unique_LoggedDate");
+                    b.HasIndex("Id");
 
                     b.ToTable("WorkLogs");
                 });

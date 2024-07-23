@@ -15,6 +15,7 @@
         </MudItem>
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
+            <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
             <MudTextField ShrinkLabel Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
         </MudItem>
 
@@ -25,6 +26,10 @@
                              ToStringFunc="@DisplayValue"
                              Variant="Variant.Text" />
         </MudItem>
+
+        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <MudTextField id="post-body" Class="fira-mono-regular"
+                          Immediate="true"
         
         <MudItem Style="height: auto" xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
             <MudTextField ShrinkLabel id="drop-area" Multiline Rows="19" 
@@ -36,7 +41,7 @@
         </MudItem>
 
         <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <div class="preview-container">
+            <div class="preview-container inter-text-field">
                 @((MarkupString)vm.PostPreview)
             </div>
         </MudItem>
@@ -44,7 +49,7 @@
     </MudGrid>
      <!-- Save button -->
      <MudItem xs="12" Class="floating-button">
-         <MudFab Color="MudBlazor.Color.Primary" OnClick="@vm.SaveOrUpdatePostCommand" StartIcon="@Icons.Material.Filled.Save" />
+         <MudFab Color="Color.Primary" OnClick="@vm.SaveOrUpdatePostCommand" StartIcon="@Icons.Material.Filled.Save" />
      </MudItem>
 
 </MudContainer>

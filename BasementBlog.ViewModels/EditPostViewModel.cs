@@ -1,6 +1,7 @@
 ﻿using BasementBlog.DTO;
 using BasementBlog.Services.Interfaces;
 using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
@@ -12,17 +13,20 @@ public class EditPostViewModel : BaseViewModel
     private readonly IFileService fileService;
     private readonly IPostService postService;
     private readonly IBlogDialogService blogDialogService;
+    private readonly ISnackbar snackbar;
     private readonly NavigationManager navigationManager;
 
     [Parameter] public string PostId { get; set; }
 
     public EditPostViewModel(IBlogDialogService blogDialogService, NavigationManager navigationManager,
+                             IMarkdownService markdownService, IPostService postService, ISnackbar snackbar)
                              IMarkdownService markdownService, IPostService postService, IFileService fileService)
     {
         this.markdownService = markdownService;
         this.postService = postService;
         this.navigationManager = navigationManager;
         this.blogDialogService = blogDialogService;
+        this.snackbar = snackbar;   
         this.fileService = fileService;
     }
 
@@ -87,8 +91,24 @@ public class EditPostViewModel : BaseViewModel
         if (!string.IsNullOrEmpty(postId))
         {
             navigationManager.NavigateTo($"/viewpost/{postId}");
+            snackbar.Add("Save post successfully", Severity.Success, config =>
+            {
+                config.CloseAfterNavigation = false;
+                config.ShowTransitionDuration = 250;
+                config.HideTransitionDuration = 250;
+                config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+            });
             return true;
         }
+
+        snackbar.Add("Failed to save post", Severity.Error, config =>
+        {
+            config.CloseAfterNavigation = false;
+            config.ShowTransitionDuration = 250;
+            config.HideTransitionDuration = 250;
+            config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+        });
+
         return false;
     }
 
