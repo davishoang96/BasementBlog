@@ -15,7 +15,6 @@
         </MudItem>
 
         <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
-            <MudTextField Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
             <MudTextField ShrinkLabel Label="Description" @bind-Value="@vm.PostDescription" Variant="Variant.Text" />
         </MudItem>
 
@@ -27,10 +26,6 @@
                              Variant="Variant.Text" />
         </MudItem>
 
-        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
-            <MudTextField id="post-body" Class="fira-mono-regular"
-                          Immediate="true"
-        
         <MudItem Style="height: auto" xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
             <MudTextField ShrinkLabel id="drop-area" Multiline Rows="19" 
                           Immediate="true" 
@@ -129,6 +124,18 @@
 
                 for (var i = 0; i < files.length; i++) {
                     var file = files[i];
+                    
+                    // Check file type
+                    if (!file.type.startsWith('image/')) {
+                        alert(`File ${file.name} is not an image.`);
+                        continue;
+                    }
+
+                    if (file.size > 2 * 1024 * 1024) { // 2MB size limit
+                        alert(`File ${file.name} exceeds the 2MB size limit.`);
+                        continue;
+                    }
+
                     await readFile(file);
                 }
             }

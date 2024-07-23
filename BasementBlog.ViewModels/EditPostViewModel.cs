@@ -19,14 +19,13 @@ public class EditPostViewModel : BaseViewModel
     [Parameter] public string PostId { get; set; }
 
     public EditPostViewModel(IBlogDialogService blogDialogService, NavigationManager navigationManager,
-                             IMarkdownService markdownService, IPostService postService, ISnackbar snackbar)
-                             IMarkdownService markdownService, IPostService postService, IFileService fileService)
+                             IMarkdownService markdownService, IPostService postService, IFileService fileService, ISnackbar snackbar)
     {
         this.markdownService = markdownService;
         this.postService = postService;
         this.navigationManager = navigationManager;
         this.blogDialogService = blogDialogService;
-        this.snackbar = snackbar;   
+        this.snackbar = snackbar;
         this.fileService = fileService;
     }
 
