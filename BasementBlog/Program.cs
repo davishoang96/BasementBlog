@@ -30,6 +30,7 @@ builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
@@ -42,6 +43,11 @@ builder.Services
     .AddMudServices()
     .AddBlazorise()
     .AddMudMarkdownServices();
+
+builder.Services.AddServerSideBlazor().AddHubOptions(options =>
+{
+    options.MaximumReceiveMessageSize = null; // no limit or use a number
+});
 
 builder.Services.AddAuth0WebAppAuthentication(o =>
 {
@@ -85,10 +91,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseForwardedHeaders();
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
-
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
