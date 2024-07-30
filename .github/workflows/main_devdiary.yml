@@ -72,7 +72,7 @@ jobs:
           port: 22
           script: |
             sudo systemctl stop vhdevblog
-            unzip -o -j /root/artifact.zip 'home/runner/.dotnet/BasementBlog/*' -d /var/www/
+            unzip -o -j /root/artifact.zip 'home/runner/.dotnet/BasementBlog/*' -d /var/www/oldBasementBlog/
             rm /root/artifact.zip
             sudo systemctl restart vhdevblog
       
