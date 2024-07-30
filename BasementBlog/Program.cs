@@ -30,6 +30,7 @@ builder.Services
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 
+
 builder.Configuration
     .AddJsonFile("appsettings.json", false, true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
@@ -42,6 +43,11 @@ builder.Services
     .AddMudServices()
     .AddBlazorise()
     .AddMudMarkdownServices();
+
+builder.Services.AddServerSideBlazor().AddHubOptions(options =>
+{
+    options.MaximumReceiveMessageSize = null; // no limit or use a number
+});
 
 builder.Services.AddAuth0WebAppAuthentication(o =>
 {
@@ -69,6 +75,24 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext, string redirectUri
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
 
+app.MapGet("/backupDb", async (HttpContext context) =>
+{
+    var dbFilePath = "blazorblog.db";
+    var timestamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+    var fileName = $"blazorblog-{timestamp}.db";
+
+    if (!System.IO.File.Exists(dbFilePath))
+    {
+        context.Response.StatusCode = 404;
+        await context.Response.WriteAsync("Database file not found.");
+        return;
+    }
+
+    context.Response.ContentType = "application/octet-stream";
+    context.Response.Headers.Add("Content-Disposition", $"attachment; filename={fileName}");
+    await context.Response.SendFileAsync(dbFilePath);
+}).RequireAuthorization();
+
 using (var scope = ((IApplicationBuilder)app).ApplicationServices.GetService<IServiceScopeFactory>()!.CreateScope())
 {
     scope.ServiceProvider.GetRequiredService<DatabaseContext>().Database.Migrate();
@@ -85,10 +109,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseForwardedHeaders();
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
-
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
