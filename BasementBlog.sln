@@ -19,6 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Utilities", "B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog.Tests", "BasementBlog.Tests\BasementBlog.Tests.csproj", "{AD65C7FD-FEF6-4630-B628-1041E15129FC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blog", "Blog", "{5D629220-4811-4398-A52D-0629EA77CD16}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog", "Blog\Blog\Blog.csproj", "{B53F4351-D42C-4FAB-A5E9-20BC83416A73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Client", "Blog\Blog.Client\Blog.Client.csproj", "{3C32C546-D3A8-491A-B462-46516192B565}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,11 +63,23 @@ Global
 		{AD65C7FD-FEF6-4630-B628-1041E15129FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD65C7FD-FEF6-4630-B628-1041E15129FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD65C7FD-FEF6-4630-B628-1041E15129FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B53F4351-D42C-4FAB-A5E9-20BC83416A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B53F4351-D42C-4FAB-A5E9-20BC83416A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B53F4351-D42C-4FAB-A5E9-20BC83416A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B53F4351-D42C-4FAB-A5E9-20BC83416A73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C32C546-D3A8-491A-B462-46516192B565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C32C546-D3A8-491A-B462-46516192B565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C32C546-D3A8-491A-B462-46516192B565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C32C546-D3A8-491A-B462-46516192B565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {79F3A385-1024-4CA3-9877-AB0D05A4C378}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B53F4351-D42C-4FAB-A5E9-20BC83416A73} = {5D629220-4811-4398-A52D-0629EA77CD16}
+		{3C32C546-D3A8-491A-B462-46516192B565} = {5D629220-4811-4398-A52D-0629EA77CD16}
 	EndGlobalSection
 EndGlobal
