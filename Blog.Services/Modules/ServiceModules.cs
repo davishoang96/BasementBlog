@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Blog.Services;
 
 namespace Blog.Services.Modules;
 
