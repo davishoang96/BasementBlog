@@ -3,7 +3,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BasementBlog.Components;
 using BasementBlog.Database;
-using BasementBlog.Services.Modules;
+using Blog.Services.Modules;
 using BasementBlog.ViewModels;
 using Blazorise;
 using Microsoft.AspNetCore.Authentication;

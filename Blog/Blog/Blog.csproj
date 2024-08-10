@@ -7,10 +7,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Include="wwwroot\**">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+		<ProjectReference Include="..\..\Blog.Database\Blog.Database.csproj" />
+		<ProjectReference Include="..\Blog.Client\Blog.Client.csproj" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
 	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Auth0.AspNetCore.Authentication" Version="1.4.1" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
@@ -20,7 +21,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1" />
 		<PackageReference Include="MudBlazor" Version="6.15.0" />
 		<PackageReference Include="MudBlazor.Markdown" Version="0.1.3" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Sqids" Version="3.1.0" />
 	</ItemGroup>
+
 </Project>
