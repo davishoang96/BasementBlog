@@ -1,13 +1,12 @@
-using BlazorBlog.Client.Services;
-using BlazorBlog.Components;
+using BlazorApp1.Client.Pages;
+using BlazorApp1.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
-
-//builder.Services.AddSingleton<IPostServices, PostServices>();
 
 var app = builder.Build();
 
@@ -29,7 +28,8 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(BlazorBlog.Client._Imports).Assembly);
+    .AddAdditionalAssemblies(typeof(BlazorApp1.Client._Imports).Assembly);
 
 app.Run();

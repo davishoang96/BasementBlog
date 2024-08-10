@@ -7,9 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BasementBlog.DTO\BasementBlog.DTO.csproj" />
-    <ProjectReference Include="..\BlazorBlog.Client\BlazorBlog.Client.csproj" />
-    <PackageReference Include="AutoFixture" Version="4.18.1" />
+    <ProjectReference Include="..\BlazorApp1.Client\BlazorApp1.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.4" />
   </ItemGroup>
 
