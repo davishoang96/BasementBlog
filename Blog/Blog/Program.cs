@@ -4,6 +4,10 @@ using Blog.Database;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Variables
+var baseUrl = builder.Configuration["BaseUrl"];
+
 builder.Services.AddTransient<DatabaseContext>();
 
 // Add services to the container.
@@ -12,10 +16,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
+builder.WebHost.UseUrls(baseUrl);
 
 builder.Services.AddHttpClient<IPostServices, PostServices>(c =>
 {
-    c.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+    c.BaseAddress = new Uri(baseUrl);
 });
 
 var app = builder.Build();
