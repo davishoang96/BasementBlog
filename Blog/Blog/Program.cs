@@ -1,3 +1,4 @@
+using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,13 @@ builder.Services.AddTransient<DatabaseContext>();
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
+
+builder.Services.AddControllers();
+
+builder.Services.AddHttpClient<IPostServices, PostServices>(c =>
+{
+    c.BaseAddress = new Uri(builder.Configuration["BaseUrl"]);
+});
 
 var app = builder.Build();
 
@@ -34,7 +42,7 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
-
+app.MapControllers();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()

@@ -1,0 +1,47 @@
+﻿@page "/posts"
+@using Blog.Client.Services;
+@using Blog.DTO
+@inject IPostServices postServices;
+
+<h3>Posts</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Category Id</th>
+            <th>Category Name</th>
+            <th>Title</th>
+            <th>Body</th>
+            <th>Description</th>
+            <th>Publish Date</th>
+            <th>Modified Date</th>
+            <th>Is Deleted</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var post in posts)
+        {
+            <tr>
+                <td>@post.Id</td>
+                <td>@post.CategoryId</td>
+                <td>@post.CategoryName</td>
+                <td>@post.Title</td>
+                <td>@post.Body</td>
+                <td>@post.Description</td>
+                <td>@post.PublishDate.ToString("yyyy-MM-dd")</td>
+                <td>@post.ModifiedDate.ToString("yyyy-MM-dd")</td>
+                <td>@(post.IsDelete.HasValue && post.IsDelete.Value ? "Yes" : "No")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    private IEnumerable<PostDTO> posts = new List<PostDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await postServices.GetPostsAsync();
+    }
+}
