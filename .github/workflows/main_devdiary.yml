@@ -20,13 +20,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '8.x'
-          include-prerelease: true
+          include-prerelease: false
 
-      - name: dotnet build
-        run: dotnet build --configuration Release
-
-      # - name: dotnet test
-      #   run: dotnet test --verbosity normal
+      - name: dotnet version
+        run: dotnet --version
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/Blog/
