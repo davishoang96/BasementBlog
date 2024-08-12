@@ -38,7 +38,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: BlogApp
+          name: BlogWebApp
           path: artifact.zip
 
   deploy:
@@ -51,7 +51,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: BasementBlogApp
+          name: BlogWebApp
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
@@ -78,4 +78,4 @@ jobs:
       
       - uses: geekyeggo/delete-artifact@v5
         with:
-          name: Blog.app
+          name: BlogWebApp
