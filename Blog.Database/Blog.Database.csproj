@@ -15,7 +15,8 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.8" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlcipher" Version="2.1.9" />
+		<PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.9" />
 	</ItemGroup>
 
 	<ItemGroup>
