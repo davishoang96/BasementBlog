@@ -29,16 +29,16 @@ jobs:
       #   run: dotnet test --verbosity normal
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/BasementBlog/
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/Blog/
 
       - name: Create artifact zip
         run: |
-          zip -r artifact.zip ${{env.DOTNET_ROOT}}/BasementBlog/
+          zip -r artifact.zip ${{env.DOTNET_ROOT}}/Blog/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: BasementBlogApp
+          name: BlogApp
           path: artifact.zip
 
   deploy:
@@ -72,10 +72,10 @@ jobs:
           port: 22
           script: |
             sudo systemctl stop vhdevblog
-            unzip -o -j /root/artifact.zip 'home/runner/.dotnet/BasementBlog/*' -d /var/www/oldBasementBlog/
+            unzip -o -j /root/artifact.zip 'home/runner/.dotnet/Blog/*' -d /var/www/Blog/
             rm /root/artifact.zip
             sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
         with:
-          name: BasementBlog.app
+          name: Blog.app
