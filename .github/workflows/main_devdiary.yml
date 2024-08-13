@@ -29,7 +29,7 @@ jobs:
         run: dotnet restore
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ../Blog/
+        run: dotnet publish -c Release --runtime win-x64 -o ../Blog/
 
       - name: Create artifact zip
         run: |
