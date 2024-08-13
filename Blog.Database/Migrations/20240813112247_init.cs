@@ -27,6 +27,22 @@ namespace Blog.Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "WorkLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Body = table.Column<string>(type: "TEXT", nullable: false),
+                    LoggedDate = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WorkLogs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
@@ -37,7 +53,8 @@ namespace Blog.Database.Migrations
                     Body = table.Column<string>(type: "TEXT", nullable: false),
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     PublishDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    ModifiedDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,11 +68,11 @@ namespace Blog.Database.Migrations
 
             migrationBuilder.InsertData(
                 table: "Posts",
-                columns: new[] { "Id", "Body", "CategoryId", "Description", "ModifiedDate", "PublishDate", "Title" },
+                columns: new[] { "Id", "Body", "CategoryId", "Description", "IsDeleted", "ModifiedDate", "PublishDate", "Title" },
                 values: new object[,]
                 {
-                    { 1, "Test", null, "Test", new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9017), new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9040), "Make the world better" },
-                    { 2, "Test", null, "Test", new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9043), new DateTime(2024, 3, 12, 11, 41, 38, 316, DateTimeKind.Local).AddTicks(9043), "AI take over the world" }
+                    { 1, "Test", null, "Test", null, new DateTime(2024, 8, 13, 19, 22, 47, 247, DateTimeKind.Local).AddTicks(9585), new DateTime(2024, 8, 13, 19, 22, 47, 247, DateTimeKind.Local).AddTicks(9595), "Make the world better" },
+                    { 2, "Test", null, "Test", null, new DateTime(2024, 8, 13, 19, 22, 47, 247, DateTimeKind.Local).AddTicks(9597), new DateTime(2024, 8, 13, 19, 22, 47, 247, DateTimeKind.Local).AddTicks(9598), "AI take over the world" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -72,6 +89,12 @@ namespace Blog.Database.Migrations
                 name: "IX_Posts_Id",
                 table: "Posts",
                 column: "Id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Unique_LoggedDate",
+                table: "WorkLogs",
+                column: "LoggedDate",
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -79,6 +102,9 @@ namespace Blog.Database.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Posts");
+
+            migrationBuilder.DropTable(
+                name: "WorkLogs");
 
             migrationBuilder.DropTable(
                 name: "Categories");
