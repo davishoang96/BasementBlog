@@ -29,11 +29,11 @@ jobs:
         run: dotnet restore
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/Blog/
+        run: dotnet publish --configuration Release --output ./output-folder/Blog/
 
       - name: Create artifact zip
         run: |
-          zip -r artifact.zip ${{env.DOTNET_ROOT}}/Blog/
+          zip -r artifact.zip ./output-folder/Blog/
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
