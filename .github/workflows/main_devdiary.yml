@@ -29,39 +29,21 @@ jobs:
         run: dotnet restore
 
       - name: dotnet publish
-        run: dotnet publish --configuration Release --output ./output-folder/Blog/
+        run: dotnet publish --configuration Release --output ./Blog/
 
       - name: Create artifact zip
         run: |
-          zip -r artifact.zip ./output-folder/Blog/
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
-        with:
-          name: BlogWebApp
-          path: artifact.zip
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: 'Production'
+          zip -r artifact.zip ./Blog/
     
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v3
-        with:
-          name: BlogWebApp
-
       - name: copy file via ssh password
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.IP_SSH_DEVBLOG }}
-          username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
-          password: ${{ secrets.KEY_SSH_DEVBLOG }}
-          port: 22
-          source: artifact.zip
-          target: /root/
+            host: ${{ secrets.IP_SSH_DEVBLOG }}
+            username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+            password: ${{ secrets.KEY_SSH_DEVBLOG }}
+            port: 22
+            source: artifact.zip
+            target: /root/
 
       - name: executing remote ssh commands using password
         uses: appleboy/ssh-action@v1.0.3
@@ -72,10 +54,51 @@ jobs:
           port: 22
           script: |
             sudo systemctl stop vhdevblog
-            unzip -o -j /root/artifact.zip 'home/runner/.dotnet/Blog/*' -d /var/www/Blog/
+            unzip -o -j /root/artifact.zip '/Blog/*' -d /var/www/Blog/
             rm /root/artifact.zip
             sudo systemctl restart vhdevblog
-      
-      - uses: geekyeggo/delete-artifact@v5
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
         with:
           name: BlogWebApp
+          path: artifact.zip
+
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   needs: build
+  #   environment:
+  #     name: 'Production'
+    
+  #   steps:
+  #     - name: Download artifact from build job
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: BlogWebApp
+
+  #     - name: copy file via ssh password
+  #       uses: appleboy/scp-action@v0.1.7
+  #       with:
+  #         host: ${{ secrets.IP_SSH_DEVBLOG }}
+  #         username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+  #         password: ${{ secrets.KEY_SSH_DEVBLOG }}
+  #         port: 22
+  #         source: artifact.zip
+  #         target: /root/
+
+  #     - name: executing remote ssh commands using password
+  #       uses: appleboy/ssh-action@v1.0.3
+  #       with:
+  #         host: ${{ secrets.IP_SSH_DEVBLOG }}
+  #         username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+  #         password: ${{ secrets.KEY_SSH_DEVBLOG }}
+  #         port: 22
+  #         script: |
+  #           sudo systemctl stop vhdevblog
+  #           unzip -o -j /root/artifact.zip 'home/runner/.dotnet/Blog/*' -d /var/www/Blog/
+  #           rm /root/artifact.zip
+  #           sudo systemctl restart vhdevblog
+      
+  #     - uses: geekyeggo/delete-artifact@v5
+  #       with:
+  #         name: BlogWebApp
