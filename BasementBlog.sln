@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BasementBlog", "BasementBlog\BasementBlog.csproj", "{57BE8289-4495-4EEE-A940-3F410D0598C8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog", "Blog\Blog\Blog.csproj", "{E28DD785-C2DA-4E56-B92B-D7429EBC741F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Client", "Blog\Blog.Client\Blog.Client.csproj", "{9EC34DF2-1B36-48A0-8C9E-4BB2FEA621F2}"
