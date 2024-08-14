@@ -6,44 +6,18 @@ namespace Blog.Database;
 
 public class DatabaseContext : DbContext
 {
-    private SqliteConnection connection;
-    private string dbFile = "BlogBasement.db";
-
-    public DatabaseContext() { }
-    public DatabaseContext(DbContextOptions<DatabaseContext> dbContextOptions) : base(dbContextOptions) { }
-
-    public DatabaseContext(string databaseFile)
+    // Constructor that accepts DbContextOptions
+    public DatabaseContext(DbContextOptions<DatabaseContext> options)
+        : base(options)
     {
-        if (!string.IsNullOrEmpty(databaseFile))
-        {
-            dbFile = databaseFile;
-        }
-    }
-
-    public DatabaseContext(SqliteConnection sqliteConnection)
-    {
-        if (!string.IsNullOrEmpty(sqliteConnection?.DataSource))
-        {
-            dbFile = sqliteConnection.DataSource;
-        }
-
-        connection = sqliteConnection;
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        connection ??= InitializeSQLiteConnection(dbFile);
-        optionsBuilder.UseSqlite(connection);
-    }
-
-    private static SqliteConnection InitializeSQLiteConnection(string databaseFile)
-    {
-        var connectionString = new SqliteConnectionStringBuilder
+        if (!optionsBuilder.IsConfigured)
         {
-            DataSource = databaseFile,
-            Password = "@j32[f09q;4gq43Q#$VC"
-        };
-        return new SqliteConnection(connectionString.ToString());
+            optionsBuilder.UseSqlite("Data Source=BlogVenda.db");
+        }
     }
 
     public DbSet<Post> Posts { get; set; }

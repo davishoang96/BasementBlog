@@ -8,7 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
 
-builder.Services.AddTransient<DatabaseContext>();
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlite("Data Source=BlogVenda.db"));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
