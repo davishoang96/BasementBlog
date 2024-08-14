@@ -26,7 +26,7 @@ jobs:
         run: dotnet --version
 
       - name: Restore dependencies
-        run: dotnet restore BasementBlog/Blog/Blog.csproj
+        run: dotnet restore /Blog/Blog.csproj
 
       - name: Build project
         run: dotnet build /Blog/Blog.csproj --configuration Release
