@@ -25,11 +25,14 @@ jobs:
       - name: dotnet version
         run: dotnet --version
 
-      - name: dotnet restore
-        run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore BasementBlog/Blog/Blog.csproj
 
-      - name: dotnet publish
-        run: dotnet publish -c Release --runtime win-x64 -o ../Blog/
+      - name: Build project
+        run: dotnet build BasementBlog/Blog/Blog.csproj --configuration Release
+      
+      - name: Publish project
+        run: dotnet publish BasementBlog/Blog/Blog.csproj --configuration Release --output ../Blog
 
       - name: Create artifact zip
         run: |
