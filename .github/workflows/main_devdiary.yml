@@ -29,10 +29,10 @@ jobs:
         run: dotnet restore BasementBlog/Blog/Blog.csproj
 
       - name: Build project
-        run: dotnet build BasementBlog/Blog/Blog.csproj --configuration Release
+        run: dotnet build /Blog/Blog.csproj --configuration Release
       
       - name: Publish project
-        run: dotnet publish BasementBlog/Blog/Blog.csproj --configuration Release --output ../Blog
+        run: dotnet publish /Blog/Blog.csproj --configuration Release --output ../Blog
 
       - name: Create artifact zip
         run: |
