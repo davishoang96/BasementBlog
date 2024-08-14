@@ -1,20 +1,35 @@
 ﻿using Blog.Database;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace Blog.Tests;
 
 public class BaseDataContextTest : IDisposable
 {
-    internal SqliteConnection _connection;
+    internal SqliteConnection Connection { get; }
+    internal DbContextOptions<DatabaseContext> Options { get; }
 
     public BaseDataContextTest()
     {
-        _connection = new SqliteConnection("DataSource=:memory:");
-        _connection.Open();
-        using (var context = new DatabaseContext(_connection))
-        {
-            context.Database.EnsureCreated();
-        }
+        // Create and open a shared SqliteConnection
+        Connection = new SqliteConnection("DataSource=:memory:");
+        Connection.Open();
+
+        // Configure DbContextOptions to use this connection
+        Options = new DbContextOptionsBuilder<DatabaseContext>()
+            .UseSqlite(Connection)
+            .Options;
+
+        // Ensure the database schema is created
+        using var context = new DatabaseContext(Options);
+        context.Database.EnsureCreated();
+    }
+
+    public void Dispose()
+    {
+        // Clean up the connection after all tests are done
+        Connection.Close();
     }
 
     #region IDisposable Support
@@ -26,17 +41,13 @@ public class BaseDataContextTest : IDisposable
         {
             if (disposing)
             {
-                _connection.Close();
-                _connection.Dispose();
+                Connection.Close();
+                Connection.Dispose();
             }
 
             disposedValue = true;
         }
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-    }
     #endregion
 }
