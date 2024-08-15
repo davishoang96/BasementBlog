@@ -1,63 +1,76 @@
 ﻿@inherits LayoutComponentBase
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
-<MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
-<MudPopoverProvider />
+<MudThemeProvider IsDarkMode="true" Theme="_theme" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
+
 <MudLayout>
-    <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
-        <MudSpacer />
-        <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" />
-        <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
-    </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu />
+    <MudDrawer @bind-Open="@_drawerOpen" Width="250px">
+       <MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
+            <MudNavMenu Class="mud-width-full">
+                <MudAvatar Style="width: 100px; height: 100px; margin:10px 10px 10px 70px;">
+                    <MudImage Src="https://lh3.googleusercontent.com/a/ACg8ocL4dGVfEEs7YNpO39_69jO419fnW6Rf1lKxQJvPJfaFCM9QfWNrmQ=s634-c-no"></MudImage>
+                </MudAvatar>
+                <MudText Typo="Typo.h6" Class="px-4">The Basement Blog</MudText>
+                <MudText Typo="Typo.overline" Class="px-4" Style="font-size: 10px;font-style: italic;">Personal blog written by Davis Hoang</MudText>
+                <MudDivider Class="my-2" />
+                <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+               <CascadingAuthenticationState>
+                 <AuthorizeView>
+                    <Authorized>      
+                        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+                        <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
+                    </Authorized>
+                </AuthorizeView>
+               </CascadingAuthenticationState>
+                <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
+                <CascadingAuthenticationState>
+                    <AuthorizeView>
+                        <Authorized>        
+                            <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit">Logout</MudNavLink>
+                            @* <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Href="Account/Logout">Logout</MudNavLink> *@
+                        </Authorized>
+                        <NotAuthorized>
+                            <MudNavLink Icon="@Icons.Material.Filled.Login" Color="Color.Inherit">Login</MudNavLink>
+                            @* <MudNavLink Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Href="Account/Login?redirectUri=/">Login</MudNavLink> *@
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </CascadingAuthenticationState>
+            </MudNavMenu>
+        </MudPaper>
     </MudDrawer>
-    <MudMainContent Class="mt-16 pa-4">
-        @Body
+    <MudMainContent>
+        <div Style="margin-top:-60px; margin-left: 5px">
+            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" />
+        </div>
+        <MudContainer>
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 
-
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
-
 @code {
-    private bool _drawerOpen = true;
-    private bool _isDarkMode = true;
-    private MudTheme? _theme = null;
+    private MudTheme _theme = new()
+    {
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1,
+            Background = "#0d1117",
+        },
+    };
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
-
-        _theme = new()
-        {
-            LayoutProperties = new LayoutProperties()
-        };
+        _drawerOpen = true;
     }
 
+    bool _drawerOpen = true;
 
-    private void DrawerToggle()
+    void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
     }
-
-    private void DarkModeToggle()
-    {
-        _isDarkMode = !_isDarkMode;
-    }
-
-    public string DarkLightModeButtonIcon => _isDarkMode switch
-    {
-        true => Icons.Material.Rounded.AutoMode,
-        false => Icons.Material.Outlined.DarkMode,
-    };
 }
-
 

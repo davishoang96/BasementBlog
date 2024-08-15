@@ -30,7 +30,7 @@ var handler = new HttpClientHandler
 builder.Services.AddHttpClient("BlogAppApi", c =>
 {
     c.BaseAddress = new Uri(baseUrl);
-}).ConfigurePrimaryHttpMessageHandler(() => handler);
+}).ConfigurePrimaryHttpMessageHandler(() => handler); 
 
 
 builder.Services.AddSingleton<IPostServices, PostServices>();
