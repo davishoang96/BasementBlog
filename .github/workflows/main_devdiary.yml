@@ -32,7 +32,7 @@ jobs:
         run: ls -la
 
       - name: Restore dependencies
-        run: dotnet restore /home/runner/work/BasementBlog/Blog/Blog.csproj
+        run: dotnet restore /home/runner/work/BasementBlog/BasementBlog/Blog/Blog.csproj
 
   #     - name: Build project
   #       run: dotnet build ${{ github.workspace }}/Blog/Blog.csproj --configuration Release
