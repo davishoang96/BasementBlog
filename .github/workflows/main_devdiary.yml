@@ -24,21 +24,14 @@ jobs:
 
       - name: dotnet version
         run: dotnet --version
-
-      - name: Show current working directory
-        run: pwd
-
-      - name: List files in current directory
-        run: ls -la
-
       - name: Restore dependencies
-        run: dotnet restore ${{ github.workspace }}/Blog/Blog/Blog.csproj
+        run: dotnet restore
 
       - name: Build project
-        run: dotnet build ${{ github.workspace }}/Blog/Blog/Blog.csproj --configuration Release
+        run: dotnet build -c Release
       
       - name: Publish project
-        run: dotnet publish ${{ github.workspace }}/Blog/Blog/Blog.csproj --configuration Release --output ../Blog
+        run: dotnet publish -c Release --p ../Blog
 
       - name: Create artifact zip
         run: |
@@ -72,18 +65,18 @@ jobs:
           source: artifact.zip
           target: /root/
 
-      - name: executing remote ssh commands using password
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.IP_SSH_DEVBLOG }}
-          username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
-          password: ${{ secrets.KEY_SSH_DEVBLOG }}
-          port: 22
-          script: |
-            sudo systemctl stop vhdevblog
-            unzip -o -j /root/artifact.zip -d /var/www/Blog/
-            rm /root/artifact.zip
-            sudo systemctl restart vhdevblog
+      # - name: executing remote ssh commands using password
+      #   uses: appleboy/ssh-action@v1.0.3
+      #   with:
+      #     host: ${{ secrets.IP_SSH_DEVBLOG }}
+      #     username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+      #     password: ${{ secrets.KEY_SSH_DEVBLOG }}
+      #     port: 22
+      #     script: |
+      #       sudo systemctl stop vhdevblog
+      #       unzip -o -j /root/artifact.zip -d /var/www/Blog/
+      #       rm /root/artifact.zip
+      #       sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
         with:
