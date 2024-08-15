@@ -14,7 +14,7 @@ public class PostServices : IPostServices
 
     public PostServices(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClientFactory.CreateClient("test");
+        _httpClient = httpClientFactory.CreateClient("BlogAppApi");
     }
 
     public async Task<IEnumerable<PostDTO>> GetPostsAsync()

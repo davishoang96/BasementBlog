@@ -19,16 +19,16 @@ builder.Services.AddRazorComponents()
 builder.Services.AddControllers();
 builder.WebHost.UseUrls(baseUrl);
 
-//var handler = new HttpClientHandler
-//{
-//    // Bypass SSL certificate validation
-//    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-//};
+var handler = new HttpClientHandler
+{
+    // Bypass SSL certificate validation
+    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+};
 
-builder.Services.AddHttpClient("test", c =>
+builder.Services.AddHttpClient("BlogAppApi", c =>
 {
     c.BaseAddress = new Uri(baseUrl);
-});
+}).ConfigurePrimaryHttpMessageHandler(() => handler);
 
 
 builder.Services.AddSingleton<IPostServices, PostServices>();
