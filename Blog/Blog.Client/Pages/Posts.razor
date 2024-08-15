@@ -5,37 +5,31 @@
 
 <h3>Posts</h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Category Id</th>
-            <th>Category Name</th>
-            <th>Title</th>
-            <th>Body</th>
-            <th>Description</th>
-            <th>Publish Date</th>
-            <th>Modified Date</th>
-            <th>Is Deleted</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var post in posts)
-        {
-            <tr>
-                <td>@post.Id</td>
-                <td>@post.CategoryId</td>
-                <td>@post.CategoryName</td>
-                <td>@post.Title</td>
-                <td>@post.Body</td>
-                <td>@post.Description</td>
-                <td>@post.PublishDate.ToString("yyyy-MM-dd")</td>
-                <td>@post.ModifiedDate.ToString("yyyy-MM-dd")</td>
-                <td>@(post.IsDelete.HasValue && post.IsDelete.Value ? "Yes" : "No")</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<MudTable Items="posts" Hover="true" Striped="true">
+    <HeaderContent>
+        <MudTh>Id</MudTh>
+        <MudTh>Category Id</MudTh>
+        <MudTh>Category Name</MudTh>
+        <MudTh>Title</MudTh>
+        <MudTh>Body</MudTh>
+        <MudTh>Description</MudTh>
+        <MudTh>Publish Date</MudTh>
+        <MudTh>Modified Date</MudTh>
+        <MudTh>Is Deleted</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Id">@context.Id</MudTd>
+        <MudTd DataLabel="Category Id">@context.CategoryId</MudTd>
+        <MudTd DataLabel="Category Name">@context.CategoryName</MudTd>
+        <MudTd DataLabel="Title">@context.Title</MudTd>
+        <MudTd DataLabel="Body">@context.Body</MudTd>
+        <MudTd DataLabel="Description">@context.Description</MudTd>
+        <MudTd DataLabel="Publish Date">@context.PublishDate.ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="Modified Date">@context.ModifiedDate.ToString("yyyy-MM-dd")</MudTd>
+        <MudTd DataLabel="Is Deleted">@(@context.IsDelete.HasValue && @context.IsDelete.Value ? "Yes" : "No")</MudTd>
+    </RowTemplate>
+</MudTable>
+
 
 @code {
     private IEnumerable<PostDTO> posts = new List<PostDTO>();
