@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 var baseUrl = builder.Configuration["BaseUrl"];
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlite("Data Source=BlogVenda.db"));
+    options.UseSqlite("Data Source=BlogDatabase.db"));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -19,16 +19,16 @@ builder.Services.AddRazorComponents()
 builder.Services.AddControllers();
 builder.WebHost.UseUrls(baseUrl);
 
-var handler = new HttpClientHandler
-{
-    // Bypass SSL certificate validation
-    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
-};
+//var handler = new HttpClientHandler
+//{
+//    // Bypass SSL certificate validation
+//    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+//};
 
 builder.Services.AddHttpClient<IPostServices, PostServices>(c =>
 {
     c.BaseAddress = new Uri(baseUrl);
-}).ConfigurePrimaryHttpMessageHandler(() => handler); ;
+});
 
 var app = builder.Build();
 
