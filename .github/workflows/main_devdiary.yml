@@ -31,7 +31,7 @@ jobs:
         run: dotnet build -c Release
       
       - name: Publish project
-        run: dotnet publish -c Release --p ../Blog
+        run: dotnet publish -c Release -o ../Blog
 
       - name: Create artifact zip
         run: |
