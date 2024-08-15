@@ -26,13 +26,13 @@ jobs:
         run: dotnet --version
 
       - name: Restore dependencies
-        run: dotnet restore /home/runner/work/BasementBlog/BasementBlog/Blog.csproj
+        run: dotnet restore /home/runner/work/BasementBlog/BasementBlog/Blog/Blog.csproj
 
       - name: Build project
-        run: dotnet build /home/runner/work/BasementBlog/BasementBlog/Blog.csproj --configuration Release
+        run: dotnet build /home/runner/work/BasementBlog/BasementBlog/Blog/Blog.csproj --configuration Release
       
       - name: Publish project
-        run: dotnet publish /home/runner/work/BasementBlog/BasementBlog/Blog.csproj --configuration Release --output ../Blog
+        run: dotnet publish /home/runner/work/BasementBlog/BasementBlog/Blog/Blog.csproj --configuration Release --output ../Blog
 
       - name: Create artifact zip
         run: |
