@@ -2,6 +2,7 @@ using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,8 @@ builder.Services.AddHttpClient("BlogAppApi", c =>
 
 
 builder.Services.AddSingleton<IPostServices, PostServices>();
+
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 

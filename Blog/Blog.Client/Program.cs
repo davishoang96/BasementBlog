@@ -1,5 +1,6 @@
 using Blog.Client.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using MudBlazor.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -14,5 +15,5 @@ builder.Services.AddHttpClient("BlogAppApi", c =>
 });
 
 builder.Services.AddSingleton<IPostServices, PostServices>();
-
+builder.Services.AddMudServices();
 await builder.Build().RunAsync();
