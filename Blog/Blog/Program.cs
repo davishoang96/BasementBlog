@@ -2,6 +2,7 @@ using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,6 +37,15 @@ builder.Services.AddSingleton<IPostServices, PostServices>();
 
 builder.Services.AddMudServices();
 
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "My BlogApp Api",
+    });
+});
+
 var app = builder.Build();
 
 // Apply migration
@@ -48,6 +58,12 @@ using (var scope = ((IApplicationBuilder)app).ApplicationServices.GetService<ISe
 if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My BlogApp Api");
+        c.RoutePrefix = "api-docs"; // Set Swagger UI at the app's root
+    });
 }
 else
 {
