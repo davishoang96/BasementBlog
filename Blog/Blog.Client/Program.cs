@@ -8,10 +8,11 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 //    // Bypass SSL certificate validation
 //    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
 //};
-
-builder.Services.AddHttpClient<IPostServices, PostServices>(c =>
+builder.Services.AddHttpClient("test", c =>
 {
     c.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
 });
+
+builder.Services.AddSingleton<IPostServices, PostServices>();
 
 await builder.Build().RunAsync();

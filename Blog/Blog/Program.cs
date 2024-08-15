@@ -25,10 +25,13 @@ builder.WebHost.UseUrls(baseUrl);
 //    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
 //};
 
-builder.Services.AddHttpClient<IPostServices, PostServices>(c =>
+builder.Services.AddHttpClient("test", c =>
 {
     c.BaseAddress = new Uri(baseUrl);
 });
+
+
+builder.Services.AddSingleton<IPostServices, PostServices>();
 
 var app = builder.Build();
 

@@ -12,9 +12,9 @@ public class PostServices : IPostServices
 {
     private readonly HttpClient _httpClient;
 
-    public PostServices(HttpClient httpClient)
+    public PostServices(IHttpClientFactory httpClientFactory)
     {
-        _httpClient = httpClient;
+        _httpClient = httpClientFactory.CreateClient("test");
     }
 
     public async Task<IEnumerable<PostDTO>> GetPostsAsync()
