@@ -24,12 +24,10 @@ jobs:
 
       - name: dotnet version
         run: dotnet --version
+        
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build project
-        run: dotnet build -c Release
-      
       - name: Publish project
         run: dotnet publish -c Release -o ../Blog
 
@@ -65,18 +63,18 @@ jobs:
           source: artifact.zip
           target: /root/
 
-      # - name: executing remote ssh commands using password
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.IP_SSH_DEVBLOG }}
-      #     username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
-      #     password: ${{ secrets.KEY_SSH_DEVBLOG }}
-      #     port: 22
-      #     script: |
-      #       sudo systemctl stop vhdevblog
-      #       unzip -o -j /root/artifact.zip -d /var/www/Blog/
-      #       rm /root/artifact.zip
-      #       sudo systemctl restart vhdevblog
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.IP_SSH_DEVBLOG }}
+          username: ${{ secrets.USERNAME_SSH_DEVBLOG }}
+          password: ${{ secrets.KEY_SSH_DEVBLOG }}
+          port: 22
+          script: |
+            sudo systemctl stop vhdevblog
+            unzip /root/artifact.zip -d /var/www/
+            rm /root/artifact.zip
+            sudo systemctl restart vhdevblog
       
       - uses: geekyeggo/delete-artifact@v5
         with:
