@@ -26,13 +26,13 @@ jobs:
         run: dotnet --version
 
       - name: Restore dependencies
-        run: dotnet restore ../Blog.csproj
+        run: dotnet restore ./Blog.csproj
 
       - name: Build project
-        run: dotnet build ../Blog.csproj --configuration Release
+        run: dotnet build ./Blog.csproj --configuration Release
       
       - name: Publish project
-        run: dotnet publish ../Blog.csproj --configuration Release --output ../Blog
+        run: dotnet publish ./Blog.csproj --configuration Release --output ../Blog
 
       - name: Create artifact zip
         run: |
