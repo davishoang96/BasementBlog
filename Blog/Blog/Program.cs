@@ -9,6 +9,8 @@ using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 using Blog.AuthenticationStateSyncer;
 using Microsoft.AspNetCore.Components.Authorization;
+using AutoFixture;
+using Blog.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -113,5 +115,12 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
     await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
+
+app.MapGet("/api/internalData", () =>
+{
+    var fixture = new Fixture();
+    return fixture.Build<PostDTO>().CreateMany(5);
+})
+.RequireAuthorization();
 
 app.Run();
