@@ -2,8 +2,11 @@
 @using Blog.Client.Services;
 @using Blog.DTO
 @inject IPostServices postServices;
-@attribute [Authorize]
 <h3>Posts</h3>
+
+<MudText>Hi, @Username</MudText>
+
+<MudButton OnClick="@(CallApi)">Call API</MudButton>
 
 <MudTable Items="posts" Hover="true" Striped="true">
     <HeaderContent>
@@ -33,9 +36,25 @@
 
 @code {
     private IEnumerable<PostDTO> posts = new List<PostDTO>();
+    private string Username = "";
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await postServices.GetPostsAsync();
+        if (authenticationState is not null)
+        {
+            var state = await authenticationState;
+
+            Username = state?.User?.Identity?.Name ?? string.Empty;
+        }
+    }
+
+    private async Task CallApi()
+    {
+        if(!string.IsNullOrEmpty(Username))
+        {
+            posts = await postServices.GetPostsAsync();
+        }
     }
 }
