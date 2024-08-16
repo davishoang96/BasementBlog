@@ -1,11 +1,19 @@
+using Auth0.AspNetCore.Authentication;
 using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
+using Blog.AuthenticationStateSyncer;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
 
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
@@ -30,8 +38,13 @@ var handler = new HttpClientHandler
 builder.Services.AddHttpClient("BlogAppApi", c =>
 {
     c.BaseAddress = new Uri(baseUrl);
-}).ConfigurePrimaryHttpMessageHandler(() => handler); 
+}).ConfigurePrimaryHttpMessageHandler(() => handler);
 
+builder.Services.AddAuth0WebAppAuthentication(options =>
+{
+    options.Domain = builder.Configuration["Auth0:Domain"];
+    options.ClientId = builder.Configuration["Auth0:ClientId"];
+});
 
 builder.Services.AddSingleton<IPostServices, PostServices>();
 
@@ -81,5 +94,24 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(Blog.Client._Imports).Assembly);
+
+app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = "/") =>
+{
+    var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+            .WithRedirectUri(returnUrl)
+            .Build();
+
+    await httpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+});
+
+app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
+{
+    var authenticationProperties = new LogoutAuthenticationPropertiesBuilder()
+            .WithRedirectUri("/")
+            .Build();
+
+    await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+    await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+});
 
 app.Run();
