@@ -1,6 +1,4 @@
 ﻿@inherits LayoutComponentBase
-@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 <MudThemeProvider IsDarkMode="true" Theme="_theme" DefaultScrollbar="true" />
 <MudDialogProvider />
@@ -18,27 +16,21 @@
                 <MudDivider Class="my-2" />
                 <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
                 <MudNavLink Href="/posts" Icon="@Icons.Material.Filled.Pages">Posts</MudNavLink>
-                <CascadingAuthenticationState>
-                    <AuthorizeView>
+                <AuthorizeView>
                     <Authorized>      
                         <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
                         <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
                     </Authorized>
                 </AuthorizeView>
-                </CascadingAuthenticationState>
                 <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
-                <CascadingAuthenticationState>
-                    <AuthorizeView>
-                        <Authorized>        
-                            <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit">Logout</MudNavLink>
-                            @* <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Href="Account/Logout">Logout</MudNavLink> *@
-                        </Authorized>
-                        <NotAuthorized>
-                            <MudNavLink Icon="@Icons.Material.Filled.Login" Color="Color.Inherit">Login</MudNavLink>
-                            @* <MudNavLink Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Href="Account/Login?redirectUri=/">Login</MudNavLink> *@
-                        </NotAuthorized>
-                    </AuthorizeView>
-                </CascadingAuthenticationState>
+                <AuthorizeView>
+                    <Authorized>        
+                        <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Href="Account/Logout">Logout</MudNavLink>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudNavLink Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Href="Account/Login">Login</MudNavLink>
+                    </NotAuthorized>
+                </AuthorizeView>
             </MudNavMenu>
         </MudPaper>
     </MudDrawer>

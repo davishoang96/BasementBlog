@@ -2,7 +2,7 @@
 @using Blog.Client.Services;
 @using Blog.DTO
 @inject IPostServices postServices;
-
+@attribute [Authorize]
 <h3>Posts</h3>
 
 <MudTable Items="posts" Hover="true" Striped="true">

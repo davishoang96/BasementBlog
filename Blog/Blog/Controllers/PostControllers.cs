@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using Blog.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Controllers;
@@ -9,6 +10,7 @@ namespace Blog.Controllers;
 public class PostController : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     [Route("GetPosts")]
     public ActionResult<IEnumerable<PostDTO>> GetPosts()
     {
