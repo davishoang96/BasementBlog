@@ -17,14 +17,15 @@
                 <MudText Typo="Typo.overline" Class="px-4" Style="font-size: 10px;font-style: italic;">Personal blog written by Davis Hoang</MudText>
                 <MudDivider Class="my-2" />
                 <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
-               <CascadingAuthenticationState>
-                 <AuthorizeView>
+                <MudNavLink Href="/posts" Icon="@Icons.Material.Filled.Pages">Posts</MudNavLink>
+                <CascadingAuthenticationState>
+                    <AuthorizeView>
                     <Authorized>      
                         <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
                         <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
                     </Authorized>
                 </AuthorizeView>
-               </CascadingAuthenticationState>
+                </CascadingAuthenticationState>
                 <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
                 <CascadingAuthenticationState>
                     <AuthorizeView>
