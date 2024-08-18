@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 
 namespace Blog.Client.Services;
 
-public interface IPostServices 
+public interface IPostServices
 {
     Task<IEnumerable<PostDTO>> GetPostsAsync();
 }
@@ -19,6 +19,6 @@ public class PostServices : IPostServices
 
     public async Task<IEnumerable<PostDTO>> GetPostsAsync()
     {
-        return await _httpClient.GetFromJsonAsync<IEnumerable<PostDTO>>("Post/GetPosts");
+        return await _httpClient.GetFromJsonAsync<IEnumerable<PostDTO>>("post/GetPosts");
     }
 }

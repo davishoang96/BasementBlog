@@ -5,13 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.Controllers;
 
-[Route("[controller]")]
 [ApiController]
+[Route("[controller]")]
 public class PostController : ControllerBase
 {
-    [HttpGet]
     [Authorize]
-    [Route("GetPosts")]
+    [HttpGet("GetPosts")]
     public ActionResult<IEnumerable<PostDTO>> GetPosts()
     {
         var fixture = new Fixture();
