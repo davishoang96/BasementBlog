@@ -19,6 +19,6 @@ public class PostServices : IPostServices
 
     public async Task<IEnumerable<PostDTO>> GetPostsAsync()
     {
-        return await _httpClient.GetFromJsonAsync<IEnumerable<PostDTO>>("/api/internalData");
+        return await _httpClient.GetFromJsonAsync<IEnumerable<PostDTO>>("post/GetPosts");
     }
 }
