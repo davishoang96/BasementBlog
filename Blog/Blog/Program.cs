@@ -1,17 +1,14 @@
 using Auth0.AspNetCore.Authentication;
+using Blog.AuthenticationStateSyncer;
 using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
-using Blog.AuthenticationStateSyncer;
-using Microsoft.AspNetCore.Components.Authorization;
-using AutoFixture;
-using Blog.DTO;
-using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,9 +32,16 @@ builder.WebHost.UseUrls(baseUrl);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
+var handler = new HttpClientHandler
+{
+    // Bypass SSL certificate validation
+    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+};
+
 builder.Services.AddHttpClient("BlogAppApi",
       client => client.BaseAddress = new Uri(baseUrl))
-      .AddHttpMessageHandler<TokenHandler>();
+      .AddHttpMessageHandler<TokenHandler>()
+      .ConfigurePrimaryHttpMessageHandler(() => handler);
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
   .CreateClient("BlogAppApi"));
