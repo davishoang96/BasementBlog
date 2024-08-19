@@ -6,14 +6,25 @@ public class TokenHandler : DelegatingHandler {
     
     public TokenHandler(IHttpContextAccessor httpContextAccessor)
     {
-      _httpContextAccessor = httpContextAccessor;
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
-      var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) 
+    {
+        var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
 
-      request.Headers.Authorization =
-          new AuthenticationHeaderValue("Bearer", accessToken);
-      return await base.SendAsync(request, cancellationToken);
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+        // Bypass SSL certificate validation
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+        };
+
+        using (var httpClient = new HttpClient(handler))
+        {
+            // Use the HttpClient instance with the custom handler
+            return await base.SendAsync(request, cancellationToken);
+        }
     }
 }

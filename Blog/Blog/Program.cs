@@ -40,8 +40,7 @@ var handler = new HttpClientHandler
 
 builder.Services.AddHttpClient("BlogAppApi",
       client => client.BaseAddress = new Uri(baseUrl))
-      .AddHttpMessageHandler<TokenHandler>()
-      .ConfigurePrimaryHttpMessageHandler(() => handler);
+      .AddHttpMessageHandler<TokenHandler>();
 
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
   .CreateClient("BlogAppApi"));
