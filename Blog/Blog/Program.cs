@@ -20,6 +20,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
+var pem = builder.Configuration["pemFilePath"];
+var pemKey = builder.Configuration["pemKey"];
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlite("Data Source=BlogDatabase.db"));
@@ -30,7 +32,20 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
-builder.WebHost.UseUrls(baseUrl);
+if (builder.Environment.EnvironmentName != "Development")
+{
+    builder.WebHost.ConfigureKestrel(o =>
+    {
+        o.ListenAnyIP(5000, lo =>
+        {
+            lo.UseHttps(pem, pemKey);
+        });
+    });
+}
+else
+{
+    builder.WebHost.UseUrls(baseUrl);
+}
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
