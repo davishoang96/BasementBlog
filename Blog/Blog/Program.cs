@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using AutoFixture;
 using Blog.DTO;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,8 +21,6 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
-var pem = builder.Configuration["pemFilePath"];
-var pemKey = builder.Configuration["pemKey"];
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlite("Data Source=BlogDatabase.db"));
@@ -34,11 +33,14 @@ builder.Services.AddRazorComponents()
 builder.Services.AddControllers();
 if (builder.Environment.EnvironmentName != "Development")
 {
+    var pem = builder.Configuration["pemFilePath"];
+    var pemKey = builder.Configuration["pemKey"];
+    var x509 = X509Certificate2.CreateFromPem(pem, pemKey);
     builder.WebHost.ConfigureKestrel(o =>
     {
         o.ListenAnyIP(5000, lo =>
         {
-            lo.UseHttps(pem, pemKey);
+            lo.UseHttps(x509);
         });
     });
 }
