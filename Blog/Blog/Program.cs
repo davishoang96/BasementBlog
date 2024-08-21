@@ -1,17 +1,15 @@
 using Auth0.AspNetCore.Authentication;
+using Blog.AuthenticationStateSyncer;
 using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
-using Blog.AuthenticationStateSyncer;
-using Microsoft.AspNetCore.Components.Authorization;
-using AutoFixture;
-using Blog.DTO;
-using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,7 +28,27 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
-builder.WebHost.UseUrls(baseUrl);
+if (builder.Environment.IsDevelopment())
+{
+    builder.WebHost.UseUrls(baseUrl);
+}
+else
+{
+    var pem = builder.Configuration["pemFilePath"];
+    var pemKey = builder.Configuration["pemKey"];
+    var x509 = X509Certificate2.CreateFromPemFile(pem, pemKey);
+
+    builder.WebHost.ConfigureKestrel(o =>
+    {
+        o.ListenAnyIP(5000, lo =>
+        {
+            lo.UseHttps(x509);
+        });
+    });
+}
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<TokenHandler>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
@@ -93,9 +111,9 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.MapControllers();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(Blog.Client._Imports).Assembly);
+   .AddInteractiveServerRenderMode()
+   .AddInteractiveWebAssemblyRenderMode()
+   .AddAdditionalAssemblies(typeof(Blog.Client._Imports).Assembly);
 
 app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = "/") =>
 {
