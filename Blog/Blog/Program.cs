@@ -36,6 +36,9 @@ if (builder.Environment.EnvironmentName != "Development")
     var pem = builder.Configuration["pemFilePath"];
     var pemKey = builder.Configuration["pemKey"];
     var x509 = X509Certificate2.CreateFromPem(pem, pemKey);
+
+    Console.WriteLine($"x509: {x509.SerialNumber}");
+
     builder.WebHost.ConfigureKestrel(o =>
     {
         o.ListenAnyIP(5000, lo =>
