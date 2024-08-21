@@ -1,17 +1,14 @@
 using Auth0.AspNetCore.Authentication;
+using Blog.AuthenticationStateSyncer;
 using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
-using Blog.AuthenticationStateSyncer;
-using Microsoft.AspNetCore.Components.Authorization;
-using AutoFixture;
-using Blog.DTO;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,14 +28,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
-if (builder.Environment.EnvironmentName != "Development")
+if (builder.Environment.IsProduction())
 {
     var pem = builder.Configuration["pemFilePath"];
     var pemKey = builder.Configuration["pemKey"];
-
     var x509 = X509Certificate2.CreateFromPemFile(pem, pemKey);
-
-    Console.WriteLine($"x509: {x509.SerialNumber}");
 
     builder.WebHost.ConfigureKestrel(o =>
     {
@@ -114,9 +108,9 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.MapControllers();
 app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(Blog.Client._Imports).Assembly);
+   .AddInteractiveServerRenderMode()
+   .AddInteractiveWebAssemblyRenderMode()
+   .AddAdditionalAssemblies(typeof(Blog.Client._Imports).Assembly);
 
 app.MapGet("/Account/Login", async (HttpContext httpContext, string returnUrl = "/") =>
 {
