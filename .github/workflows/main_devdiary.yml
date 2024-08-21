@@ -34,6 +34,14 @@ jobs:
       - name: Publish project
         run: dotnet publish -c Release -o ../Blog
 
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: '../Blog/appsettings.json'
+        env:
+          pemFilePath: ${{ secrets.PEMFILEPATH }}
+          pemKey: ${{ secrets.PEMPRIVATEKEY }}
+
       - name: Create artifact zip
         run: |
           zip -r artifact.zip ../Blog/

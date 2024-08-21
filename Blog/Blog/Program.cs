@@ -9,11 +9,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
-using Blog.AuthenticationStateSyncer;
-using Microsoft.AspNetCore.Components.Authorization;
-using AutoFixture;
-using Blog.DTO;
-using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,7 +28,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
-if (builder.Environment.IsProduction())
+if (builder.Environment.IsDevelopment())
+{
+    builder.WebHost.UseUrls(baseUrl);
+}
+else
 {
     var pem = builder.Configuration["pemFilePath"];
     var pemKey = builder.Configuration["pemKey"];
@@ -46,10 +45,6 @@ if (builder.Environment.IsProduction())
             lo.UseHttps(x509);
         });
     });
-}
-else
-{
-    builder.WebHost.UseUrls(baseUrl);
 }
 
 builder.Services.AddHttpContextAccessor();
