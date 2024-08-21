@@ -9,6 +9,11 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
+using Blog.AuthenticationStateSyncer;
+using Microsoft.AspNetCore.Components.Authorization;
+using AutoFixture;
+using Blog.DTO;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +51,9 @@ else
 {
     builder.WebHost.UseUrls(baseUrl);
 }
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<TokenHandler>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
