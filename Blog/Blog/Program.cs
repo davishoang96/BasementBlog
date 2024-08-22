@@ -40,7 +40,7 @@ else
 
     builder.WebHost.ConfigureKestrel(o =>
     {
-        o.ListenAnyIP(5000, lo =>
+        o.ListenAnyIP(443, lo =>
         {
             lo.UseHttps(x509);
         });
