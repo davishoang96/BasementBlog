@@ -18,6 +18,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
+var portNumber = int.Parse(builder.Configuration["PortNumber"]);
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlite("Data Source=BlogDatabase.db"));
@@ -40,7 +41,7 @@ else
 
     builder.WebHost.ConfigureKestrel(o =>
     {
-        o.ListenAnyIP(4443, lo =>
+        o.ListenAnyIP(portNumber, lo =>
         {
             lo.UseHttps(x509);
         });
