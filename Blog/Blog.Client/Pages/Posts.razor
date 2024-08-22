@@ -6,8 +6,6 @@
 
 <MudText>Hi, @Username</MudText>
 
-<MudButton OnClick="@(CallApi)">Call API</MudButton>
-
 <MudTable Items="posts" Hover="true" Striped="true">
     <HeaderContent>
         <MudTh>Id</MudTh>
@@ -47,14 +45,11 @@
             var state = await authenticationState;
 
             Username = state?.User?.Identity?.Name ?? string.Empty;
-        }
-    }
 
-    private async Task CallApi()
-    {
-        if(!string.IsNullOrEmpty(Username))
-        {
-            posts = await postServices.GetPostsAsync();
+            if(!string.IsNullOrEmpty(Username))
+            {
+                posts = await postServices.GetPostsAsync();
+            }
         }
     }
 }
