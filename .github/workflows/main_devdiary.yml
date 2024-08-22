@@ -39,8 +39,12 @@ jobs:
         with:
           files: '../Blog/appsettings.json'
         env:
+          PortNumber: ${{ secrets.PORTNUMBER }}
+          BaseUrl: ${{ secrets.BASEURL }}
           pemFilePath: ${{ secrets.PEMFILEPATH }}
           pemKey: ${{ secrets.PEMPRIVATEKEY }}
+          Auth0.Domain: ${{ secrets.AUTH0_DOMAIN }}
+          Auth0.ClientId: ${{ secrets.AUTH0_CLIENTID }}
 
       - name: Create artifact zip
         run: |
