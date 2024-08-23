@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace Blog.Database.Models;
 
 public class WorkLog

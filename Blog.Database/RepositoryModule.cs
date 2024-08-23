@@ -10,6 +10,6 @@ public class RepositoryModule : Module
         base.Load(builder);
 
         builder.RegisterType<PostRepository>().AsImplementedInterfaces().InstancePerDependency();
+        builder.RegisterType<WorkLogRepository>().AsImplementedInterfaces().InstancePerDependency();
     }
 }
-
