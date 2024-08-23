@@ -2,7 +2,6 @@ using Auth0.AspNetCore.Authentication;
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using Blog.AuthenticationStateSyncer;
-using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
 using Blog.Services.Modules;
