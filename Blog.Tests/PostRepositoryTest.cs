@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using Blog.Database;
 using Blog.Database.Models;
+using Blog.Database.Repositories;
 using Blog.DTO;
-using Blog.Services;
 using Blog.Services.Interfaces;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +11,11 @@ using Xunit;
 
 namespace Blog.Tests;
 
-public sealed class PostServiceTest : BaseDataContextTest
+public sealed class PostRepositoryTest : BaseDataContextTest
 {
     private Mock<ISqidService> MockSqidService;
 
-    public PostServiceTest()
+    public PostRepositoryTest()
     {
         MockSqidService = new Mock<ISqidService>();
     }
@@ -44,7 +44,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(Options), MockSqidService.Object);
+        var service = new PostRepository(new DatabaseContext(Options), MockSqidService.Object);
 
         // Act
         var result = await service.GetCategoriesWithLightPostDTO();
@@ -57,7 +57,7 @@ public sealed class PostServiceTest : BaseDataContextTest
     public async Task AddPostOK()
     {
         // Arrange
-        var service = new PostService(new DatabaseContext(Options), MockSqidService.Object);
+        var service = new PostRepository(new DatabaseContext(Options), MockSqidService.Object);
         MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
         // Act
         var id = await service.SaveOrUpdatePost(new PostDTO
@@ -82,7 +82,7 @@ public sealed class PostServiceTest : BaseDataContextTest
     public async Task AddPostWithCategory()
     {
         // Arrange
-        var service = new PostService(new DatabaseContext(Options), MockSqidService.Object);
+        var service = new PostRepository(new DatabaseContext(Options), MockSqidService.Object);
         MockSqidService.Setup(s => s.EncryptId(It.IsAny<int>())).Returns("GOAIwe");
 
         // Act
@@ -170,7 +170,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(Options), MockSqidService.Object);
+        var service = new PostRepository(new DatabaseContext(Options), MockSqidService.Object);
 
         // Act
         var result = await service.GetCategoryDTOs();
@@ -205,7 +205,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(Options), MockSqidService.Object);
+        var service = new PostRepository(new DatabaseContext(Options), MockSqidService.Object);
 
         // Act
         var result = await service.GetAllPosts();
@@ -236,7 +236,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(Options), MockSqidService.Object);
+        var service = new PostRepository(new DatabaseContext(Options), MockSqidService.Object);
 
         // Act
         var result = service.SoftDeletePost("TEST91");
@@ -268,7 +268,7 @@ public sealed class PostServiceTest : BaseDataContextTest
             await context.SaveChangesAsync();
         }
 
-        var service = new PostService(new DatabaseContext(Options), MockSqidService.Object);
+        var service = new PostRepository(new DatabaseContext(Options), MockSqidService.Object);
 
         // Act
         await service.WipeAllSoftDeletedPost();

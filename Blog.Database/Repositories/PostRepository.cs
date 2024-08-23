@@ -1,4 +1,4 @@
-﻿using Blog.Database;
+﻿using Blog.Database.Interfaces;
 using Blog.Database.Models;
 using Blog.DTO;
 using Blog.Services.Interfaces;
@@ -6,13 +6,14 @@ using Blog.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Blog.Services;
+namespace Blog.Database.Repositories;
 
-public class PostService : IPostService
+public class PostRepository : IPostRepository
 {
     private readonly DatabaseContext db;
     private ISqidService sqidService;
-    public PostService(DatabaseContext databaseContext, ISqidService sqidService)
+
+    public PostRepository(DatabaseContext databaseContext, ISqidService sqidService)
     {
         this.sqidService = sqidService;
         db = databaseContext;
