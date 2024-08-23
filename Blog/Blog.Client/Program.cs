@@ -8,13 +8,11 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<TokenHandler>();
 builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
 builder.Services.AddHttpClient("BlogAppApi", c =>
 {
     c.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-}).AddHttpMessageHandler<TokenHandler>();
+});
 
 // Register the ApiClient with both the baseUrl and HttpClient
 builder.Services.AddScoped<IApiClient>(sp =>
