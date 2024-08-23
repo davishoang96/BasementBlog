@@ -1,6 +1,4 @@
-﻿using Blog.DTO;
-
-namespace Blog.Services;
+﻿namespace Blog.DTO;
 
 public class CategoryDTO
 {

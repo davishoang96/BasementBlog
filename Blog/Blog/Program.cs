@@ -1,8 +1,11 @@
 using Auth0.AspNetCore.Authentication;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
 using Blog.AuthenticationStateSyncer;
 using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
+using Blog.Services.Modules;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -12,6 +15,12 @@ using MudBlazor.Services;
 using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+        .ConfigureContainer<ContainerBuilder>(builder =>
+        {
+            builder.RegisterModule(new RepositoryModule());
+        });
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
