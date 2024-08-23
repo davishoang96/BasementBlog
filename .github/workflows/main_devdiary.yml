@@ -39,6 +39,7 @@ jobs:
         with:
           files: '../Blog/appsettings.json'
         env:
+          DatabaseSource: ${{ secrets.DATABASESOURCE }}
           PortNumber: ${{ secrets.PORTNUMBER }}
           BaseUrl: ${{ secrets.BASEURL }}
           pemFilePath: ${{ secrets.PEMFILEPATH }}

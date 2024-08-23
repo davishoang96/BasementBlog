@@ -27,10 +27,11 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
+var databaseSource = builder.Configuration["DatabaseSource"];
 var portNumber = int.Parse(builder.Configuration["PortNumber"]);
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlite("Data Source=BlogDatabase.db"));
+    options.UseSqlite($"Data Source={databaseSource}"));
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
