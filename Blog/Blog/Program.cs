@@ -2,7 +2,6 @@ using Auth0.AspNetCore.Authentication;
 using Autofac.Extensions.DependencyInjection;
 using Autofac;
 using Blog.AuthenticationStateSyncer;
-using Blog.Client.Services;
 using Blog.Components;
 using Blog.Database;
 using Blog.Services.Modules;
@@ -13,12 +12,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 using System.Security.Cryptography.X509Certificates;
+using Blog.ApiClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureContainer<ContainerBuilder>(builder =>
         {
+            builder.RegisterModule(new ServiceModules());
             builder.RegisterModule(new RepositoryModule());
         });
 
@@ -61,15 +62,16 @@ else
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<TokenHandler>();
-
 builder.Services.AddHttpClient("BlogAppApi",
       client => client.BaseAddress = new Uri(baseUrl))
       .AddHttpMessageHandler<TokenHandler>();
 
-builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
-  .CreateClient("BlogAppApi"));
+// Register the ApiClient with both the baseUrl and HttpClient
+builder.Services.AddScoped<IApiClient>(sp =>
+{
+    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlogAppApi");
+    return new ApiClient(baseUrl, httpClient);
+});
 
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
@@ -77,12 +79,11 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
     options.ClientId = builder.Configuration["Auth0:ClientId"];
 });
 
-builder.Services.AddSingleton<IPostServices, PostServices>();
-
 builder.Services.AddMudServices();
 
 builder.Services.AddSwaggerGen(c =>
 {
+    c.EnableAnnotations();
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
@@ -106,7 +107,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My BlogApp Api");
-        c.RoutePrefix = "api-docs"; // Set Swagger UI at the app's root
+        c.RoutePrefix = "swagger"; // Set Swagger UI at the app's root
     });
 }
 else

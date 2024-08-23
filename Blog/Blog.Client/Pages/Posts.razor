@@ -1,55 +1,47 @@
 ﻿@page "/posts"
-@using Blog.Client.Services;
-@using Blog.DTO
-@inject IPostServices postServices;
+@using Blog.ApiClient
+@inject IApiClient ApiClient
+@attribute [StreamRendering]
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 <h3>Posts</h3>
 
-<MudText>Hi, @Username</MudText>
-
-<MudTable Items="posts" Hover="true" Striped="true">
-    <HeaderContent>
-        <MudTh>Id</MudTh>
-        <MudTh>Category Id</MudTh>
-        <MudTh>Category Name</MudTh>
-        <MudTh>Title</MudTh>
-        <MudTh>Body</MudTh>
-        <MudTh>Description</MudTh>
-        <MudTh>Publish Date</MudTh>
-        <MudTh>Modified Date</MudTh>
-        <MudTh>Is Deleted</MudTh>
-    </HeaderContent>
-    <RowTemplate>
-        <MudTd DataLabel="Id">@context.Id</MudTd>
-        <MudTd DataLabel="Category Id">@context.CategoryId</MudTd>
-        <MudTd DataLabel="Category Name">@context.CategoryName</MudTd>
-        <MudTd DataLabel="Title">@context.Title</MudTd>
-        <MudTd DataLabel="Body">@context.Body</MudTd>
-        <MudTd DataLabel="Description">@context.Description</MudTd>
-        <MudTd DataLabel="Publish Date">@context.PublishDate.ToString("yyyy-MM-dd")</MudTd>
-        <MudTd DataLabel="Modified Date">@context.ModifiedDate.ToString("yyyy-MM-dd")</MudTd>
-        <MudTd DataLabel="Is Deleted">@(@context.IsDelete.HasValue && @context.IsDelete.Value ? "Yes" : "No")</MudTd>
-    </RowTemplate>
-</MudTable>
-
+@if(!posts.Any())
+{
+    <MudText>Loading...</MudText>
+}
+else
+{
+    <MudTable Items="posts" Hover="true" Striped="true">
+        <HeaderContent>
+            <MudTh>Id</MudTh>
+            <MudTh>Category Id</MudTh>
+            <MudTh>Category Name</MudTh>
+            <MudTh>Title</MudTh>
+            <MudTh>Body</MudTh>
+            <MudTh>Description</MudTh>
+            <MudTh>Publish Date</MudTh>
+            <MudTh>Modified Date</MudTh>
+            <MudTh>Is Deleted</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Category Id">@context.CategoryId</MudTd>
+            <MudTd DataLabel="Category Name">@context.CategoryName</MudTd>
+            <MudTd DataLabel="Title">@context.Title</MudTd>
+            <MudTd DataLabel="Body">@context.Body</MudTd>
+            <MudTd DataLabel="Description">@context.Description</MudTd>
+            <MudTd DataLabel="Publish Date">@context.PublishDate.ToString("yyyy-MM-dd")</MudTd>
+            <MudTd DataLabel="Modified Date">@context.ModifiedDate.ToString("yyyy-MM-dd")</MudTd>
+            <MudTd DataLabel="Is Deleted">@(@context.IsDelete.HasValue && @context.IsDelete.Value ? "Yes" : "No")</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
 
 @code {
     private IEnumerable<PostDTO> posts = new List<PostDTO>();
-    private string Username = "";
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (authenticationState is not null)
-        {
-            var state = await authenticationState;
-
-            Username = state?.User?.Identity?.Name ?? string.Empty;
-
-            if(!string.IsNullOrEmpty(Username))
-            {
-                posts = await postServices.GetPostsAsync();
-            }
-        }
+        posts = await ApiClient.GetPostsAsync();
     }
 }
