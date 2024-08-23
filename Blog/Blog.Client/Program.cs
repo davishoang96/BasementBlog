@@ -12,7 +12,7 @@ builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticat
 builder.Services.AddHttpClient("BlogAppApi", c =>
 {
     c.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-});
+}).AddHttpMessageHandler<TokenHandler>();
 
 // Register the ApiClient with both the baseUrl and HttpClient
 builder.Services.AddScoped<IApiClient>(sp =>
