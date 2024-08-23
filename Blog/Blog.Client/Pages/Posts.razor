@@ -1,34 +1,42 @@
 ﻿@page "/posts"
 @using Blog.ViewModels;
+@attribute [StreamRendering(true)]
 
 <PageTitle>Posts</PageTitle>
 
-<div class="home-container">
-    @foreach (var category in vm.Categoroies)
-    {
-        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-            <h6>@category.Name</h6>
-            <ul>
-                @foreach (var post in category.PostDTOs)
-                {
-                    <li>
-                        <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
-                    </li>
-                }
-            </ul>
-        </MudItem>
-    }
-
-    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-        <h6>Unclassified Posts</h6>
-        @foreach (var post in vm.Posts)
+@if(!vm.Posts.Any())
+{
+    <MudText>Loading...</MudText>    
+}
+else
+{
+    <div class="home-container">
+        @foreach (var category in vm.Categoroies)
         {
-            <div>
-                <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
-            </div>
+            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+                <h6>@category.Name</h6>
+                <ul>
+                    @foreach (var post in category.PostDTOs)
+                    {
+                        <li>
+                            <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+                        </li>
+                    }
+                </ul>
+            </MudItem>
         }
-    </MudItem>
-</div>
+
+        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+            <h6>Unclassified Posts</h6>
+            @foreach (var post in vm.Posts)
+            {
+                <div>
+                    <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+                </div>
+            }
+        </MudItem>
+    </div>
+}
 
 <!-- Create post button -->
 <AuthorizeView Roles="Admin">
@@ -49,7 +57,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         if (authenticationState is not null)
         {
             var state = await authenticationState;
@@ -58,6 +65,5 @@
 
         await vm.GetCategoriesWithPost();
         await vm.GetUnclassifiedPosts();
-
     }
 }
