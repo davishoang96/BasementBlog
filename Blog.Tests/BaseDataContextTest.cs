@@ -1,7 +1,6 @@
 ﻿using Blog.Database;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Blog.Tests;
 

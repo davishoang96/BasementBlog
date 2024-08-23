@@ -2,7 +2,7 @@ using Blog.DTO;
 
 namespace Blog.Services.Interfaces;
 
-public interface IWorkLogService
+public interface IWorkLogRepository
 {
     Task<WorkLogDTO> GetWorkLogById(string id);
     Task<IEnumerable<WorkLogDTO>> GetAllWorkLogs();
