@@ -1,5 +1,5 @@
 ﻿using Blog.DTO;
-using Blog.Services.Interfaces;
+using Blog.Services;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.Components;
 
@@ -7,7 +7,7 @@ namespace Blog.ViewModels;
 
 public partial class HomeViewModel : BaseViewModel
 {
-    private readonly IPostService postService;
+    private readonly IApiClient apiClient;
     private readonly NavigationManager navigationManager;
 
     public List<PostDTO> Posts = new List<PostDTO>();
@@ -16,16 +16,16 @@ public partial class HomeViewModel : BaseViewModel
 
     public IAsyncRelayCommand<PostDTO> DeletePostCommand { get; }
 
-    public HomeViewModel(NavigationManager navigationManager, IPostService postService)
+    public HomeViewModel(NavigationManager navigationManager, IApiClient apiClient)
     {
-        this.postService = postService;
+        this.apiClient = apiClient;
         this.navigationManager = navigationManager;
         DeletePostCommand = new AsyncRelayCommand<PostDTO>(ExecuteDeletePostCommand);
     }
 
     public async Task GetUnclassifiedPosts()
     {
-        var result = await postService.GetUnclassifiedPosts();
+        var result = await apiClient.GetUnclassifiedPostsAsync();
         if (result.Any())
         {
             Posts = result.ToList();
@@ -34,16 +34,16 @@ public partial class HomeViewModel : BaseViewModel
 
     private async Task ExecuteDeletePostCommand(PostDTO postDTO)
     {
-        var result = await postService.DeletePost(postDTO.Id);
-        if (result)
-        {
-            Posts.Remove(postDTO);
-        }
+        //var result = await postService.DeletePost(postDTO.Id);
+        //if (result)
+        //{
+        //    Posts.Remove(postDTO);
+        //}
     }
 
     public async Task GetCategoriesWithPost()
     {
-        var result = await postService.GetCategoriesWithLightPostDTO();
+        var result = await apiClient.GetCategoriesWithLightPostAsync();
         if (result?.Any() == true)
         {
             Categoroies = result.ToList();

@@ -12,7 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 using System.Security.Cryptography.X509Certificates;
-using Blog.ApiClient;
+using Blog.Services;
+using Blog.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureContainer<ContainerBuilder>(builder =>
         {
             builder.RegisterModule(new ServiceModules());
+            builder.RegisterModule(new ViewModelModule());
             builder.RegisterModule(new RepositoryModule());
         });
 

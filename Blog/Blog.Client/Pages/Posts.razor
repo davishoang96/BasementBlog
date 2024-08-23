@@ -1,47 +1,63 @@
 ﻿@page "/posts"
-@using Blog.ApiClient
-@inject IApiClient ApiClient
-@attribute [StreamRendering]
+@using Blog.ViewModels;
 
-<h3>Posts</h3>
+<PageTitle>Posts</PageTitle>
 
-@if(!posts.Any())
+<div class="home-container">
+    @foreach (var category in vm.Categoroies)
+    {
+        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+            <h6>@category.Name</h6>
+            <ul>
+                @foreach (var post in category.PostDTOs)
+                {
+                    <li>
+                        <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+                    </li>
+                }
+            </ul>
+        </MudItem>
+    }
+
+    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+        <h6>Unclassified Posts</h6>
+        @foreach (var post in vm.Posts)
+        {
+            <div>
+                <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+            </div>
+        }
+    </MudItem>
+</div>
+
+<!-- Create post button -->
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <MudItem xs="12" Class="floating-button">
+            <MudFab Color="Color.Primary" Link="/postEditor" StartIcon="@Icons.Material.Filled.Create" />
+        </MudItem>
+    </Authorized>
+</AuthorizeView>
+
+@code
 {
-    <MudText>Loading...</MudText>
-}
-else
-{
-    <MudTable Items="posts" Hover="true" Striped="true">
-        <HeaderContent>
-            <MudTh>Id</MudTh>
-            <MudTh>Category Id</MudTh>
-            <MudTh>Category Name</MudTh>
-            <MudTh>Title</MudTh>
-            <MudTh>Body</MudTh>
-            <MudTh>Description</MudTh>
-            <MudTh>Publish Date</MudTh>
-            <MudTh>Modified Date</MudTh>
-            <MudTh>Is Deleted</MudTh>
-        </HeaderContent>
-        <RowTemplate>
-            <MudTd DataLabel="Id">@context.Id</MudTd>
-            <MudTd DataLabel="Category Id">@context.CategoryId</MudTd>
-            <MudTd DataLabel="Category Name">@context.CategoryName</MudTd>
-            <MudTd DataLabel="Title">@context.Title</MudTd>
-            <MudTd DataLabel="Body">@context.Body</MudTd>
-            <MudTd DataLabel="Description">@context.Description</MudTd>
-            <MudTd DataLabel="Publish Date">@context.PublishDate.ToString("yyyy-MM-dd")</MudTd>
-            <MudTd DataLabel="Modified Date">@context.ModifiedDate.ToString("yyyy-MM-dd")</MudTd>
-            <MudTd DataLabel="Is Deleted">@(@context.IsDelete.HasValue && @context.IsDelete.Value ? "Yes" : "No")</MudTd>
-        </RowTemplate>
-    </MudTable>
-}
+    [Inject]
+    private HomeViewModel vm { get; set; }
 
-@code {
-    private IEnumerable<PostDTO> posts = new List<PostDTO>();
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        posts = await ApiClient.GetPostsAsync();
+
+        if (authenticationState is not null)
+        {
+            var state = await authenticationState;
+            var username = state?.User?.Identity?.Name ?? string.Empty;
+        }
+
+        await vm.GetCategoriesWithPost();
+        await vm.GetUnclassifiedPosts();
+
     }
 }
