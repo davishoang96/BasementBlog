@@ -39,6 +39,7 @@ jobs:
         with:
           files: '../Blog/appsettings.json'
         env:
+          DatabaseSource: ${{ secrets.DATABASESOURCE }}
           PortNumber: ${{ secrets.PORTNUMBER }}
           BaseUrl: ${{ secrets.BASEURL }}
           pemFilePath: ${{ secrets.PEMFILEPATH }}
@@ -87,6 +88,7 @@ jobs:
           port: 22
           script: |
             sudo systemctl stop vhdevblog
+            rm -r /var/www/Blog
             unzip /root/artifact.zip -d /var/www/
             rm /root/artifact.zip
             sudo systemctl restart vhdevblog
