@@ -1,7 +1,9 @@
 ﻿@page "/posts"
+@using Blog.ApiClient
 @using Blog.Client.Services;
 @using Blog.DTO
-@inject IPostServices postServices;
+@inject IApiClient ApiClient
+
 <h3>Posts</h3>
 
 <MudText>Hi, @Username</MudText>
@@ -48,7 +50,7 @@
 
             if(!string.IsNullOrEmpty(Username))
             {
-                posts = await postServices.GetPostsAsync();
+                posts = await ApiClient.GetPostsAsync();
             }
         }
     }
