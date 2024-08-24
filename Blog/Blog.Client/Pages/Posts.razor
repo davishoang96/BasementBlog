@@ -3,35 +3,44 @@
 @using Blog.Services
 @using Blog.ViewModels;
 @inject IApiClient ApiClient;
+@rendermode InteractiveAuto
+@attribute [StreamRendering]
 
 <PageTitle>Posts</PageTitle>
 
-<div class="home-container">
-    @foreach (var category in Categoroies)
-    {
-        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-            <h6>@category.Name</h6>
-            <ul>
-                @foreach (var post in category.PostDTOs)
-                {
-                    <li>
-                        <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
-                    </li>
-                }
-            </ul>
-        </MudItem>
-    }
-
-    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-        <h6>Unclassified Posts</h6>
-        @foreach (var post in BlogPosts)
+@if(BlogPosts.Any())
+{
+    <div class="home-container">
+        @foreach (var category in Categoroies)
         {
-            <div>
-                <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
-            </div>
+            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+                <h6>@category.Name</h6>
+                <ul>
+                    @foreach (var post in category.PostDTOs)
+                    {
+                        <li>
+                            <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
+                        </li>
+                    }
+                </ul>
+            </MudItem>
         }
-    </MudItem>
-</div>
+
+        <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+            <h6>Unclassified Posts</h6>
+            @foreach (var post in BlogPosts)
+            {
+                <div>
+                    <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
+                </div>
+            }
+        </MudItem>
+    </div>
+}
+else
+{
+    <MudText>Loading...</MudText>
+}
 
 <!-- Create post button -->
 <AuthorizeView Roles="Admin">
