@@ -3,6 +3,7 @@
 @using Blog.Services
 @using Blog.ViewModels;
 @inject IApiClient ApiClient;
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 @attribute [StreamRendering]
 
 <PageTitle>Posts</PageTitle>
@@ -68,8 +69,6 @@ else
             var state = await authenticationState;
             var username = state?.User?.Identity?.Name ?? string.Empty;
         }
-
-
     }
 
     protected override async Task OnParametersSetAsync()
