@@ -63,15 +63,10 @@ else
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpClient("BlogAppApi", client => client.BaseAddress = new Uri(baseUrl))
-                .AddHttpMessageHandler<TokenHandler>();
-
-// Register the ApiClient with both the baseUrl and HttpClient
-builder.Services.AddScoped<IApiClient>(sp =>
+builder.Services.AddHttpClient<IApiClient, ApiClient>("BlogAppApi", client =>
 {
-    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlogAppApi");
-    return new ApiClient(baseUrl, httpClient);
-});
+    client.BaseAddress = new Uri(baseUrl);
+}).AddHttpMessageHandler<TokenHandler>();
 
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {

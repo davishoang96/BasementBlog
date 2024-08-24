@@ -1,22 +1,24 @@
-//using Microsoft.AspNetCore.Authentication;
-//using Microsoft.AspNetCore.Http;
-//using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
 
-//public class TokenHandler : DelegatingHandler
-//{
-//    private readonly IHttpContextAccessor _httpContextAccessor;
+namespace Blog.Client;
 
-//    public TokenHandler(IHttpContextAccessor httpContextAccessor)
-//    {
-//        _httpContextAccessor = httpContextAccessor;
-//    }
+public class TokenHandler : DelegatingHandler
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-//    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-//    {
-//        var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+    public TokenHandler(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-//        request.Headers.Authorization =
-//            new AuthenticationHeaderValue("Bearer", accessToken);
-//        return await base.SendAsync(request, cancellationToken);
-//    }
-//}
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        var accessToken = await _httpContextAccessor.HttpContext.GetTokenAsync("access_token");
+
+        request.Headers.Authorization =
+            new AuthenticationHeaderValue("Bearer", accessToken);
+        return await base.SendAsync(request, cancellationToken);
+    }
+}
