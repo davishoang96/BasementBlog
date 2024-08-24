@@ -1,9 +1,11 @@
 using Auth0.AspNetCore.Authentication;
-using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Blog;
 using Blog.AuthenticationStateSyncer;
 using Blog.Components;
 using Blog.Database;
+using Blog.Services;
 using Blog.Services.Modules;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,8 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 using System.Security.Cryptography.X509Certificates;
-using Blog.Services;
-using Blog.ViewModels;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,9 +63,8 @@ else
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpClient("BlogAppApi",
-      client => client.BaseAddress = new Uri(baseUrl))
-      .AddHttpMessageHandler<TokenHandler>();
+builder.Services.AddHttpClient("BlogAppApi", client => client.BaseAddress = new Uri(baseUrl))
+                .AddHttpMessageHandler<TokenHandler>();
 
 // Register the ApiClient with both the baseUrl and HttpClient
 builder.Services.AddScoped<IApiClient>(sp =>

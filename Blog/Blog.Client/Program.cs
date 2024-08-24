@@ -18,8 +18,7 @@ builder.Services.AddHttpClient("BlogAppApi", c =>
 builder.Services.AddScoped<IApiClient>(sp =>
 {
     var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlogAppApi");
-    var baseUrl = builder.HostEnvironment.BaseAddress; // Or replace with your API base URL
-    return new ApiClient(baseUrl, httpClient);
+    return new ApiClient(builder.HostEnvironment.BaseAddress, httpClient);
 });
 
 builder.Services.AddMudServices();
