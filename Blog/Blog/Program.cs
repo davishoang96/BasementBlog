@@ -1,5 +1,6 @@
 using Auth0.AspNetCore.Authentication;
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Blog;
 using Blog.AuthenticationStateSyncer;
@@ -26,6 +27,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
+
 
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
@@ -59,6 +61,17 @@ else
         });
     });
 }
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins(baseUrl)
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
@@ -140,5 +153,5 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
     await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
-
+app.UseCors("AllowSpecificOrigin"); // Apply CORS policy globally
 app.Run();
