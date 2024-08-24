@@ -69,6 +69,11 @@ else
             var username = state?.User?.Identity?.Name ?? string.Empty;
         }
 
+
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
         await GetCategoriesWithPost();
         await GetUnclassifiedPosts();
     }
