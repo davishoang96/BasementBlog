@@ -1,17 +1,20 @@
 ﻿@page "/posts"
+@using Blog.DTO
+@using Blog.Services
 @using Blog.ViewModels;
+@inject IApiClient ApiClient;
 @attribute [StreamRendering(true)]
 
 <PageTitle>Posts</PageTitle>
 
-@if(!vm.Posts.Any())
+@if(!BlogPosts.Any())
 {
     <MudText>Loading...</MudText>    
 }
 else
 {
     <div class="home-container">
-        @foreach (var category in vm.Categoroies)
+        @foreach (var category in Categoroies)
         {
             <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
                 <h6>@category.Name</h6>
@@ -19,7 +22,7 @@ else
                     @foreach (var post in category.PostDTOs)
                     {
                         <li>
-                            <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+                            <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
                         </li>
                     }
                 </ul>
@@ -28,10 +31,10 @@ else
 
         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
             <h6>Unclassified Posts</h6>
-            @foreach (var post in vm.Posts)
+            @foreach (var post in BlogPosts)
             {
                 <div>
-                    <MudLink OnClick="() => vm.ViewPost(post.Id)">@post.Title</MudLink>
+                    <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
                 </div>
             }
         </MudItem>
@@ -49,11 +52,14 @@ else
 
 @code
 {
-    [Inject]
-    private HomeViewModel vm { get; set; }
-
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
+
+    private readonly NavigationManager navigationManager;
+
+    public List<PostDTO> BlogPosts = new List<PostDTO>();
+
+    public List<CategoryDTO> Categoroies = new List<CategoryDTO>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -63,7 +69,44 @@ else
             var username = state?.User?.Identity?.Name ?? string.Empty;
         }
 
-        await vm.GetCategoriesWithPost();
-        await vm.GetUnclassifiedPosts();
+        await GetCategoriesWithPost();
+        await GetUnclassifiedPosts();
+    }
+
+    public async Task GetUnclassifiedPosts()
+    {
+        var result = await ApiClient.GetUnclassifiedPostsAsync();
+        if (result.Any())
+        {
+            BlogPosts = result.ToList();
+        }
+    }
+
+    private async Task ExecuteDeletePostCommand(PostDTO postDTO)
+    {
+        //var result = await postService.DeletePost(postDTO.Id);
+        //if (result)
+        //{
+        //    Posts.Remove(postDTO);
+        //}
+    }
+
+    public async Task GetCategoriesWithPost()
+    {
+        var result = await ApiClient.GetCategoriesWithLightPostAsync();
+        if (result?.Any() == true)
+        {
+            Categoroies = result.ToList();
+        }
+    }
+
+    public void EditPost(string postId)
+    {
+        navigationManager.NavigateTo($"/postEditor/{postId}");
+    }
+
+    public void ViewPost(string postId)
+    {
+        navigationManager.NavigateTo($"/viewpost/{postId}");
     }
 }

@@ -21,7 +21,6 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .ConfigureContainer<ContainerBuilder>(builder =>
         {
             builder.RegisterModule(new ServiceModules());
-            builder.RegisterModule(new ViewModelModule());
             builder.RegisterModule(new RepositoryModule());
         });
 
