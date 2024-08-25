@@ -49,6 +49,14 @@ public class PostController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet("{id}")]
+    [SwaggerOperation(OperationId = "GetPostById")]
+    public async Task<ActionResult<PostDTO>> GetPostById(string id)
+    {
+        var result = await postRepository.GetPostById(id);
+        return Ok(result);
+    }
+
     [Authorize]
     [HttpPost("savePost")]
     [SwaggerOperation(OperationId = "savePost")]

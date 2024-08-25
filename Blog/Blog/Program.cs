@@ -59,10 +59,17 @@ builder.Services.AddCors(options =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpClient<IApiClient, ApiClient>("BlogAppApi", client =>
+builder.Services.AddHttpClient("BlogAppApi", client =>
 {
     client.BaseAddress = new Uri(baseUrl);
 }).AddHttpMessageHandler<TokenHandler>();
+
+builder.Services.AddScoped<IApiClient>(sp =>
+{
+    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlogAppApi");
+    return new ApiClient(baseUrl, httpClient);
+});
+
 
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
