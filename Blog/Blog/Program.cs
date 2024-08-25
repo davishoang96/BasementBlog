@@ -1,6 +1,5 @@
 using Auth0.AspNetCore.Authentication;
 using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Blog;
 using Blog.AuthenticationStateSyncer;
@@ -14,7 +13,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
-using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
