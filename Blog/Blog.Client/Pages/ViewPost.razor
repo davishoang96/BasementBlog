@@ -1,0 +1,55 @@
+﻿@page "/viewPost/{postId}"
+@using Blog.Services
+@using Blog.Services.Interfaces
+@inject IMarkdownService markdownService;
+@inject IApiClient ApiClient;
+@attribute [StreamRendering]
+
+<MudStack>
+    <MudText Typo="Typo.h4">@PostTitle</MudText>
+    <MudText Typo="Typo.body1">Publish Date: @PublishDate</MudText>
+    <MudText Class="markdown-body mt-5 inter-text-field" Typo="Typo.body1">@((MarkupString)PostBody)</MudText>
+</MudStack>
+
+<!-- Save button -->
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <MudItem xs="12" Class="floating-button">
+            <MudFab Color="Color.Primary" OnClick="EditPost" StartIcon="@Icons.Material.Filled.Edit" />
+        </MudItem>
+    </Authorized>
+</AuthorizeView>
+
+@code
+{
+    [Parameter]
+    public string PostId { get; set; }
+
+    public string PostTitle { get; set; }
+
+    public string PostBody { get; set; }
+
+    public string PublishDate { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetPostById(PostId);
+    }
+
+    public async Task GetPostById(string postId)
+    {
+        var post = await ApiClient.GetPostByIdAsync(postId);
+        if (post != null)
+        {
+            PostTitle = post.Title;
+            PostBody = string.IsNullOrEmpty(post.Body) ? string.Empty : markdownService.TextToHtml(post.Body);
+            PublishDate = post.PublishDate.ToString("dd/MM/yyyy");
+            PostId = postId;
+        }
+    }
+
+    public void EditPost()
+    {
+        //navigationManager.NavigateTo($"/postEditor/{PostId}");
+    }
+} 

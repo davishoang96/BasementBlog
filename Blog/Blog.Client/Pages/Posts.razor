@@ -3,6 +3,7 @@
 @using Blog.Services
 @using Blog.ViewModels;
 @inject IApiClient ApiClient;
+@inject NavigationManager navigationManager;
 @attribute [StreamRendering]
 <h3>Posts</h3>
 
@@ -56,8 +57,6 @@ else
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
 
-    private readonly NavigationManager navigationManager;
-
     public List<PostDTO> BlogPosts = new List<PostDTO>();
 
     public List<CategoryDTO> Categoroies = new List<CategoryDTO>();
@@ -69,10 +68,7 @@ else
             var state = await authenticationState;
             var username = state?.User?.Identity?.Name ?? string.Empty;
         }
-    }
 
-    protected override async Task OnParametersSetAsync()
-    {
         await GetCategoriesWithPost();
         await GetUnclassifiedPosts();
     }
