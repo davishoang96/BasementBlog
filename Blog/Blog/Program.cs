@@ -53,6 +53,8 @@ else
     var pemKey = builder.Configuration["pemKey"];
     var x509 = X509Certificate2.CreateFromPemFile(pem, pemKey);
 
+    Console.WriteLine($"SSL Certificate serial: {x509.SerialNumber}");
+
     builder.WebHost.ConfigureKestrel(o =>
     {
         o.ListenAnyIP(portNumber, lo =>
