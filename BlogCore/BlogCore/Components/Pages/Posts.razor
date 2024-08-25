@@ -1,0 +1,50 @@
+﻿@page "/posts"
+@using Blog.DTO
+@using Blog.Services
+@inject IApiClient ApiClient
+@attribute [StreamRendering]
+<h3>Posts</h3>
+
+@if(!posts.Any())
+{
+    <p>loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Category</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Publish Date</th>
+                <th>Modified Date</th>
+                <th>Is Deleted</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var post in posts)
+            {
+                <tr>
+                    <td>@post.Id</td>
+                    <td>@post.CategoryName</td>
+                    <td>@post.Title</td>
+                    <td>@post.Description</td>
+                    <td>@post.PublishDate.ToString("yyyy-MM-dd")</td>
+                    <td>@post.ModifiedDate.ToString("yyyy-MM-dd")</td>
+                    <td>@post.IsDelete</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<PostDTO> posts = new List<PostDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        posts = await ApiClient.GetPostsAsync();
+    }
+}
