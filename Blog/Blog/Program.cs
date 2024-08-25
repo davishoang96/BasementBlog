@@ -40,24 +40,26 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
-if (builder.Environment.IsDevelopment())
-{
-    builder.WebHost.UseUrls(baseUrl);
-}
-else
-{
-    var pem = builder.Configuration["pemFilePath"];
-    var pemKey = builder.Configuration["pemKey"];
-    var x509 = X509Certificate2.CreateFromPemFile(pem, pemKey);
+// if (builder.Environment.IsDevelopment())
+// {
+//     builder.WebHost.UseUrls(baseUrl);
+// }
+// else
+// {
+//     var pem = builder.Configuration["pemFilePath"];
+//     var pemKey = builder.Configuration["pemKey"];
+//     var x509 = X509Certificate2.CreateFromPemFile(pem, pemKey);
 
-    builder.WebHost.ConfigureKestrel(o =>
-    {
-        o.ListenAnyIP(portNumber, lo =>
-        {
-            lo.UseHttps(x509);
-        });
-    });
-}
+//     builder.WebHost.ConfigureKestrel(o =>
+//     {
+//         o.ListenAnyIP(portNumber, lo =>
+//         {
+//             lo.UseHttps(x509);
+//         });
+//     });
+// }
+
+builder.WebHost.UseUrls(baseUrl);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
