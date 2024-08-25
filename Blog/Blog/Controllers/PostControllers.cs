@@ -59,10 +59,11 @@ public class PostController : ControllerBase
 
     [Authorize]
     [HttpPost("savePost")]
+    [Produces("text/plain")]
     [SwaggerOperation(OperationId = "savePost")]
-    public async Task<ActionResult<string>> SavePost([FromBody] PostDTO postDto)
+    public async Task<string> SavePost([FromBody] PostDTO postDto)
     {
         var result = await postRepository.SaveOrUpdatePost(postDto);
-        return Ok(result);
+        return result;
     }
 }

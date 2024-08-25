@@ -4,6 +4,7 @@
 @inject IMarkdownService markdownService;
 @inject IApiClient ApiClient;
 @attribute [StreamRendering]
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <MudStack>
     <MudText Typo="Typo.h4">@PostTitle</MudText>
