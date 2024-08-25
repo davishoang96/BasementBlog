@@ -62,7 +62,7 @@ builder.Services.AddScoped<TokenHandler>();
 builder.Services.AddHttpClient<IApiClient, ApiClient>("BlogAppApi", client =>
 {
     client.BaseAddress = new Uri(baseUrl);
-});
+}).AddHttpMessageHandler<TokenHandler>();
 
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
