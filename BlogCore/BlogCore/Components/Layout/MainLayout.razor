@@ -1,23 +1,69 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<MudThemeProvider IsDarkMode="true" Theme="_theme" DefaultScrollbar="true" />
+<MudDialogProvider />
+<MudSnackbarProvider />
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+<MudLayout>
+    <MudDrawer @bind-Open="@_drawerOpen" Width="250px">
+       <MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
+            <MudNavMenu Class="mud-width-full">
+                <MudAvatar Style="width: 100px; height: 100px; margin:10px 10px 10px 70px;">
+                    <MudImage Src="https://lh3.googleusercontent.com/a/ACg8ocL4dGVfEEs7YNpO39_69jO419fnW6Rf1lKxQJvPJfaFCM9QfWNrmQ=s634-c-no"></MudImage>
+                </MudAvatar>
+                <MudText Typo="Typo.h6" Class="px-4">The Basement Blog</MudText>
+                <MudText Typo="Typo.overline" Class="px-4" Style="font-size: 10px;font-style: italic;">Personal blog written by Davis Hoang</MudText>
+                <MudDivider Class="my-2" />
+                <MudNavLink Href="/" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+                <MudNavLink Href="/posts" Icon="@Icons.Material.Filled.Pages">Posts</MudNavLink>
+                <AuthorizeView>
+                    <Authorized>      
+                        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+                        <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
+                    </Authorized>
+                </AuthorizeView>
+                <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>
+                <AuthorizeView>
+                    <Authorized>        
+                        <MudNavLink Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Href="Account/Logout">Logout</MudNavLink>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudNavLink Icon="@Icons.Material.Filled.Login" Color="Color.Inherit" Href="Account/Login">Login</MudNavLink>
+                    </NotAuthorized>
+                </AuthorizeView>
+            </MudNavMenu>
+        </MudPaper>
+    </MudDrawer>
+    <MudMainContent>
+        <div Style="margin-top:-60px; margin-left: 5px">
+            <MudIconButton Icon="@Icons.Material.Outlined.Menu" Color="Color.Inherit" OnClick="@((e) => DrawerToggle())" />
         </div>
-
-        <article class="content px-4">
+        <MudContainer>
             @Body
-        </article>
-    </main>
-</div>
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
 
-<div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div>
+@code {
+    private MudTheme _theme = new()
+    {
+        PaletteDark = new PaletteDark()
+        {
+            Primary = Colors.Blue.Lighten1,
+            Background = "#0d1117",
+        },
+    };
+
+    protected override void OnInitialized()
+    {
+        _drawerOpen = true;
+    }
+
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}
+
