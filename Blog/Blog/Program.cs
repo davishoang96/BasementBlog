@@ -41,23 +41,9 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 builder.Services.AddControllers();
-if (builder.Environment.IsDevelopment())
-{
-    builder.WebHost.UseUrls(baseUrl);
-}
-else
-{
-    var pem = builder.Configuration["pemFilePath"];
-    var pemKey = builder.Configuration["pemKey"];
 
-    builder.WebHost.ConfigureKestrel(o =>
-    {
-        o.ListenAnyIP(portNumber, lo =>
-        {
-            lo.UseHttps(pem, pemKey);
-        });
-    });
-}
+// Use https
+builder.WebHost.UseUrls(baseUrl);
 
 builder.Services.AddCors(options =>
 {
