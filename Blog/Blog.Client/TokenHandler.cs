@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System.Net.Http.Headers;
 
+namespace Blog.Client;
+
 public class TokenHandler : DelegatingHandler
 {
     private readonly IHttpContextAccessor _httpContextAccessor;

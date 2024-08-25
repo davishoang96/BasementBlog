@@ -1,9 +1,11 @@
 using Auth0.AspNetCore.Authentication;
-using Autofac.Extensions.DependencyInjection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Blog;
 using Blog.AuthenticationStateSyncer;
 using Blog.Components;
 using Blog.Database;
+using Blog.Services;
 using Blog.Services.Modules;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,8 +13,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
-using System.Security.Cryptography.X509Certificates;
-using Blog.ApiClient;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +25,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAuthenticationStateProvider>();
+
 
 // Variables
 var baseUrl = builder.Configuration["BaseUrl"];
@@ -44,19 +45,24 @@ builder.Services.AddControllers();
 // Use https
 builder.WebHost.UseUrls(baseUrl);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins(baseUrl)
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
 
-builder.Services.AddHttpClient("BlogAppApi",
-      client => client.BaseAddress = new Uri(baseUrl))
-      .AddHttpMessageHandler<TokenHandler>();
-
-// Register the ApiClient with both the baseUrl and HttpClient
-builder.Services.AddScoped<IApiClient>(sp =>
+builder.Services.AddHttpClient<IApiClient, ApiClient>("BlogAppApi", client =>
 {
-    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlogAppApi");
-    return new ApiClient(baseUrl, httpClient);
-});
+    client.BaseAddress = new Uri(baseUrl);
+}).AddHttpMessageHandler<TokenHandler>();
 
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
@@ -102,8 +108,6 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
 app.MapControllers();
@@ -130,5 +134,5 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
     await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
-
+app.UseCors("AllowSpecificOrigin"); // Apply CORS policy globally
 app.Run();

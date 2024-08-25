@@ -1,6 +1,8 @@
-using Blog.ApiClient;
+using Blog.Client;
 using Blog.Client.AuthenticationStateSyncer;
+using Blog.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor.Services;
 
@@ -9,17 +11,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.Services.AddAuthorizationCore();
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddSingleton<AuthenticationStateProvider, PersistentAuthenticationStateProvider>();
-builder.Services.AddHttpClient("BlogAppApi", c =>
-{
-    c.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
-});
 
-// Register the ApiClient with both the baseUrl and HttpClient
-builder.Services.AddScoped<IApiClient>(sp =>
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<TokenHandler>();
+builder.Services.AddHttpClient<IApiClient, ApiClient>("BlogAppApi", client =>
 {
-    var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient("BlogAppApi");
-    var baseUrl = builder.HostEnvironment.BaseAddress; // Or replace with your API base URL
-    return new ApiClient(baseUrl, httpClient);
+    client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress);
 });
 
 builder.Services.AddMudServices();

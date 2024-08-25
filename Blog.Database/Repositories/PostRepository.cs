@@ -103,7 +103,7 @@ public class PostRepository : IPostRepository
     /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetUnclassifiedPosts()
     {
-        var result = db.Posts.Where(s => s.CategoryId == null && s.IsDeleted == false);
+        var result = db.Posts.Where(s => s.CategoryId == null && s.IsDeleted == false || s.IsDeleted == null);
 
         if (result == null || result.IsNullOrEmpty())
         {
