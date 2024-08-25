@@ -2,7 +2,7 @@
 
 public class PostDTO
 {
-    public string Id { get; set; }
+    public string? Id { get; set; }
     public int? CategoryId { get; set; }
     public string? CategoryName { get; set; }
     public required string Title { get; set; }

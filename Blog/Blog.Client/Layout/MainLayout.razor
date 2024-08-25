@@ -3,7 +3,7 @@
 <MudThemeProvider IsDarkMode="true" Theme="_theme" DefaultScrollbar="true" />
 <MudDialogProvider />
 <MudSnackbarProvider />
-
+<MudPopoverProvider />
 <MudLayout>
     <MudDrawer @bind-Open="@_drawerOpen" Width="250px">
        <MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
@@ -18,8 +18,9 @@
                 <MudNavLink Href="/posts" Icon="@Icons.Material.Filled.Pages">Posts</MudNavLink>
                 <AuthorizeView>
                     <Authorized>      
-                        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
-                        <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
+                        @* <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
+                        <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink> *@
+                        <MudNavLink Href="/postEditor" Icon="@Icons.Material.Filled.PostAdd">Create Post</MudNavLink>
                     </Authorized>
                 </AuthorizeView>
                 <MudNavLink Href="/about" Icon="@Icons.Material.Filled.Info">About</MudNavLink>

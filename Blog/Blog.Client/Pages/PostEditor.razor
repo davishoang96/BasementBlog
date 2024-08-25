@@ -1,0 +1,311 @@
+﻿@page "/postEditor";
+@page "/postEditor/{postId}"
+@using Blog.DTO;
+@using System.Text.Json.Serialization
+@using Blog.Services
+@using Blog.Services.Interfaces
+@using Newtonsoft.Json
+@inject IJSRuntime JSRuntime
+@inject IApiClient ApiClient;
+@inject IMarkdownService markdownService;
+@inject IDialogService dialogService;
+@inject ISnackbar snackBarService;
+@inject NavigationManager navigationManager;
+@attribute [Authorize]
+
+ <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+     <MudGrid>
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
+            <MudTextField ShrinkLabel Label="Title" @bind-Value="PostTitle" Variant="Variant.Text" />
+        </MudItem>
+
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4" class="mb-4">
+            <MudTextField ShrinkLabel Label="Description" @bind-Value="PostDescription" Variant="Variant.Text" />
+        </MudItem>
+
+        <MudItem xs="12" sm="4" md="4" lg="4" xl="4">
+            <MudAutocomplete T="CategoryDTO" Label="Category"
+                             @bind-Value="SelectedCategory"
+                             SearchFunc="SearchCategories"
+                             ToStringFunc="@DisplayValue"
+                             Variant="Variant.Text" />
+        </MudItem>
+
+        <MudItem Style="height: auto" xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <MudTextField ShrinkLabel id="drop-area" Multiline Rows="19" 
+                          Immediate="true" 
+                          DisableUnderLine="true"
+                          AutoGrow Label="Body" 
+                          @bind-Value="PostBody">
+            </MudTextField>
+        </MudItem>
+
+        <MudItem xs="12" sm="6" md="6" lg="6" xl="6" class="mb-4">
+            <div class="preview-container inter-text-field">
+                @((MarkupString)PostPreview)
+            </div>
+        </MudItem>
+
+    </MudGrid>
+     <!-- Save button -->
+     <MudItem xs="12" Class="floating-button">
+         <MudFab Color="Color.Primary" OnClick="SaveOrUpdatePostCommand" StartIcon="@Icons.Material.Filled.Save" />
+     </MudItem>
+
+</MudContainer>
+
+<style>
+    #drop-area {
+
+    }
+
+    #drop-area.highlight {
+        border: 2px dashed #007bff;
+        border-radius: 10px;
+    }
+</style>
+
+<script async>
+    window.setCursorPosition = function (elementId, position) {
+        var element = document.getElementById(elementId);
+        if (element && element.setSelectionRange) {
+            element.focus();
+            element.setSelectionRange(position, position);
+        }
+    };
+
+    window.insertTextAtCursor = function (elementId, text) {
+        var element = document.getElementById(elementId);
+        if (element) {
+            var startPos = element.selectionStart;
+            var endPos = element.selectionEnd;
+            var scrollTop = element.scrollTop;
+            element.value = element.value.substring(0, startPos) + text + element.value.substring(endPos, element.value.length);
+            element.focus();
+            element.setSelectionRange(startPos + text.length, startPos + text.length);
+            element.scrollTop = scrollTop;
+        }
+    };
+
+    window.uploadImage = async function (dotNetObject) {
+        var dropArea = document.getElementById('drop-area');
+        if (dropArea) {
+
+            // Prevent default drag behaviors
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            // Highlight drop area when dragging over
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+
+            function highlight(e) {
+                dropArea.classList.add('highlight');
+            }
+
+            function unhighlight(e) {
+                dropArea.classList.remove('highlight');
+            }
+
+            // Handle dropped files
+            dropArea.addEventListener('drop', handleDrop, false);
+
+            async function handleDrop(e) {
+                e.preventDefault();
+
+                var dt = e.dataTransfer;
+                var files = dt.files;
+
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    
+                    // Check file type
+                    if (!file.type.startsWith('image/')) {
+                        alert(`File ${file.name} is not an image.`);
+                        continue;
+                    }
+
+                    if (file.size > 2 * 1024 * 1024) { // 2MB size limit
+                        alert(`File ${file.name} exceeds the 2MB size limit.`);
+                        continue;
+                    }
+
+                    await readFile(file);
+                }
+            }
+
+            async function readFile(file) {
+                var reader = new FileReader();
+                reader.onload = async function (event) {
+                    var byteArray = new Uint8Array(event.target.result);
+                    var jsonObject = {
+                        "name": file.name,
+                        "type": file.type,
+                        "data": Array.from(byteArray)
+                    };
+                    dotNetObject.invokeMethodAsync('HandleFiles', jsonObject).then(resolve).catch(reject);
+                };
+
+                reader.onerror = function (event) {
+                    console.error("File could not be read! Code " + event.target.error.code);
+                    reject(event.target.error);
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+        }
+    };
+</script>
+
+@code
+{
+    [Parameter]
+    public string PostId { get; set; }
+
+    private Func<CategoryDTO, string?> DisplayValue = item => item is null ? null : item.Name;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetCategories();
+        await GetPostById(PostId);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
+        {
+            var dotNetReference = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("uploadImage", dotNetReference);
+        }
+    }
+
+    [JSInvokable("HandleFiles")]
+    public async Task HandleFiles(object value)
+    {
+        // var result = await HandleFiles(value);
+        // await JSRuntime.InvokeVoidAsync("insertTextAtCursor", "drop-area", result);
+    }
+
+    public string PostTitle { get; set; }
+    public string PostDescription { get; set; }
+    public string PostBody { get; set; }
+
+    public List<CategoryDTO> Categories { get; set; }
+
+    public async Task GetCategories()
+    {
+        var result = await ApiClient.GetCategoryAsync();
+        Categories = result.ToList();
+        if (!Categories.Any())
+        {
+            Categories.Add(new CategoryDTO
+            {
+                Name = "General",
+            });
+        }
+    }
+
+    public string PostPreview => string.IsNullOrEmpty(PostBody) ? "Type here" : markdownService.TextToHtml(PostBody);
+
+    public async Task GetPostById(string postId)
+    {
+        if(postId == null)
+        {
+            return;
+        }
+
+        var post = await ApiClient.GetPostByIdAsync(postId);
+        if (post != null)
+        {
+            PostTitle = post.Title;
+            PostDescription = post.Description;
+            PostBody = post.Body;
+            SelectedCategory = Categories.SingleOrDefault(s => s.CategoryId == post.CategoryId);
+        }
+    }
+
+    public async Task<bool> SaveOrUpdatePostCommand()
+    {
+        if (string.IsNullOrEmpty(PostTitle) || string.IsNullOrEmpty(PostDescription) || string.IsNullOrEmpty(PostBody))
+        {
+            await dialogService.ShowMessageBox("Warning", "Cannot leave those field empty");
+            return false;
+        }
+
+        var postId = await ApiClient.SavePostAsync(new PostDTO
+        {
+            Id = PostId,
+            Title = PostTitle,
+            Description = PostDescription,
+            CategoryId = SelectedCategory != null ? SelectedCategory.CategoryId : 0,
+            CategoryName = SelectedCategory != null ? SelectedCategory.Name : newCategory,
+            Body = PostBody,
+        });
+
+        if (!string.IsNullOrEmpty(postId))
+        {
+            navigationManager.NavigateTo($"/viewpost/{postId}");
+            snackBarService.Add("Save post successfully", Severity.Success, config =>
+            {
+                config.CloseAfterNavigation = false;
+                config.ShowTransitionDuration = 250;
+                config.HideTransitionDuration = 250;
+                config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+            });
+            return true;
+        }
+
+        snackBarService.Add("Failed to save post", Severity.Error, config =>
+        {
+            config.CloseAfterNavigation = false;
+            config.ShowTransitionDuration = 250;
+            config.HideTransitionDuration = 250;
+            config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+        });
+
+        return false;
+    }
+
+    public CategoryDTO? SelectedCategory { get; set; }
+
+    private string newCategory { get; set; }
+
+    public async Task<IEnumerable<CategoryDTO>> SearchCategories(string value, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return Categories;
+        }
+
+        var result = Categories.Where(x => x.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+        if (!result.Any())
+        {
+            SelectedCategory = null;
+            newCategory = value;
+        }
+
+        return result;
+    }
+
+    // public async Task<string> HandleFiles(object value)
+    // {
+    //     if (value is null)
+    //     {
+    //         await blogDialogService.ShowDialog("Warning", "Cannot leave those field empty");
+    //         return string.Empty;
+    //     }
+
+    //     return await fileService.UploadImage(value);
+    // }
+}
