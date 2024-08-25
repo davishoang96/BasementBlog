@@ -2,7 +2,6 @@
 @using Blog.ApiClient
 @inject IApiClient ApiClient
 @attribute [StreamRendering]
-@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 <h3>Posts</h3>
 
 @if(!posts.Any())
