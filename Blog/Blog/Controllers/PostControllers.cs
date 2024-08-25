@@ -48,4 +48,13 @@ public class PostController : ControllerBase
         var result = await postRepository.GetUnclassifiedPosts();
         return Ok(result);
     }
+
+    [Authorize]
+    [HttpPost("savePost")]
+    [SwaggerOperation(OperationId = "savePost")]
+    public async Task<ActionResult<string>> SavePost([FromBody] PostDTO postDto)
+    {
+        var result = await postRepository.SaveOrUpdatePost(postDto);
+        return Ok(result);
+    }
 }
