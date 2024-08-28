@@ -57,6 +57,14 @@ public class PostController : ControllerBase
     }
 
     [Authorize]
+    [HttpDelete("{id}")]
+    [SwaggerOperation(OperationId = "DeletePost")]
+    public async Task<bool> DeletePost(string id)
+    {
+        return await postRepository.DeletePost(id);
+    }
+
+    [Authorize]
     [HttpPost("savePost")]
     [Produces("text/plain")]
     [SwaggerOperation(OperationId = "savePost")]
