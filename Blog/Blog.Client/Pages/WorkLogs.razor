@@ -4,14 +4,12 @@
 @using Blog.Services
 @using Blog.Utilities
 @using Blog.Services.Interfaces;
+@using System.Runtime.InteropServices
 @inject IApiClient ApiClient;
 @inject IMarkdownService markdownService;
 @inject ISnackbar snackbar;
-@implements IDisposable
-@inject PersistentComponentState ApplicationState;
 @attribute [StreamRendering]
 @attribute [Authorize(Roles = "Admin")]
-@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <PageTitle>Worklogs</PageTitle>
 
@@ -48,8 +46,6 @@
         </MudButtonGroup>
     </MudItem>
 
-    <MudButton OnClick="@Setup">Click</MudButton>
-
 </MudContainer>
 
 <style>
@@ -63,35 +59,14 @@
 
 @code{
 
-    private PersistingComponentStateSubscription _subscription;
-
     protected override async Task OnInitializedAsync()
     {
-        // _subscription = ApplicationState.RegisterOnPersisting(Persist);
-        // var foundInState = ApplicationState.TryTakeFromJson<ObservableCollection<WorkLogDTO>>(nameof(WorkLogCollection), out var workLogDTOs);
-
-        // if(foundInState)
-        // {
-        //     WorkLogCollection = workLogDTOs;
-        // }
-        // else
-        // {
-        // }
-    }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if(firstRender)
+        // NOTE: https://stackoverflow.com/questions/78012730/in-net-8-blazor-app-how-to-fetch-data-only-on-client-while-keeping-prerender-o
+        var isPrerendering = RuntimeInformation.ProcessArchitecture != Architecture.Wasm;
+        if (!isPrerendering)
         {
             await Setup();
-            StateHasChanged();
         }
-    }
-
-    private Task Persist()
-    {
-        ApplicationState.PersistAsJson(nameof(WorkLogCollection), WorkLogCollection);
-        return Task.CompletedTask;
     }
 
     bool hideCalendar = false;
@@ -224,10 +199,5 @@
             config.HideTransitionDuration = 250;
             config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
         });
-    }
-
-    public void Dispose()
-    {
-        _subscription.Dispose();
     }
 }
