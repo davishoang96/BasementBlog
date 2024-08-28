@@ -33,9 +33,9 @@ public class WorkLogController : BaseAuthorizedController
     [HttpPost(nameof(SaveOrUpdateWorkLog))]
     [Produces("text/plain")]
     [SwaggerOperation(OperationId = nameof(SaveOrUpdateWorkLog))]
-    public async Task<string> SaveOrUpdateWorkLog([FromBody]WorkLogDTO workLogDTO)
+    public async Task<string> SaveOrUpdateWorkLog([FromBody] WorkLogDTO workLogDTO)
     {
-        var result = await workLogRepository.SaveOrUpdateWorkLog(workLogDTO);   
+        var result = await workLogRepository.SaveOrUpdateWorkLog(workLogDTO);
         return result;
     }
 

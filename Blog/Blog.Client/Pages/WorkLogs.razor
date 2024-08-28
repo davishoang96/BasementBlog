@@ -10,7 +10,8 @@
 @implements IDisposable
 @inject PersistentComponentState ApplicationState;
 @attribute [StreamRendering]
-@attribute [Authorize]
+@attribute [Authorize(Roles = "Admin")]
+@rendermode @(new InteractiveAutoRenderMode(prerender: false))
 
 <PageTitle>Worklogs</PageTitle>
 
@@ -47,6 +48,7 @@
         </MudButtonGroup>
     </MudItem>
 
+    <MudButton OnClick="@Setup">Click</MudButton>
 
 </MudContainer>
 
@@ -61,29 +63,28 @@
 
 @code{
 
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationState { get; set; }
-
     private PersistingComponentStateSubscription _subscription;
 
     protected override async Task OnInitializedAsync()
     {
-        if (authenticationState is not null)
-        {
-            var state = await authenticationState;
-            var username = state?.User?.Identity?.Name ?? string.Empty;
-        }
+        // _subscription = ApplicationState.RegisterOnPersisting(Persist);
+        // var foundInState = ApplicationState.TryTakeFromJson<ObservableCollection<WorkLogDTO>>(nameof(WorkLogCollection), out var workLogDTOs);
 
-        _subscription = ApplicationState.RegisterOnPersisting(Persist);
-        var foundInState = ApplicationState.TryTakeFromJson<ObservableCollection<WorkLogDTO>>(nameof(WorkLogCollection), out var workLogDTOs);
+        // if(foundInState)
+        // {
+        //     WorkLogCollection = workLogDTOs;
+        // }
+        // else
+        // {
+        // }
+    }
 
-        if(foundInState)
-        {
-            WorkLogCollection = workLogDTOs;
-        }
-        else
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(firstRender)
         {
             await Setup();
+            StateHasChanged();
         }
     }
 
