@@ -47,28 +47,20 @@ else
 <AuthorizeView Roles="Admin">
     <Authorized>
         <MudItem xs="12" Class="floating-button">
-            <MudFab Color="Color.Primary" Link="/postEditor" StartIcon="@Icons.Material.Filled.Create" />
+            <MudFab Color="Color.Primary" OnClick="@CreatePost" StartIcon="@Icons.Material.Filled.Create" />
         </MudItem>
     </Authorized>
 </AuthorizeView>
 
 @code
 {
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationState { get; set; }
-
     public List<PostDTO> BlogPosts = new List<PostDTO>();
 
     public List<CategoryDTO> Categoroies = new List<CategoryDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        if (authenticationState is not null)
-        {
-            var state = await authenticationState;
-            var username = state?.User?.Identity?.Name ?? string.Empty;
-        }
-
+ 
         await GetCategoriesWithPost();
         await GetUnclassifiedPosts();
     }
@@ -103,6 +95,11 @@ else
     public void EditPost(string postId)
     {
         navigationManager.NavigateTo($"/postEditor/{postId}");
+    }
+
+    public void CreatePost()
+    {
+        navigationManager.NavigateTo("/postEditor");
     }
 
     public void ViewPost(string postId)
