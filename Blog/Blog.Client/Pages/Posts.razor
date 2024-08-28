@@ -54,21 +54,13 @@ else
 
 @code
 {
-    [CascadingParameter]
-    private Task<AuthenticationState>? authenticationState { get; set; }
-
     public List<PostDTO> BlogPosts = new List<PostDTO>();
 
     public List<CategoryDTO> Categoroies = new List<CategoryDTO>();
 
     protected override async Task OnInitializedAsync()
     {
-        if (authenticationState is not null)
-        {
-            var state = await authenticationState;
-            var username = state?.User?.Identity?.Name ?? string.Empty;
-        }
-
+ 
         await GetCategoriesWithPost();
         await GetUnclassifiedPosts();
     }
