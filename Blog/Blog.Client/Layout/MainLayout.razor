@@ -18,12 +18,6 @@
                 <MudNavLink Href="/posts" Icon="@Icons.Material.Filled.Pages">Posts</MudNavLink>
                 <AuthorizeView Roles="Admin">
                     <Authorized>      
-                        <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
-                        <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
-                    </Authorized>
-                </AuthorizeView>
-                <AuthorizeView Roles="Admin">
-                    <Authorized>      
                         @* <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink> *@
                         <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
                     </Authorized>
