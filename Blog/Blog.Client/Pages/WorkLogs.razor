@@ -7,49 +7,97 @@
 @inject IApiClient ApiClient;
 @inject IMarkdownService markdownService;
 @inject ISnackbar snackbar;
+@implements IDisposable
+@inject PersistentComponentState ApplicationState;
+@attribute [StreamRendering]
 @attribute [Authorize]
 
 <PageTitle>Worklogs</PageTitle>
 
- <MudContainer MaxWidth="MaxWidth.ExtraLarge">
+ @if(!WorkLogCollection.Any())
+{
+    <MudText>Loading...</MudText>
+}
+else
+{
+    <MudContainer MaxWidth="MaxWidth.ExtraLarge">
 
-     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
-         <MudTabPanel Text="Description">
-            <MudTextField id="post-body" Class="fira-mono-regular"
-                          Immediate="true" DisableUnderLine="true" AutoGrow 
-                          @bind-Value="@Body" />
-         </MudTabPanel>
-        <MudTabPanel Text="Preview">
-            <MudText class="preview-container inter-text-field">
-                @((MarkupString)PreviewBody)
-            </MudText>
-        </MudTabPanel>
-     </MudTabs>
+        <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+            <MudTabPanel Text="Description">
+                <MudTextField id="post-body" Class="fira-mono-regular"
+                              Immediate="true" DisableUnderLine="true" AutoGrow
+                              @bind-Value="@Body" />
+            </MudTabPanel>
+            <MudTabPanel Text="Preview">
+                <MudText class="preview-container inter-text-field">
+                    @((MarkupString)PreviewBody)
+                </MudText>
+            </MudTabPanel>
+        </MudTabs>
 
-     <MudGrid>
-        <MudItem xs="12" Class="floating-button" Style="margin-right: -12px; margin-bottom: 30px">
-            <MudDatePicker PickerVariant="PickerVariant.Static"
-                           Rounded="true" DisableToolbar="true" hidden="@hideCalendar"
-                           AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))"
-                           @bind-Date="SelectedDate" />
+        <MudGrid>
+            <MudItem xs="12" Class="floating-button" Style="margin-right: -12px; margin-bottom: 30px">
+                <MudDatePicker PickerVariant="PickerVariant.Static"
+                               Rounded="true" DisableToolbar="true" hidden="@hideCalendar"
+                               AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))"
+                               @bind-Date="SelectedDate" />
+            </MudItem>
+        </MudGrid>
+
+
+        <!-- Save button -->
+        <MudItem xs="12" Class="floating-button">
+            <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+                <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@SaveOrUpdateWorkLog"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.CalendarToday" OnClick="@ToggleCalendar"></MudIconButton>
+            </MudButtonGroup>
         </MudItem>
-    </MudGrid>
 
-   
-     <!-- Save button -->
-     <MudItem xs="12" Class="floating-button">
-        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
-            <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@SaveOrUpdateWorkLog"></MudIconButton>
-            <MudIconButton Icon="@Icons.Material.Filled.CalendarToday" OnClick="@ToggleCalendar"></MudIconButton>
-        </MudButtonGroup>
-     </MudItem>
-</MudContainer>
+
+    </MudContainer>
+}
+
+<style>
+    .floating-button {
+        position: fixed;
+        bottom: 16px;
+        right: 60px;
+        z-index: 1000; /* Ensure the button stays on top of other elements */
+    }
+</style>
 
 @code{
 
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationState { get; set; }
+
+    private PersistingComponentStateSubscription _subscription;
+
     protected override async Task OnInitializedAsync()
     {
-        await Setup();
+        if (authenticationState is not null)
+        {
+            var state = await authenticationState;
+            var username = state?.User?.Identity?.Name ?? string.Empty;
+        }
+
+        _subscription = ApplicationState.RegisterOnPersisting(Persist);
+        var foundInState = ApplicationState.TryTakeFromJson<ObservableCollection<WorkLogDTO>>(nameof(WorkLogCollection), out var workLogDTOs);
+
+        if(foundInState)
+        {
+            WorkLogCollection = workLogDTOs;
+        }
+        else
+        {
+            await Setup();
+        }
+    }
+
+    private Task Persist()
+    {
+        ApplicationState.PersistAsJson(nameof(WorkLogCollection), WorkLogCollection);
+        return Task.CompletedTask;
     }
 
     bool hideCalendar = false;
@@ -58,7 +106,7 @@
         hideCalendar = !hideCalendar;
     }
 
-    private ObservableCollection<WorkLogDTO> workLogCollection;
+    private ObservableCollection<WorkLogDTO> workLogCollection = new ObservableCollection<WorkLogDTO>();
     public ObservableCollection<WorkLogDTO> WorkLogCollection
     {
         get => workLogCollection;
@@ -182,5 +230,10 @@
             config.HideTransitionDuration = 250;
             config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
         });
+    }
+
+    public void Dispose()
+    {
+        _subscription.Dispose();
     }
 }
