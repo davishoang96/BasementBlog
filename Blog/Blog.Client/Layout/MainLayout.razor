@@ -22,6 +22,12 @@
                         <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
                     </Authorized>
                 </AuthorizeView>
+                <AuthorizeView Roles="Admin">
+                    <Authorized>      
+                        @* <MudNavLink Href="/dashboard" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink> *@
+                        <MudNavLink Href="/worklogs" Icon="@Icons.Material.Filled.Comment">Work Logs</MudNavLink>
+                    </Authorized>
+                </AuthorizeView>
                 <AuthorizeView>
                     <Authorized>
                         <MudNavLink Href="/postEditor" Icon="@Icons.Material.Filled.PostAdd">Create Post</MudNavLink>

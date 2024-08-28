@@ -1,0 +1,203 @@
+﻿@page "/worklogs";
+@using Blog.DTO;
+@using System.Collections.ObjectModel
+@using Blog.Services
+@using Blog.Utilities
+@using Blog.Services.Interfaces;
+@using System.Runtime.InteropServices
+@inject IApiClient ApiClient;
+@inject IMarkdownService markdownService;
+@inject ISnackbar snackbar;
+@attribute [StreamRendering]
+@attribute [Authorize(Roles = "Admin")]
+
+<PageTitle>Worklogs</PageTitle>
+
+<MudContainer MaxWidth="MaxWidth.ExtraLarge">
+
+    <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+        <MudTabPanel Text="Description">
+            <MudTextField id="post-body" Class="fira-mono-regular"
+                          Immediate="true" DisableUnderLine="true" AutoGrow
+                          @bind-Value="@Body" />
+        </MudTabPanel>
+        <MudTabPanel Text="Preview">
+            <MudText class="preview-container inter-text-field">
+                @((MarkupString)PreviewBody)
+            </MudText>
+        </MudTabPanel>
+    </MudTabs>
+
+    <MudGrid>
+        <MudItem xs="12" Class="floating-button" Style="margin-right: -12px; margin-bottom: 30px">
+            <MudDatePicker PickerVariant="PickerVariant.Static"
+                           Rounded="true" DisableToolbar="true" hidden="@hideCalendar"
+                           AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))"
+                           @bind-Date="SelectedDate" />
+        </MudItem>
+    </MudGrid>
+
+
+    <!-- Save button -->
+    <MudItem xs="12" Class="floating-button">
+        <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
+            <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@SaveOrUpdateWorkLog"></MudIconButton>
+            <MudIconButton Icon="@Icons.Material.Filled.CalendarToday" OnClick="@ToggleCalendar"></MudIconButton>
+        </MudButtonGroup>
+    </MudItem>
+
+</MudContainer>
+
+<style>
+    .floating-button {
+        position: fixed;
+        bottom: 16px;
+        right: 60px;
+        z-index: 1000; /* Ensure the button stays on top of other elements */
+    }
+</style>
+
+@code{
+
+    protected override async Task OnInitializedAsync()
+    {
+        // NOTE: https://stackoverflow.com/questions/78012730/in-net-8-blazor-app-how-to-fetch-data-only-on-client-while-keeping-prerender-o
+        var isPrerendering = RuntimeInformation.ProcessArchitecture != Architecture.Wasm;
+        if (!isPrerendering)
+        {
+            await Setup();
+        }
+    }
+
+    bool hideCalendar = false;
+    private void ToggleCalendar()
+    {
+        hideCalendar = !hideCalendar;
+    }
+
+    private ObservableCollection<WorkLogDTO> workLogCollection = new ObservableCollection<WorkLogDTO>();
+    public ObservableCollection<WorkLogDTO> WorkLogCollection
+    {
+        get => workLogCollection;
+        set
+        {
+            workLogCollection = value;
+        }
+    }
+
+    private WorkLogDTO selectedWorkLog;
+    public WorkLogDTO SelectedWorkLog
+    {
+        get => selectedWorkLog;
+        set
+        {
+            selectedWorkLog = value;
+            if (selectedWorkLog != null)
+            {
+                Body = selectedWorkLog.Body;
+            }
+        }
+    }
+
+    public string Body { get; set; }
+
+    private DateTime? dateTime;
+    public DateTime? SelectedDate
+    {
+        get => dateTime;
+        set
+        {
+            dateTime = value;
+            if (WorkLogCollection.Any() && value != null)
+            {
+                SelectedWorkLog = WorkLogCollection.SingleOrDefault(s => s.LoggedDate == SelectedDate.Value.ToString(Common.DefaultDateTimeFormat));
+            }
+
+            if (SelectedWorkLog == null)
+            {
+                SelectedWorkLog = null;
+                Body = null;
+            }
+        }
+    }
+
+    public string PreviewBody => string.IsNullOrEmpty(Body) ? string.Empty : markdownService.TextToHtml(Body);
+
+    public async Task Setup()
+    {
+        var workLogs = await ApiClient.GetAllWorkLogsAsync();
+        if (workLogs.Any())
+        {
+            WorkLogCollection = new ObservableCollection<WorkLogDTO>(workLogs);
+        }
+        else
+        {
+            WorkLogCollection = new ObservableCollection<WorkLogDTO>();
+        }
+
+        SelectedDate = DateTime.Now;
+    }
+
+    public async Task GetWorkLogById(string id)
+    {
+        var res = await ApiClient.GetWorkLogByIdAsync(id);
+        if (res is not null)
+        {
+            SelectedWorkLog = new WorkLogDTO
+            {
+                Id = res.Id,
+                Body = Body = res.Body,
+                ModifiedDate = res.ModifiedDate,
+                LoggedDate = res.LoggedDate,
+            };
+
+            var dt = DateTime.Parse(SelectedWorkLog.LoggedDate);
+            SelectedDate = dt;
+        }
+    }
+
+    public async Task SaveOrUpdateWorkLog()
+    {
+        if (string.IsNullOrEmpty(Body))
+        {
+            Body = string.Empty;
+            return;
+        }
+
+        if (SelectedWorkLog == null)
+        {
+            SelectedWorkLog = new WorkLogDTO
+            {
+                Body = Body,
+                ModifiedDate = DateTime.Now,
+            };
+        }
+        else
+        {
+            SelectedWorkLog.Body = Body;
+            SelectedWorkLog.ModifiedDate = DateTime.Now;
+        }
+
+        SelectedWorkLog.LoggedDate = SelectedDate.Value.ToString(Common.DefaultDateTimeFormat);
+
+        var id = await ApiClient.SaveOrUpdateWorkLogAsync(SelectedWorkLog);
+        if (!string.IsNullOrEmpty(id))
+        {
+            if (WorkLogCollection.Contains(SelectedWorkLog))
+            {
+                WorkLogCollection.Remove(SelectedWorkLog);
+            }
+
+            SelectedWorkLog.Id = id;
+            WorkLogCollection.Add(SelectedWorkLog);
+        }
+
+        snackbar.Add("Save work log successfully", Severity.Success, config =>
+        {
+            config.CloseAfterNavigation = true;
+            config.ShowTransitionDuration = 250;
+            config.HideTransitionDuration = 250;
+            config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+        });
+    }
+}

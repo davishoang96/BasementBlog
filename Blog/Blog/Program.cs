@@ -50,16 +50,16 @@ builder.Services.AddControllers(o =>
 // Use https
 builder.WebHost.UseUrls(baseUrl);
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin",
-        builder =>
-        {
-            builder.WithOrigins(baseUrl)
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
-        });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowSpecificOrigin",
+//        builder =>
+//        {
+//            builder.WithOrigins(baseUrl)
+//                   .AllowAnyHeader()
+//                   .AllowAnyMethod();
+//        });
+//});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<TokenHandler>();
@@ -67,7 +67,7 @@ builder.Services.AddScoped<TokenHandler>();
 builder.Services.AddHttpClient("BlogAppApi", client =>
 {
     client.BaseAddress = new Uri(baseUrl);
-}).AddHttpMessageHandler<TokenHandler>();
+});
 
 builder.Services.AddScoped<IApiClient>(sp =>
 {
@@ -146,5 +146,6 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
     await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
-app.UseCors("AllowSpecificOrigin"); // Apply CORS policy globally
+app.UseAuthorization();
+//app.UseCors("AllowSpecificOrigin"); // Apply CORS policy globally
 app.Run();
