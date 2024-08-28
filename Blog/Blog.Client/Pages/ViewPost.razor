@@ -1,7 +1,9 @@
 ﻿@page "/viewPost/{postId}"
 @using Blog.Services
 @using Blog.Services.Interfaces
+@using Blog.Utilities
 @inject IMarkdownService markdownService;
+@inject NavigationManager navigationManager;
 @inject IApiClient ApiClient;
 @attribute [StreamRendering]
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
@@ -44,13 +46,13 @@
         {
             PostTitle = post.Title;
             PostBody = string.IsNullOrEmpty(post.Body) ? string.Empty : markdownService.TextToHtml(post.Body);
-            PublishDate = post.PublishDate.ToString("dd/MM/yyyy");
+            PublishDate = post.PublishDate.ToString(Common.DefaultDateTimeFormat);
             PostId = postId;
         }
     }
 
     public void EditPost()
     {
-        //navigationManager.NavigateTo($"/postEditor/{PostId}");
+        navigationManager.NavigateTo($"/postEditor/{PostId}");
     }
 } 
