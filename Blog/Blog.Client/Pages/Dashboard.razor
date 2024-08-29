@@ -2,6 +2,7 @@
 @using Blog.DTO
 @using System.Collections.ObjectModel
 @using Blog.Services
+@using System.Runtime.InteropServices
 @inject NavigationManager navigationManager;
 @inject IApiClient ApiClient;
 @inject IDialogService dialogService;
@@ -81,7 +82,11 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await InitialDashboard();
+        var isPrerendering = RuntimeInformation.ProcessArchitecture != Architecture.Wasm;
+        if (!isPrerendering)
+        {
+            await InitialDashboard();
+        }
     }
 
     void OnRowClick(string id)
@@ -97,28 +102,28 @@
     public async Task WipeAllIsDeletedPosts()
     {
         var result = await dialogService.ShowMessageBox("Warning", "Do you want to wipe all 'IsDeleted' posts?");
-        if (result.HasValue && !result.Value)
+        if (result.HasValue && result.Value)
         {
-            // var num = await postService.WipeAllSoftDeletedPost();
-            // if (num > 0)
-            // {
-            //     var p = Posts.Where(s => s.IsDelete == null || s.IsDelete == false);
-            //     Posts = new ObservableCollection<PostDTO>(p);
+            var num = await ApiClient.WipeAllSoftDeletedPostAsync();
+            if (num > 0)
+            {
+                var p = Posts.Where(s => s.IsDelete == null || s.IsDelete == false);
+                Posts = new ObservableCollection<PostDTO>(p);
 
-            //     // TODO: Somehow throw exception about threading. Pls investigate this.
-            //     //foreach(var p in Posts.Where(s => s.IsDelete == true))
-            //     //{
-            //     //    Posts.Remove(p);
-            //     //}
+                // TODO: Somehow throw exception about threading. Pls investigate this.
+                //foreach(var p in Posts.Where(s => s.IsDelete == true))
+                //{
+                //    Posts.Remove(p);
+                //}
 
-            //     snackbar.Add($"Deleted {num} posts", Severity.Success, config =>
-            //     {
-            //         config.CloseAfterNavigation = true;
-            //         config.ShowTransitionDuration = 250;
-            //         config.HideTransitionDuration = 250;
-            //         config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
-            //     });
-            // }
+                snackbar.Add($"Deleted {num} posts", Severity.Success, config =>
+                {
+                    config.CloseAfterNavigation = true;
+                    config.ShowTransitionDuration = 250;
+                    config.HideTransitionDuration = 250;
+                    config.DuplicatesBehavior = SnackbarDuplicatesBehavior.Prevent;
+                });
+            }
         }
     }
 
@@ -139,7 +144,7 @@
 
     public async Task SoftDeletePost(string id)
     {
-        if (await ApiClient.DeletePostAsync(id))
+        if (await ApiClient.SoftDeletePostAsync(id))
         {
             var p = Posts.Single(s => s.Id == id);
             p.IsDelete = true;
@@ -152,15 +157,15 @@
 
     public async Task RestorePost(string id)
     {
-        // if (await ApiClient.RestoreDeletedPost(id))
-        // {
-        //     var p = Posts.Single(s => s.Id == id);
-        //     p.IsDelete = false;
-        // }
-        // else
-        // {
-        //     await blogDialogService.ShowDialog("Warning", $"Unable to restore deleted post with id = {id}");
-        // }
+        if (await ApiClient.RestoreDeletedPostAsync(id))
+        {
+            var p = Posts.Single(s => s.Id == id);
+            p.IsDelete = false;
+        }
+        else
+        {
+            await dialogService.ShowMessageBox("Warning", $"Unable to restore deleted post with id = {id}");
+        }
     }
 
     public void ViewPost(string postId)

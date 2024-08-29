@@ -56,12 +56,36 @@ public class PostController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
+    //[Authorize]
+    //[HttpDelete("{id}")]
+    //[SwaggerOperation(OperationId = "DeletePost")]
+    //public async Task<bool> DeletePost(string id)
+    //{
+    //    return await postRepository.DeletePost(id);
+    //}
+
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
-    [SwaggerOperation(OperationId = "DeletePost")]
-    public async Task<bool> DeletePost(string id)
+    [SwaggerOperation(OperationId = "SoftDeletePost")]
+    public async Task<bool> SoftDeletePost(string id)
     {
-        return await postRepository.DeletePost(id);
+        return await postRepository.SoftDeletePost(id);
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpDelete]
+    [SwaggerOperation(OperationId = "WipeAllSoftDeletedPost")]
+    public async Task<int> WipeAllSoftDeletedPost()
+    {
+        return await postRepository.WipeAllSoftDeletedPost();
+    }
+
+    [Authorize(Roles = "Admin")]
+    [HttpPost("restorePost")]
+    [SwaggerOperation(OperationId = "RestoreDeletedPost")]
+    public async Task<bool> RestoreDeletedPost([FromBody] string id)
+    {
+        return await postRepository.RestoreDeletedPost(id);
     }
 
     [Authorize]
