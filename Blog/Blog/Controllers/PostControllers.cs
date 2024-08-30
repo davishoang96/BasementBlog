@@ -53,11 +53,16 @@ public class PostController : ControllerBase
     public async Task<ActionResult<PostDTO>> GetPostById(string id)
     {
         var result = await postRepository.GetPostById(id);
+        if (result == null || result.IsDelete.HasValue && result.IsDelete.Value == true)
+        {
+            return NotFound(new { Message = "Post not found or has been deleted." });
+        }
+
         return Ok(result);
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpGet("{postId}")]
+    [HttpDelete("{postId}")]
     [SwaggerOperation(OperationId = "DeletePost")]
     public async Task<bool> DeletePost(string postId)
     {
