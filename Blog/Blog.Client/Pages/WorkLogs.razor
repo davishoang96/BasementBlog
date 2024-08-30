@@ -30,13 +30,12 @@
 
     <MudGrid>
         <MudItem xs="12" Class="floating-button" Style="margin-right: -12px; margin-bottom: 30px">
-            <MudDatePicker PickerVariant="PickerVariant.Static"
-                          DateChanged="DateChanged"
-                           Rounded="true" DisableToolbar="true" hidden="@hideCalendar"
+            <MudDatePicker PickerVariant="PickerVariant.Static" DateChanged="DateChanged"
+                           ShowWeekNumbers="true" Rounded="true" 
+                           DisableToolbar="true" hidden="@hideCalendar"
                            AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))" />
         </MudItem>
     </MudGrid>
-
 
     <!-- Save button -->
     <MudItem xs="12" Class="floating-button">
@@ -111,7 +110,7 @@
         {
             SelectedWorkLog = null;
             Body = null;
-            
+
             return;
         }
 
@@ -142,7 +141,7 @@
             WorkLogCollection = new ObservableCollection<WorkLogDTO>();
         }
 
-        SelectedDate = DateTime.Now;
+        await DateChanged(DateTime.Now);
     }
 
     public async Task SaveOrUpdateWorkLog()
