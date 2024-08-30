@@ -56,13 +56,13 @@ public class PostController : ControllerBase
         return Ok(result);
     }
 
-    //[Authorize]
-    //[HttpDelete("{id}")]
-    //[SwaggerOperation(OperationId = "DeletePost")]
-    //public async Task<bool> DeletePost(string id)
-    //{
-    //    return await postRepository.DeletePost(id);
-    //}
+    [Authorize(Roles = "Admin")]
+    [HttpGet("{postId}")]
+    [SwaggerOperation(OperationId = "DeletePost")]
+    public async Task<bool> DeletePost(string postId)
+    {
+        return await postRepository.DeletePost(postId);
+    }
 
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
