@@ -2,6 +2,7 @@
 @using Blog.DTO
 @using Blog.Services
 @inject IApiClient ApiClient;
+@inject PersistentComponentState ApplicationState
 @inject NavigationManager navigationManager;
 @attribute [StreamRendering]
 <h3>Posts</h3>
@@ -28,7 +29,7 @@
 
         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
             <h6>Unclassified Posts</h6>
-            @foreach (var post in BlogPosts)
+            @foreach (var post in BlogPosts.Where(s => s.CategoryId == null))
             {
                 <div>
                     <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
@@ -53,15 +54,34 @@ else
 
 @code
 {
+    private PersistingComponentStateSubscription _subscription;
+
     public List<PostDTO> BlogPosts = new List<PostDTO>();
 
     public List<CategoryDTO> Categoroies = new List<CategoryDTO>();
 
     protected override async Task OnInitializedAsync()
     {
- 
-        await GetCategoriesWithPost();
-        await GetUnclassifiedPosts();
+        _subscription = ApplicationState.RegisterOnPersisting(Persist);
+        var isFoundPosts = ApplicationState.TryTakeFromJson<List<PostDTO>>(nameof(BlogPosts), out var blogPosts);
+        var isFoundCate = ApplicationState.TryTakeFromJson<List<CategoryDTO>>(nameof(Categoroies), out var categories);
+        if(isFoundPosts && isFoundCate)
+        {
+            BlogPosts = blogPosts;
+            Categoroies = categories;
+        }
+        else
+        {
+            await GetCategoriesWithPost();
+            await GetUnclassifiedPosts();
+        }
+    }
+
+    private Task Persist()
+    {
+        ApplicationState.PersistAsJson(nameof(BlogPosts), BlogPosts);
+        ApplicationState.PersistAsJson(nameof(Categoroies), Categoroies);
+        return Task.CompletedTask;
     }
 
     public async Task GetUnclassifiedPosts()
