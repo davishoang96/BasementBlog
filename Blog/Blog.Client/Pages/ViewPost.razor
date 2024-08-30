@@ -43,13 +43,21 @@
 
     public async Task GetPostById(string postId)
     {
-        var post = await ApiClient.GetPostByIdAsync(postId);
-        if (post != null)
+        try
         {
-            PostTitle = post.Title;
-            PostBody = string.IsNullOrEmpty(post.Body) ? string.Empty : markdownService.TextToHtml(post.Body);
-            PublishDate = post.PublishDate.ToString(Common.DefaultDateTimeFormat);
-            PostId = postId;
+            var post = await ApiClient.GetPostByIdAsync(postId);
+            if (post != null)
+            {
+                PostTitle = post.Title;
+                PostBody = string.IsNullOrEmpty(post.Body) ? string.Empty : markdownService.TextToHtml(post.Body);
+                PublishDate = post.PublishDate.ToString(Common.DefaultDateTimeFormat);
+                PostId = postId;
+            }
+        }
+        // Better do good next time
+        catch(Exception ex)
+        {
+            navigationManager.NavigateTo("/resourceNotFound");
         }
     }
 
