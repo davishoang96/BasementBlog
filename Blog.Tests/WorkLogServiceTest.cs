@@ -72,6 +72,30 @@ public sealed class WorkLogRepositoryTest : BaseDataContextTest
    }
 
    [Fact]
+   public async Task GetAllWorkLogWithoutBodyOK()
+   {
+        // Arrange
+        var fixture = new Fixture();
+        var id = 100;
+        var workLogs = fixture.Build<WorkLog>().With(s => s.Id, () => id++).CreateMany(10);
+
+        using (var context = new DatabaseContext(Options))
+        {
+            context.WorkLogs.AddRange(workLogs);
+            await context.SaveChangesAsync();
+        }
+
+        var service = new WorkLogRepository(new DatabaseContext(Options), MockSqidService.Object);
+
+        // Act
+        var result = await service.GetAllWorkLogsWithoutBody();
+
+        // Assert
+        result.Count().Should().Be(10);
+        result.All(s=>s.Body == null).Should().BeTrue();
+   }
+
+   [Fact]
    public async Task GetWorkLogByIdOK()
    {
         // Arrange

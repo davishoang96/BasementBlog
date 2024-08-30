@@ -31,9 +31,9 @@
     <MudGrid>
         <MudItem xs="12" Class="floating-button" Style="margin-right: -12px; margin-bottom: 30px">
             <MudDatePicker PickerVariant="PickerVariant.Static"
+                          DateChanged="DateChanged"
                            Rounded="true" DisableToolbar="true" hidden="@hideCalendar"
-                           AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))"
-                           @bind-Date="SelectedDate" />
+                           AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))" />
         </MudItem>
     </MudGrid>
 
@@ -101,31 +101,38 @@
 
     public string Body { get; set; }
 
-    private DateTime? dateTime;
-    public DateTime? SelectedDate
+    private async Task DateChanged(DateTime? selectedDate)
     {
-        get => dateTime;
-        set
-        {
-            dateTime = value;
-            if (WorkLogCollection.Any() && value != null)
-            {
-                SelectedWorkLog = WorkLogCollection.SingleOrDefault(s => s.LoggedDate == SelectedDate.Value.ToString(Common.DefaultDateTimeFormat));
-            }
+        if(selectedDate == null || !WorkLogCollection.Any()) { return; }
+        SelectedDate = selectedDate.Value;
 
-            if (SelectedWorkLog == null)
+        var logId = WorkLogCollection.SingleOrDefault(s => s.LoggedDate == selectedDate.Value.ToString(Common.DefaultDateTimeFormat))?.Id;
+        if(logId == null)
+        {
+            SelectedWorkLog = null;
+            Body = null;
+            
+            return;
+        }
+
+        var res = await ApiClient.GetWorkLogByIdAsync(logId);
+        if (res is not null)
+        {
+            SelectedWorkLog = new WorkLogDTO
             {
-                SelectedWorkLog = null;
-                Body = null;
-            }
+                Id = res.Id,
+                Body = Body = res.Body,
+                ModifiedDate = res.ModifiedDate,
+                LoggedDate = res.LoggedDate,
+            };
         }
     }
 
     public string PreviewBody => string.IsNullOrEmpty(Body) ? string.Empty : markdownService.TextToHtml(Body);
-
+    public DateTime SelectedDate { get; set; }
     public async Task Setup()
     {
-        var workLogs = await ApiClient.GetAllWorkLogsAsync();
+        var workLogs = await ApiClient.GetAllWorkLogsWithoutBodyAsync();
         if (workLogs.Any())
         {
             WorkLogCollection = new ObservableCollection<WorkLogDTO>(workLogs);
@@ -136,24 +143,6 @@
         }
 
         SelectedDate = DateTime.Now;
-    }
-
-    public async Task GetWorkLogById(string id)
-    {
-        var res = await ApiClient.GetWorkLogByIdAsync(id);
-        if (res is not null)
-        {
-            SelectedWorkLog = new WorkLogDTO
-            {
-                Id = res.Id,
-                Body = Body = res.Body,
-                ModifiedDate = res.ModifiedDate,
-                LoggedDate = res.LoggedDate,
-            };
-
-            var dt = DateTime.Parse(SelectedWorkLog.LoggedDate);
-            SelectedDate = dt;
-        }
     }
 
     public async Task SaveOrUpdateWorkLog()
@@ -178,7 +167,7 @@
             SelectedWorkLog.ModifiedDate = DateTime.Now;
         }
 
-        SelectedWorkLog.LoggedDate = SelectedDate.Value.ToString(Common.DefaultDateTimeFormat);
+        SelectedWorkLog.LoggedDate = SelectedDate.ToString(Common.DefaultDateTimeFormat);
 
         var id = await ApiClient.SaveOrUpdateWorkLogAsync(SelectedWorkLog);
         if (!string.IsNullOrEmpty(id))
