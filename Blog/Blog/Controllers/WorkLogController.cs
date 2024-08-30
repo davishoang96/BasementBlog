@@ -30,6 +30,14 @@ public class WorkLogController : BaseAuthorizedController
         return Ok(result);
     }
 
+    [HttpGet(nameof(GetAllWorkLogsWithoutBody))]
+    [SwaggerOperation(OperationId = nameof(GetAllWorkLogsWithoutBody))]
+    public async Task<ActionResult<IEnumerable<WorkLogDTO>>> GetAllWorkLogsWithoutBody()
+    {
+        var result = await workLogRepository.GetAllWorkLogsWithoutBody();
+        return Ok(result);
+    }
+
     [HttpPost(nameof(SaveOrUpdateWorkLog))]
     [Produces("text/plain")]
     [SwaggerOperation(OperationId = nameof(SaveOrUpdateWorkLog))]

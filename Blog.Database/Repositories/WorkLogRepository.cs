@@ -38,8 +38,20 @@ public class WorkLogRepository : IWorkLogRepository
        }).ToListAsync();
    }
 
-   public async Task<WorkLogDTO> GetWorkLogById(string id)
-   {
+    public async Task<IEnumerable<WorkLogDTO>> GetAllWorkLogsWithoutBody()
+    {
+        return await db.WorkLogs.Select(model => new WorkLogDTO
+        {
+            Id = sqidService.EncryptId(model.Id),
+            Body = null,
+            IsDeleted = model.IsDeleted,
+            LoggedDate = model.LoggedDate,
+            ModifiedDate = model.ModifiedDate,
+        }).ToListAsync();
+    }
+
+    public async Task<WorkLogDTO> GetWorkLogById(string id)
+    {
        var scr = sqidService.DecryptId(id);
        var model = await db.WorkLogs.SingleOrDefaultAsync(s => s.Id == scr);
        if (model is null)
