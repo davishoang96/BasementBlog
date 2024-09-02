@@ -8,16 +8,18 @@ namespace Blog.Controllers;
 [Route("[controller]")]
 public class UploadImageController : BaseAuthorizedController
 {
-    public UploadImageController() { }
+    private readonly IConfiguration configuration;
+    public UploadImageController(IConfiguration configuration) 
+    {
+        this.configuration = configuration;
+    }
 
     [HttpPost(nameof(UploadImage))]
     [Produces("text/plain")]
     [SwaggerOperation(OperationId = nameof(UploadImage))]
     public async Task<string> UploadImage([FromBody] ImageDTO imageDTO)
     {
-        var root = Path.GetFullPath("wwwroot");
-        var dict = Path.Combine(root, "Images");
-
+        var dict = configuration["ImageDirectoryPath"];
         if (!Path.Exists(dict))
         {
             Directory.CreateDirectory(dict);
