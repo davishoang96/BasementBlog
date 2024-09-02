@@ -41,6 +41,6 @@ public class UploadImageController : BaseAuthorizedController
             data.SaveTo(fileStream);
         }
 
-        return $"![Image-{DateTime.Now.ToShortDateString()}](/Images/{imageDTO.Name}.jpg){{ width={100}% }}"; ;
+        return $"![Image-{DateTime.Now.ToShortDateString()}]({filePath}){{ width={100}% }}"; ;
     }
 }
