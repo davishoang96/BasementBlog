@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 
@@ -120,7 +120,12 @@ else
     app.UseHsts();
 }
 
-app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(builder.Configuration["ImageDirectoryPath"]),
+    RequestPath = $"/{builder.Configuration["ImageDirectoryPath"]}"
+});
+
 app.UseAntiforgery();
 app.MapControllers();
 app.MapRazorComponents<App>()
