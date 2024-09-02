@@ -1,5 +1,6 @@
 ﻿using Blog.DTO;
 using Microsoft.AspNetCore.Mvc;
+using SkiaSharp;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Drawing;
 
@@ -9,7 +10,7 @@ namespace Blog.Controllers;
 public class UploadImageController : BaseAuthorizedController
 {
     private readonly IConfiguration configuration;
-    public UploadImageController(IConfiguration configuration) 
+    public UploadImageController(IConfiguration configuration)
     {
         this.configuration = configuration;
     }
@@ -29,12 +30,17 @@ public class UploadImageController : BaseAuthorizedController
         imageDTO.Name = guid.ToString();
         var filePath = Path.Combine(dict, $"{imageDTO.Name}.jpg");
         byte[] imageBytes = Convert.FromBase64String(imageDTO.Data);
-        using (MemoryStream ms = new MemoryStream(imageBytes))
+
+        // Use skiasharp to write imageBytes to disk
+        using (var stream = new SKMemoryStream(imageBytes))
+        using (var bitmap = SKBitmap.Decode(stream))
+        using (var image = SKImage.FromBitmap(bitmap))
+        using (var data = image.Encode(SKEncodedImageFormat.Jpeg, 100)) // 100 is the quality
+        using (var fileStream = System.IO.File.OpenWrite(filePath))
         {
-            // Create an Image object from the MemoryStream
-            Image image = Image.FromStream(ms);
-            image.Save(filePath);
-            return $"![Image-{DateTime.Now.ToShortDateString()}](/Images/{imageDTO.Name}.jpg){{ width={100}% }}"; ;
+            data.SaveTo(fileStream);
         }
+
+        return $"![Image-{DateTime.Now.ToShortDateString()}](/Images/{imageDTO.Name}.jpg){{ width={100}% }}"; ;
     }
 }
