@@ -148,11 +148,18 @@
             async function readFile(file) {
                 var reader = new FileReader();
                 reader.onload = async function (event) {
-                    var byteArray = new Uint8Array(event.target.result);
+                    let binary = '';
+                    const bytes = new Uint8Array(event.target.result);
+                    const len = bytes.byteLength;
+                    for (let i = 0; i < len; i++) 
+                    {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    const base64String = window.btoa(binary);
                     var jsonObject = {
                         "name": file.name,
                         "type": file.type,
-                        "data": Array.from(byteArray)
+                        "data": base64String
                     };
                     dotNetObject.invokeMethodAsync('HandleFiles', jsonObject).then(resolve).catch(reject);
                 };
@@ -191,11 +198,33 @@
     }
 
     [JSInvokable("HandleFiles")]
-    public async Task HandleFiles(object value)
+    public async Task HandleFiles(ImageDTO value)
     {
-        // var result = await HandleFiles(value);
-        // await JSRuntime.InvokeVoidAsync("insertTextAtCursor", "drop-area", result);
+        if (value is null)
+        {
+            await dialogService.ShowMessageBox("Warning", "Cannot leave those field empty");
+            return;
+        }
+
+        var result = await ApiClient.UploadImageAsync(value);
+        if (string.IsNullOrEmpty(result))
+        {
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync("insertTextAtCursor", "drop-area", result);
     }
+
+    // public async Task<string> HandleFiles(object value)
+    // {
+    //     if (value is null)
+    //     {
+    //         await blogDialogService.ShowDialog("Warning", "Cannot leave those field empty");
+    //         return string.Empty;
+    //     }
+
+    //     return await fileService.UploadImage(value);
+    // }
 
     public string PostTitle { get; set; }
     public string PostDescription { get; set; }
@@ -298,14 +327,5 @@
         return result;
     }
 
-    // public async Task<string> HandleFiles(object value)
-    // {
-    //     if (value is null)
-    //     {
-    //         await blogDialogService.ShowDialog("Warning", "Cannot leave those field empty");
-    //         return string.Empty;
-    //     }
-
-    //     return await fileService.UploadImage(value);
-    // }
+    
 }
