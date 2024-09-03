@@ -148,11 +148,18 @@
             async function readFile(file) {
                 var reader = new FileReader();
                 reader.onload = async function (event) {
-                    var byteArray = new Uint8Array(event.target.result);
+                    let binary = '';
+                    const bytes = new Uint8Array(event.target.result);
+                    const len = bytes.byteLength;
+                    for (let i = 0; i < len; i++) 
+                    {
+                        binary += String.fromCharCode(bytes[i]);
+                    }
+                    const base64String = window.btoa(binary);
                     var jsonObject = {
                         "name": file.name,
                         "type": file.type,
-                        "data": Array.from(byteArray)
+                        "data": base64String
                     };
                     dotNetObject.invokeMethodAsync('HandleFiles', jsonObject).then(resolve).catch(reject);
                 };
@@ -172,7 +179,14 @@
 {
     [Parameter]
     public string PostId { get; set; }
+    public string PostTitle { get; set; }
+    public string PostDescription { get; set; }
+    public string PostBody { get; set; }
+    public CategoryDTO? SelectedCategory { get; set; }
+    private string newCategory { get; set; }
 
+    public List<CategoryDTO> Categories { get; set; }
+    public string PostPreview => string.IsNullOrEmpty(PostBody) ? "Type here" : markdownService.TextToHtml(PostBody);
     private Func<CategoryDTO, string?> DisplayValue = item => item is null ? null : item.Name;
 
     protected override async Task OnInitializedAsync()
@@ -191,17 +205,22 @@
     }
 
     [JSInvokable("HandleFiles")]
-    public async Task HandleFiles(object value)
+    public async Task HandleFiles(ImageDTO value)
     {
-        // var result = await HandleFiles(value);
-        // await JSRuntime.InvokeVoidAsync("insertTextAtCursor", "drop-area", result);
+        if (value is null)
+        {
+            await dialogService.ShowMessageBox("Warning", "Cannot leave those field empty");
+            return;
+        }
+
+        var result = await ApiClient.UploadImageAsync(value);
+        if (string.IsNullOrEmpty(result))
+        {
+            return;
+        }
+
+        await JSRuntime.InvokeVoidAsync("insertTextAtCursor", "drop-area", result);
     }
-
-    public string PostTitle { get; set; }
-    public string PostDescription { get; set; }
-    public string PostBody { get; set; }
-
-    public List<CategoryDTO> Categories { get; set; }
 
     public async Task GetCategories()
     {
@@ -215,8 +234,6 @@
             });
         }
     }
-
-    public string PostPreview => string.IsNullOrEmpty(PostBody) ? "Type here" : markdownService.TextToHtml(PostBody);
 
     public async Task GetPostById(string postId)
     {
@@ -277,10 +294,6 @@
         return false;
     }
 
-    public CategoryDTO? SelectedCategory { get; set; }
-
-    private string newCategory { get; set; }
-
     public async Task<IEnumerable<CategoryDTO>> SearchCategories(string value, CancellationToken cancellationToken)
     {
         if (string.IsNullOrEmpty(value))
@@ -297,15 +310,4 @@
 
         return result;
     }
-
-    // public async Task<string> HandleFiles(object value)
-    // {
-    //     if (value is null)
-    //     {
-    //         await blogDialogService.ShowDialog("Warning", "Cannot leave those field empty");
-    //         return string.Empty;
-    //     }
-
-    //     return await fileService.UploadImage(value);
-    // }
 }
