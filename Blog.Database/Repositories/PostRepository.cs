@@ -103,7 +103,7 @@ public class PostRepository : IPostRepository
     /// <returns></returns>
     public async Task<IEnumerable<PostDTO>> GetUnclassifiedPosts()
     {
-        var result = db.Posts.Where(s => s.CategoryId == null && s.IsDeleted == false || s.IsDeleted == null);
+        var result = db.Posts.Where(s => s.CategoryId == null && (s.IsDeleted == false || s.IsDeleted == null));
 
         if (result == null || result.IsNullOrEmpty())
         {
@@ -249,7 +249,7 @@ public class PostRepository : IPostRepository
         {
             CategoryId = c.CategoryId,
             Name = c.Name,
-            PostDTOs = c.Posts.Where(p => p.IsDeleted == null || p.IsDeleted == false)
+            PostDTOs = c.Posts.Where(p => p.CategoryId != null && (p.IsDeleted == null || p.IsDeleted == false))
             .Select(p => new PostDTO
             {
                 Id = sqidService.EncryptId(p.Id),
