@@ -1,9 +1,11 @@
 ﻿@page "/viewPost/{postId}"
+@using Blog.DTO
 @using Blog.Services
 @using Blog.Services.Interfaces
 @using Blog.Utilities
 @inject IMarkdownService markdownService;
 @inject NavigationManager navigationManager;
+@inject PersistentComponentState ApplicationState
 @inject IApiClient ApiClient;
 @attribute [StreamRendering]
 @rendermode @(new InteractiveAutoRenderMode(prerender: false))
@@ -36,22 +38,38 @@
 
     public string PublishDate { get; set; }
 
+    private PostDTO ThePost { get; set; }
+
+    private PersistingComponentStateSubscription _subscription;
+
     protected override async Task OnInitializedAsync()
     {
-        await GetPostById(PostId);
+        _subscription = ApplicationState.RegisterOnPersisting(Persist);
+        var isFoundDto = ApplicationState.TryTakeFromJson<PostDTO>(nameof(ThePost), out var postDTO);
+        if (isFoundDto)
+        {
+            SetValue(postDTO);
+        }
+        else
+        {
+            await GetPostById(PostId);
+        }
+    }
+
+    private Task Persist()
+    {
+        ApplicationState.PersistAsJson(nameof(ThePost), ThePost);
+        return Task.CompletedTask;
     }
 
     public async Task GetPostById(string postId)
     {
         try
         {
-            var post = await ApiClient.GetPostByIdAsync(postId);
-            if (post != null)
+            ThePost = await ApiClient.GetPostByIdAsync(postId);
+            if (ThePost != null)
             {
-                PostTitle = post.Title;
-                PostBody = string.IsNullOrEmpty(post.Body) ? string.Empty : markdownService.TextToHtml(post.Body);
-                PublishDate = post.PublishDate.ToString(Common.DefaultDateTimeFormat);
-                PostId = postId;
+                SetValue(ThePost);
             }
         }
         // Better do good next time
@@ -59,6 +77,14 @@
         {
             navigationManager.NavigateTo("/resourceNotFound");
         }
+    }
+
+    private void SetValue(PostDTO postDTO)
+    {
+        PostTitle = postDTO.Title;
+        PostBody = string.IsNullOrEmpty(postDTO.Body) ? string.Empty : markdownService.TextToHtml(postDTO.Body);
+        PublishDate = postDTO.PublishDate.ToString(Common.DefaultDateTimeFormat);
+        PostId = postDTO.Id;
     }
 
     public void EditPost()
