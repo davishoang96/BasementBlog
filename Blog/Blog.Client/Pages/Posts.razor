@@ -9,7 +9,7 @@
 
 <PageTitle>Posts</PageTitle>
 
-@if(BlogPosts.Any())
+@if(UnClassifiedPosts.Any())
 {
     <div class="home-container">
         @foreach (var category in Categoroies)
@@ -29,7 +29,7 @@
 
         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
             <h6>Unclassified Posts</h6>
-            @foreach (var post in BlogPosts.Where(s => s.CategoryId == null))
+            @foreach (var post in UnClassifiedPosts)
             {
                 <div>
                     <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
@@ -56,18 +56,18 @@ else
 {
     private PersistingComponentStateSubscription _subscription;
 
-    public List<PostDTO> BlogPosts = new List<PostDTO>();
+    public List<PostDTO> UnClassifiedPosts = new List<PostDTO>();
 
     public List<CategoryDTO> Categoroies = new List<CategoryDTO>();
 
     protected override async Task OnInitializedAsync()
     {
         _subscription = ApplicationState.RegisterOnPersisting(Persist);
-        var isFoundPosts = ApplicationState.TryTakeFromJson<List<PostDTO>>(nameof(BlogPosts), out var blogPosts);
+        var isFoundPosts = ApplicationState.TryTakeFromJson<List<PostDTO>>(nameof(UnClassifiedPosts), out var blogPosts);
         var isFoundCate = ApplicationState.TryTakeFromJson<List<CategoryDTO>>(nameof(Categoroies), out var categories);
         if(isFoundPosts && isFoundCate)
         {
-            BlogPosts = blogPosts;
+            UnClassifiedPosts = blogPosts;
             Categoroies = categories;
         }
         else
@@ -79,7 +79,7 @@ else
 
     private Task Persist()
     {
-        ApplicationState.PersistAsJson(nameof(BlogPosts), BlogPosts);
+        ApplicationState.PersistAsJson(nameof(UnClassifiedPosts), UnClassifiedPosts);
         ApplicationState.PersistAsJson(nameof(Categoroies), Categoroies);
         return Task.CompletedTask;
     }
@@ -89,7 +89,7 @@ else
         var result = await ApiClient.GetUnclassifiedPostsAsync();
         if (result.Any())
         {
-            BlogPosts = result.ToList();
+            UnClassifiedPosts = result.ToList();
         }
     }
 
