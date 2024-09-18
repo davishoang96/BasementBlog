@@ -29,7 +29,7 @@
     </MudTabs>
 
     <MudGrid>
-        <MudItem xs="12" Class="floating-button" Style="margin-right: -12px; margin-bottom: 30px">
+        <MudItem xs="12" Class="floating-button" Style="margin-right: 0px; margin-bottom: 40px">
             <MudDatePicker PickerVariant="PickerVariant.Static" DateChanged="DateChanged"
                            ShowWeekNumbers="true" Rounded="true" 
                            DisableToolbar="true" hidden="@hideCalendar"
@@ -51,7 +51,7 @@
     .floating-button {
         position: fixed;
         bottom: 16px;
-        right: 60px;
+        right: 100px;
         z-index: 1000; /* Ensure the button stays on top of other elements */
     }
 </style>
