@@ -11,32 +11,30 @@
 
 @if(UnClassifiedPosts.Any())
 {
-    <div class="home-container">
-        @foreach (var category in Categoroies)
-        {
-            <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-                <h6>@category.Name</h6>
-                <ul>
-                    @foreach (var post in category.PostDTOs)
-                    {
-                        <li>
-                            <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
-                        </li>
-                    }
-                </ul>
-            </MudItem>
-        }
-
+    @foreach (var category in Categoroies)
+    {
         <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
-            <h6>Unclassified Posts</h6>
-            @foreach (var post in UnClassifiedPosts)
-            {
-                <div>
-                    <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
-                </div>
-            }
+            <h6>@category.Name</h6>
+            <ul>
+                @foreach (var post in category.PostDTOs)
+                {
+                    <li>
+                        <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
+                    </li>
+                }
+            </ul>
         </MudItem>
-    </div>
+    }
+
+    <MudItem xs="12" sm="12" md="12" lg="12" xl="12" class="mb-4">
+        <h6>Unclassified Posts</h6>
+        @foreach (var post in UnClassifiedPosts)
+        {
+            <div>
+                <MudLink OnClick="() => ViewPost(post.Id)">@post.Title</MudLink>
+            </div>
+        }
+    </MudItem>
 }
 else
 {
