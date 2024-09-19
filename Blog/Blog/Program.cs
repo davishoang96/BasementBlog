@@ -162,7 +162,8 @@ app.MapGet("/backupDb", async (HttpContext context) =>
     context.Response.ContentType = "application/octet-stream";
     context.Response.Headers.Add("Content-Disposition", $"attachment; filename={filename}");
     await context.Response.SendFileAsync(databaseSource);
-}).RequireAuthorization();
+
+}).RequireAuthorization(policy => policy.RequireRole("Admin"));
 
 app.UseAuthorization();
 //app.UseCors("AllowSpecificOrigin"); // Apply CORS policy globally
