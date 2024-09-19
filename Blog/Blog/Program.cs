@@ -146,6 +146,25 @@ app.MapGet("/Account/Logout", async (HttpContext httpContext) =>
     await httpContext.SignOutAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
     await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 });
+
+app.MapGet("/backupDb", async (HttpContext context) =>
+{
+    var timestamp = DateTime.Now.ToString("ddMMyyyy-HHmmss");
+    var filename = $"blazorblog-{timestamp}.db";
+
+    if (!File.Exists(databaseSource))
+    {
+        context.Response.StatusCode = 404;
+        await context.Response.WriteAsync("Database file not found.");
+        return;
+    }
+
+    context.Response.ContentType = "application/octet-stream";
+    context.Response.Headers.Add("Content-Disposition", $"attachment; filename={filename}");
+    await context.Response.SendFileAsync(databaseSource);
+
+}).RequireAuthorization(policy => policy.RequireRole("Admin"));
+
 app.UseAuthorization();
 //app.UseCors("AllowSpecificOrigin"); // Apply CORS policy globally
 app.Run();
