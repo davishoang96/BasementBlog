@@ -8,6 +8,7 @@ using Blog.Services.Interfaces;
 using Blog.Utilities;
 using FluentAssertions;
 using Moq;
+using System.ComponentModel.DataAnnotations;
 using Xunit;
 
 namespace Blog.Tests;
@@ -71,7 +72,46 @@ public sealed class WorkLogRepositoryTest : BaseDataContextTest
         result.Count().Should().Be(10);
    }
 
-   [Fact]
+    [Theory]
+    [InlineData(5, 5)]
+    [InlineData(6, 2)]
+    public async Task GetAllCurrentMonthWorkLogs(int selectedMonth, int expectedResult)
+    {
+        // Arrange
+        var fixture = new Fixture();
+        var id = 100;
+
+        var mayWorkLog = fixture.Build<WorkLog>()
+            .With(s => s.Id, () => id++)
+            .With(s => s.LoggedDate, () => new DateTime(DateTime.Now.Year, 5, fixture.Create<int>() % 31 + 1))
+            .CreateMany(5);
+
+        var juneWorkLogs = fixture.Build<WorkLog>()
+            .With(s => s.Id, () => id++)
+            .With(s => s.LoggedDate, () => new DateTime(DateTime.Now.Year, 6, fixture.Create<int>() % 30 + 1))
+            .CreateMany(2);
+
+        using (var context = new DatabaseContext(Options))
+        {
+            context.WorkLogs.AddRange(mayWorkLog);
+            context.WorkLogs.AddRange(juneWorkLogs);
+            await context.SaveChangesAsync();
+        }
+
+        var service = new WorkLogRepository(new DatabaseContext(Options), MockSqidService.Object);
+
+        // Act
+        var random = new Random();
+        var year = DateTime.Now.Year; // You can replace this with a specific year if needed
+        var randomDay = random.Next(1, 32); // Generates a day between 1 and 31 (inclusive)
+        var dateInSelectedMonth = new DateTime(year, selectedMonth, randomDay);
+        var result = await service.GetCurrentMonthWorkLogs(dateInSelectedMonth);
+
+        // Assert
+        result.Count().Should().Be(expectedResult);
+    }
+
+    [Fact]
    public async Task GetAllWorkLogWithoutBodyOK()
    {
         // Arrange

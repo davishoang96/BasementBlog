@@ -52,14 +52,19 @@ public class WorkLogRepository : IWorkLogRepository
 
     public async Task<IEnumerable<WorkLogDTO>> GetCurrentMonthWorkLogs(DateTime selectedMonth)
     {
-        return await db.WorkLogs.Select(model => new WorkLogDTO
-        {
-            Id = sqidService.EncryptId(model.Id),
-            Body = null,
-            IsDeleted = model.IsDeleted,
-            LoggedDate = model.LoggedDate,
-            ModifiedDate = model.ModifiedDate,
-        }).ToListAsync();
+        var startDate = new DateTime(selectedMonth.Year, selectedMonth.Month, 1);
+        var endDate = startDate.AddMonths(1).AddDays(-1);
+
+        return await db.WorkLogs
+            .Where(model => model.LoggedDate >= startDate && model.LoggedDate <= endDate)
+            .Select(model => new WorkLogDTO
+            {
+                Id = sqidService.EncryptId(model.Id),
+                Body = model.Body,
+                IsDeleted = model.IsDeleted,
+                LoggedDate = model.LoggedDate,
+                ModifiedDate = model.ModifiedDate,
+            }).ToListAsync();
     }
 
     public async Task<WorkLogDTO> GetWorkLogById(string id)
