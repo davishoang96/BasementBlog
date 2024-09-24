@@ -50,6 +50,18 @@ public class WorkLogRepository : IWorkLogRepository
         }).ToListAsync();
     }
 
+    public async Task<IEnumerable<WorkLogDTO>> GetCurrentMonthWorkLogs(DateTime selectedMonth)
+    {
+        return await db.WorkLogs.Select(model => new WorkLogDTO
+        {
+            Id = sqidService.EncryptId(model.Id),
+            Body = null,
+            IsDeleted = model.IsDeleted,
+            LoggedDate = model.LoggedDate,
+            ModifiedDate = model.ModifiedDate,
+        }).ToListAsync();
+    }
+
     public async Task<WorkLogDTO> GetWorkLogById(string id)
     {
        var scr = sqidService.DecryptId(id);

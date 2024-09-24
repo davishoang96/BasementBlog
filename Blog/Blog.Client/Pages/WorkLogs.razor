@@ -40,7 +40,8 @@
         <MudItem xs="12" Class="floating-button" Style="margin-right: 0px; margin-bottom: 40px">
             <MudDatePicker PickerVariant="PickerVariant.Static" DateChanged="DateChanged"
                            ShowWeekNumbers="true" Rounded="true"
-                           DisableToolbar="true" hidden="@hideCalendar" />
+                           DisableToolbar="true" hidden="@hideCalendar"
+                           AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate.Date == dt.Date) ? "red-text text-accent-4" : ""))" />
         </MudItem>
     </MudGrid>
     <!-- Save button -->
