@@ -26,7 +26,6 @@ public class DatabaseContext : DbContext
             .HasKey(s => s.Id);
         modelBuilder.Entity<WorkLog>()
             .HasIndex(s => s.LoggedDate)
-            .HasDatabaseName("IX_Unique_LoggedDate")
             .IsUnique();
 
         modelBuilder.Entity<Post>()

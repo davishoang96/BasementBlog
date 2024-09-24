@@ -131,7 +131,7 @@ public sealed class WorkLogRepositoryTest : BaseDataContextTest
         var dto = new WorkLogDTO
         {
             Body = "Hello",
-            LoggedDate = DateTime.Now.ToString(Common.DefaultDateTimeFormat),
+            LoggedDate = DateTime.Now,
         };
 
         // Act

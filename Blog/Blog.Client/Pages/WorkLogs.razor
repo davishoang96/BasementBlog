@@ -28,15 +28,21 @@
         </MudTabPanel>
     </MudTabs>
 
-    <MudGrid>
+    @* <MudGrid>
         <MudItem xs="12" Class="floating-button" Style="margin-right: 0px; margin-bottom: 40px">
             <MudDatePicker PickerVariant="PickerVariant.Static" DateChanged="DateChanged"
                            ShowWeekNumbers="true" Rounded="true" 
                            DisableToolbar="true" hidden="@hideCalendar"
-                           AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate == dt.Date.ToString(Common.DefaultDateTimeFormat)) ? "red-text text-accent-4" : ""))" />
+                           AdditionalDateClassesFunc="@((DateTime dt)=>(WorkLogCollection.Any(s=>s.LoggedDate.to == dt.Date) ? "red-text text-accent-4" : ""))" />
+        </MudItem>
+    </MudGrid> *@
+    <MudGrid>
+        <MudItem xs="12" Class="floating-button" Style="margin-right: 0px; margin-bottom: 40px">
+            <MudDatePicker PickerVariant="PickerVariant.Static" DateChanged="DateChanged"
+                           ShowWeekNumbers="true" Rounded="true"
+                           DisableToolbar="true" hidden="@hideCalendar" />
         </MudItem>
     </MudGrid>
-
     <!-- Save button -->
     <MudItem xs="12" Class="floating-button">
         <MudButtonGroup Color="Color.Primary" Variant="Variant.Outlined">
@@ -105,7 +111,7 @@
         if(selectedDate == null || !WorkLogCollection.Any()) { return; }
         SelectedDate = selectedDate.Value;
 
-        var logId = WorkLogCollection.SingleOrDefault(s => s.LoggedDate == selectedDate.Value.ToString(Common.DefaultDateTimeFormat))?.Id;
+        var logId = WorkLogCollection.SingleOrDefault(s => s.LoggedDate == selectedDate.Value)?.Id;
         if(logId == null)
         {
             SelectedWorkLog = null;
@@ -166,7 +172,7 @@
             SelectedWorkLog.ModifiedDate = DateTime.Now;
         }
 
-        SelectedWorkLog.LoggedDate = SelectedDate.ToString(Common.DefaultDateTimeFormat);
+        SelectedWorkLog.LoggedDate = SelectedDate;
 
         var id = await ApiClient.SaveOrUpdateWorkLogAsync(SelectedWorkLog);
         if (!string.IsNullOrEmpty(id))
