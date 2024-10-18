@@ -82,11 +82,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var isPrerendering = RuntimeInformation.ProcessArchitecture != Architecture.Wasm;
-        if (!isPrerendering)
-        {
-            await InitialDashboard();
-        }
+        // TODO: Fix pre-render 
+        await InitialDashboard();
     }
 
     void OnRowClick(string id)
