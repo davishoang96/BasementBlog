@@ -35,19 +35,10 @@
                             </MudStack>
                         </CellTemplate>
                     </TemplateColumn>
-                    <TemplateColumn CellClass="d-flex justify-end">
+                    <TemplateColumn>
                         <CellTemplate>
                             <MudStack Row>
-                                @if(context.Item.IsDelete.HasValue && context.Item.IsDelete.Value == true)
-                                {
-                                    <MudFab Color="Color.Primary" OnClick="() => RestorePost(context.Item.Id)"
-                                            StartIcon="@Icons.Material.Filled.Restore" Size="@MudBlazor.Size.Small" />
-                                }
-                                else
-                                {
-                                    <MudFab Color="Color.Error" OnClick="() => SoftDeletePost(context.Item.Id)"
-                                            StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small" />
-                                }
+                                <MudCheckBox IndeterminateIcon="@Icons.Material.Outlined.CheckBoxOutlineBlank" Value="context.Item.IsDelete"></MudCheckBox>
                             </MudStack>
                         </CellTemplate>
                     </TemplateColumn>
