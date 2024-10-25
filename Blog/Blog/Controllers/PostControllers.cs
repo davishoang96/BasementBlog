@@ -61,13 +61,13 @@ public class PostController : ControllerBase
         return Ok(result);
     }
 
-    [Authorize(Roles = "Admin")]
-    [HttpDelete("{postId}")]
-    [SwaggerOperation(OperationId = "DeletePost")]
-    public async Task<bool> DeletePost(string postId)
-    {
-        return await postRepository.DeletePost(postId);
-    }
+    //[Authorize(Roles = "Admin")]
+    //[HttpDelete("DeletePost/{postId}")]
+    //[SwaggerOperation(OperationId = "DeletePost")]
+    //public async Task<bool> DeletePost(string postId)
+    //{
+    //    return await postRepository.DeletePost(postId);
+    //}
 
     [Authorize(Roles = "Admin")]
     [HttpDelete("{id}")]
@@ -78,7 +78,7 @@ public class PostController : ControllerBase
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpDelete]
+    [HttpDelete("WipeAllSoftDeletedPost")]
     [SwaggerOperation(OperationId = "WipeAllSoftDeletedPost")]
     public async Task<int> WipeAllSoftDeletedPost()
     {
