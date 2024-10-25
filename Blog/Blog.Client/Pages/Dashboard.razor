@@ -11,16 +11,20 @@
 
 <MudContainer Class="home-container">
     <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
+        <MudTabPanel Text="Settings">
+            <MudButton StartIcon="@Icons.Material.Outlined.Download" Href ="@downloadDbUrl" 
+                       Color="Color.Info" Variant="Variant.Filled">Download Database</MudButton>
+        </MudTabPanel>
         <MudTabPanel Text="Posts">
-            <MudDataGrid T="PostDTO" RowClick="(e) => OnRowClick(e.Item.Id)" Items="@Posts" 
-                         Filterable="false" SortMode="@SortMode.None" 
+            <MudDataGrid T="PostDTO" RowClick="(e) => OnRowClick(e.Item.Id)" Items="@Posts"
+                         Filterable="false" SortMode="@SortMode.None"
                          Groupable="false" Dense="true" Hover="true">
                 <Columns>
-                    <PropertyColumn Property="p => p.Title" Title="Title" />
-                    <PropertyColumn Property="p => p.Description" Title="Description" />
-                    <PropertyColumn Property="p => p.CategoryName" Title="Category" />
-                    <PropertyColumn Property="p => p.PublishDate" Title="Publish Date" />
-                    <PropertyColumn Property="p => p.ModifiedDate" Title="Modified Date" />
+                    <PropertyColumn Property="p => p.Title" Title="Title"/>
+                    <PropertyColumn Property="p => p.Description" Title="Description"/>
+                    <PropertyColumn Property="p => p.CategoryName" Title="Category"/>
+                    <PropertyColumn Property="p => p.PublishDate" Title="Publish Date"/>
+                    <PropertyColumn Property="p => p.ModifiedDate" Title="Modified Date"/>
                     <TemplateColumn Title="Status">
                         <CellTemplate>
                             <MudStack Row>
@@ -38,52 +42,44 @@
                     <TemplateColumn CellClass="d-flex justify-end">
                         <CellTemplate>
                             <MudStack Row>
-                                @if(context.Item.IsDelete.HasValue && context.Item.IsDelete.Value == true)
+                                @if (context.Item.IsDelete.HasValue && context.Item.IsDelete.Value == true)
                                 {
                                     <MudFab Color="Color.Primary" OnClick="() => RestorePost(context.Item.Id)"
-                                            StartIcon="@Icons.Material.Filled.Restore" Size="@MudBlazor.Size.Small" />
+                                            StartIcon="@Icons.Material.Filled.Restore" Size="@MudBlazor.Size.Small"/>
                                 }
                                 else
                                 {
                                     <MudFab Color="Color.Error" OnClick="() => SoftDeletePost(context.Item.Id)"
-                                            StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small" />
+                                            StartIcon="@Icons.Material.Filled.Delete" Size="@MudBlazor.Size.Small"/>
                                 }
                             </MudStack>
                         </CellTemplate>
                     </TemplateColumn>
                 </Columns>
             </MudDataGrid>
-
             <MudButton Style="margin-top: 10px" Color="Color.Error" Variant="Variant.Filled" OnClick="WipeAllIsDeletedPosts">Delete Posts</MudButton>
-
-
         </MudTabPanel>
         <MudTabPanel Text="Categories">
             <MudDataGrid Items="Categories" Filterable="false" SortMode="@SortMode.None" Groupable="false">
                 <Columns>
-                    <PropertyColumn Property="c => c.CategoryId" />
-                    <PropertyColumn Property="c => c.Name" Title="Name" />
+                    <PropertyColumn Property="c => c.CategoryId"/>
+                    <PropertyColumn Property="c => c.Name" Title="Name"/>
                 </Columns>
             </MudDataGrid>
         </MudTabPanel>
-        <MudTabPanel Text="Users" Disabled="true">
-            <MudText>Content Disabled</MudText>
-        </MudTabPanel>
-        <MudTabPanel Text="Settings" Disabled="true">
-            <MudText>Content Disabled</MudText>
-        </MudTabPanel>
     </MudTabs>
 </MudContainer>
-
 
 @code {
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationState { get; set; }
 
+    private string downloadDbUrl;
+    
     protected override async Task OnInitializedAsync()
     {
-        // TODO: Fix pre-render 
         await InitialDashboard();
+        downloadDbUrl = navigationManager.BaseUri + "backupdb";
     }
 
     void OnRowClick(string id)
