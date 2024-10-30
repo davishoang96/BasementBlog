@@ -1,7 +1,214 @@
 ﻿@page "/"
+@using Blog.Client.Layout
+@layout HomePageLayout
 
-<PageTitle>Home</PageTitle>
+<!doctype html>
+<html>
 
-<h1>Hello, world!</h1>
+<body>
 
-This is Viet's Blog
+@* <!-- Preloader --> *@
+@* <div id="page-loading-blocs-notifaction" class="page-preloader"></div> *@
+@* <!-- Preloader END --> *@
+
+<!-- Main container -->
+<div class="page-container">
+
+	<!-- bloc-0 -->
+	<div class="bloc bloc-fill-screen b-parallax d-bloc" id="bloc-0">
+		<div class="parallax bg-anime-boy-chill-digital-art-4k-wallpaper-uhdpaper-com-284-0-j">
+		</div>
+		<div class="container fill-bloc-top-edge">
+			<div class="row">
+				<div class="col-12">
+					<nav class="navbar navbar-light row navbar-expand-md" role="navigation">
+						<div class="container-fluid ">
+							<a class="navbar-brand" href="./">The Basement Blog</a>
+							<button id="nav-toggle" type="button" class="ui-navbar-toggler navbar-toggler border-0 p-0 ms-auto me-md-0" aria-expanded="false" aria-label="Toggle navigation" data-bs-toggle="collapse" data-bs-target=".navbar-15281">
+								<span class="navbar-toggler-icon"><svg height="32" viewBox="0 0 32 32" width="32"><path class="svg-menu-icon" d="m2 9h28m-28 7h28m-28 7h28"></path></svg></span>
+							</button>
+							<div class="collapse navbar-collapse navbar-19651 navbar-15281">
+								<ul class="site-navigation nav navbar-nav ms-auto">
+									<li class="nav-item">
+										<a href="/posts" class="nav-link">Posts</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" onclick="scrollToTarget('#project-section',this)">Projects</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" onclick="scrollToTarget('#skills-section',this)">Skills</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link" onclick="scrollToTarget('#contact-section',this)">Contact</a>
+									</li>
+									<li class="nav-item">
+										<a href="/about" class="nav-link">About</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</nav>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div class="row">
+				<div class="col animated vanishIn" data-appear-anim-style="vanishIn">
+					<h1 class="mg-md text-center">
+						Hi, I’m Davis 🖖
+					</h1>
+					<h3 class="mg-md float-none text-center">
+						Coding Beyond Boundaries
+					</h3>
+					<div class="text-center">
+						<a href="#" class="btn btn-lg btn-wire" data-scroll-speed="1000" onclick="scrollToTarget('#project-section',this)">Projects</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container fill-bloc-bottom-edge">
+			<div class="row">
+				<div class="col-12">
+					<div class="text-center">
+						<a href="#" data-scroll-speed="1000" onclick="scrollToTarget('0',this)"><span class="fa fa-angle-down icon-md animated bounce animDelay08"></span></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- bloc-0 END -->
+
+	<!-- ScrollToTop Button -->
+	<button aria-label="Scroll to top button" class="bloc-button btn btn-d scrollToTop" onclick="scrollToTarget('1',this)"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32"><path class="scroll-to-top-btn-icon" d="M30,22.656l-14-13-14,13"/></svg></button>
+	<!-- ScrollToTop Button END-->
+
+
+	<!-- about-pg -->
+	<div class="bloc bgc-2941 d-bloc bloc-fill-screen" id="about-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6 text-start">
+					<h3 class="mb-4">
+						Greetings
+					</h3>
+					<p class="text-justify">
+						I'm Davis Hoang, a dedicated software engineer located in Australia. My expertise spans C#, SQL, YAML, Powershell, and Dotnet, encompassing both frontend and backend development.<br><br>I have a proven track record of crafting high-quality digital solutions, from creating seamless user interfaces with XAML to architecting robust backend systems using MAUI & Xamarin Form. My focus is always on delivering clean, efficient, and scalable code that exceeds expectations.<br><br>Throughout my career, I've had the opportunity to work on a variety of projects, each presenting unique challenges and opportunities for growth. I thrive on the continuous learning and problem-solving inherent in the tech industry.<br><br>Beyond coding, I enjoy staying abreast of the latest technological advancements and collaborating with fellow enthusiasts. Interested in discussing how we can collaborate on your next project? Feel free to get in touch. Let's transform ideas into reality and make a meaningful impact together.<br>
+					</p>
+				</div>
+				<div class="col-md-6 text-start text-lg-center align-self-center">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/DSCF1309.webp"><img src="img/lazyload-ph.png" data-src="img/DSCF1309.JPG" class="img-fluid mx-auto d-block lazyload" alt="DSCF1309.JPG" width="558" height="372"></picture>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- about-pg END -->
+
+	<!-- page-skill -->
+	<div class="bloc bgc-2941 d-bloc bloc-fill-screen " id="skills-section" page="Skills" data-bs-theme="dark">
+		<div class="container">
+			<div class="row voffset">
+				<div class="col-lg-12 mb-3">
+					<h3 class="mg-md text-center tc-3756">
+						SKILLS
+					</h3>
+					<p class="text-center tc-3756">
+						What I currently work with
+					</p>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/microsoft_azure.svg_.webp"><img src="img/lazyload-ph.png" data-src="img/microsoft_azure.svg_.png" class="img-fluid mx-auto d-block animated pulse-hvr lazyload" alt="placeholder image sq" width="267" height="267"></picture>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/C_Sharp_Logo_2023.svg.webp"><img src="img/lazyload-ph.png" data-src="img/C_Sharp_Logo_2023.svg.png" class="img-fluid mx-auto d-block animated pulse-hvr lazyload" alt="placeholder image sq" width="267" height="267"></picture>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/microsoft.visualstudio.services.icons_.webp"><img src="img/lazyload-ph.png" data-src="img/microsoft.visualstudio.services.icons_.png" class="img-fluid mx-auto d-block img-page-skill-style animated pulse-hvr lazyload" alt="microsoft.visualstudio.services.icons_" width="267" height="267"></picture>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/PieterVanhove_0-1652700055247.webp"><img src="img/lazyload-ph.png" data-src="img/PieterVanhove_0-1652700055247.png" class="img-fluid mx-auto d-block pulse animated pulse-hvr lazyload" alt="placeholder image sq" data-appear-anim-style="pulse" width="267" height="270"></picture>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/azure-pipelines.webp"><img src="img/lazyload-ph.png" data-src="img/azure-pipelines.png" class="img-fluid mx-auto d-block animated pulse-hvr lazyload" alt="placeholder image sq" width="267" height="267"></picture>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/xamarin-icon-1024x911-f0z51zar.webp"><img src="img/lazyload-ph.png" data-src="img/xamarin-icon-1024x911-f0z51zar.png" class="img-fluid mx-auto d-block animated pulse-hvr lazyload" alt="placeholder image sq" width="267" height="238"></picture>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/Powershell_256.webp"><img src="img/lazyload-ph.png" data-src="img/Powershell_256.png" class="img-fluid mx-auto d-block img-8-style animated pulse-hvr lazyload" alt="Powershell_256" width="267" height="267"></picture>
+				</div>
+				<div class="col-lg-3 col-md-6 mb-3">
+					<picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/node-js-icon-454x512-nztofx17.webp"><img src="img/lazyload-ph.png" data-src="img/node-js-icon-454x512-nztofx17.png" class="img-fluid mx-auto d-block img-9-style animated pulse-hvr lazyload" alt="placeholder image sq" width="237" height="267"></picture>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- page-skill END -->
+
+	<!-- project-pg -->
+	<div class="bloc bgc-2941 d-bloc bloc-fill-screen" id="project-section">
+		<div class="container">
+			<div class="row">
+				<div class="col text-start">
+					<h1 class="mb-4 text-lg-center">
+						PROJECTS
+					</h1>
+					<div class="row">
+						<div class="col animated pulse-hvr">
+							<h3 class="mb-4 text-lg-center">
+								Zoodata - Inspect
+							</h3><picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/maxresdefault.webp"><img src="img/lazyload-ph.png" data-src="img/maxresdefault.jpg" class="img-fluid mx-auto d-block img-maxresdefau-style lazyload" alt="placeholder image" width="357" height="201"></picture>
+							<p>
+								Zoodata Inspect is a powerful, configurable, mobile and user friendly inspection management application which will make your organisation more efficient.
+							</p>
+						</div>
+						<div class="col animated pulse-hvr">
+							<h3 class="mb-4 text-lg-center">
+								Tronox - Data Fetcher
+							</h3><picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/1675279186875.webp"><img src="img/lazyload-ph.png" data-src="img/1675279186875.jpeg" class="img-fluid mx-auto d-block lazyload" alt="placeholder image" width="364" height="201"></picture>
+							<p>
+								The Data Fetcher (DF) Service is an application, running as a service, that fetches data from source systems and stores it in a Work Management System (WMS) database.&nbsp;
+							</p>
+						</div>
+						<div class="col animated pulse-hvr">
+							<h3 class="mb-4 text-lg-center">
+								Hitachi - Botsina
+							</h3><picture><source type="image/webp" srcset="img/lazyload-ph.png" data-srcset="img/Hitachi-logo.webp"><img src="img/lazyload-ph.png" data-src="img/Hitachi-logo.jpg" class="img-fluid mx-auto d-block img-hitachi-lo-style lazyload" alt="placeholder image" width="364" height="201"></picture>
+							<p>
+								BotsinaTM is an advanced automation test suite that has been developed based on the real needs of previous clients and from current in-house projects.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- project-pg END -->
+
+	<!-- bloc-5 -->
+	<div class="bloc bloc-fill-screen b-parallax d-bloc" id="contact-section">
+		<div class="parallax bg-windows-11-365-abstract-4k-wallpaper-uhdpaper-com-140-0-h bgc-2941">
+		</div>
+		<div class="container">
+			<div class="row animated pulse" data-appear-anim-style="pulse">
+				<div class="col-md-4 text-start">
+				</div>
+				<div class="col-md-4 text-start text-lg-center align-self-center">
+					<h3 class="mb-4 text-lg-center">
+						Contact Infomation
+					</h3>
+					<p class="text-lg-center">
+						Davis Hoang<br>Email: viethg69@gmail.com
+					</p>
+				</div>
+				<div class="col-md-4 text-start col-lg-4">
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- bloc-5 END -->
+
+</div>
+<!-- Main container END -->
+</body>
+</html>
+
