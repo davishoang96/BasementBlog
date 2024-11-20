@@ -9,7 +9,6 @@ public class ServiceModules : Module
         base.Load(builder);
 
         builder.RegisterType<MarkdownService>().AsImplementedInterfaces().InstancePerDependency();
-        builder.RegisterType<BlogDialogService>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterType<SqidService>().AsImplementedInterfaces().InstancePerDependency();
         builder.RegisterType<FileService>().AsImplementedInterfaces().InstancePerDependency();
     }
