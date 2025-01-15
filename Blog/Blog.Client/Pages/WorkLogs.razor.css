@@ -1,3 +1,5 @@
 ﻿::deep .mud-input-text {
-    font-family: Consolas
+    font-family: "Fira Code", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
 }
