@@ -12,11 +12,13 @@
 
 <PageTitle>@PostTitle</PageTitle>
 
-<MudStack>
-    <MudText Typo="Typo.h4">@PostTitle</MudText>
-    <MudText Typo="Typo.body1">Publish Date: @PublishDate</MudText>
-    <MudText Class="markdown-body mt-5 inter-text-field" Typo="Typo.body1">@((MarkupString)PostBody)</MudText>
-</MudStack>
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudStack>
+        <MudText Typo="Typo.h4">@PostTitle</MudText>
+        <MudText Typo="Typo.body1">Publish Date: @PublishDate</MudText>
+        <MudText Class="markdown-body mt-5 inter-text-field" Typo="Typo.body1">@((MarkupString)PostBody)</MudText>
+    </MudStack>
+</MudContainer>
 
 <!-- Save button -->
 <AuthorizeView Roles="Admin">
