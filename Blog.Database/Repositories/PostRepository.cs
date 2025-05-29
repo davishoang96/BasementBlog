@@ -105,7 +105,7 @@ public class PostRepository : IPostRepository
     {
         var result = db.Posts.Where(s => s.CategoryId == null && (s.IsDeleted == false || s.IsDeleted == null));
 
-        if (result == null || result.IsNullOrEmpty())
+        if (result == null)
         {
             return Enumerable.Empty<PostDTO>();
         }

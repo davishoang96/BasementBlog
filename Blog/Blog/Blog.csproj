@@ -11,6 +11,7 @@
 		<ProjectReference Include="..\..\Blog.DTO\Blog.DTO.csproj" />
 		<ProjectReference Include="..\Blog.Client\Blog.Client.csproj" />
 		<PackageReference Include="AutoFixture" Version="4.18.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="9.0.1" />
 	</ItemGroup>
 

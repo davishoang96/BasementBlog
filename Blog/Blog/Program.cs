@@ -9,10 +9,10 @@ using Blog.Services;
 using Blog.Services.Modules;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 
@@ -33,6 +33,9 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 var baseUrl = builder.Configuration["BaseUrl"];
 var databaseSource = builder.Configuration["DatabaseSource"];
 var portNumber = int.Parse(builder.Configuration["PortNumber"]);
+var savePostApi = builder.Configuration["SavePostApi"];
+var authority = builder.Configuration["Auth0_Domain"];
+
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlite($"Data Source={databaseSource}"));
@@ -80,6 +83,16 @@ builder.Services.AddAuth0WebAppAuthentication(options =>
 {
     options.Domain = builder.Configuration["Auth0:Domain"];
     options.ClientId = builder.Configuration["Auth0:ClientId"];
+});
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.Authority = authority;
+    options.Audience = savePostApi;
 });
 
 builder.Services.AddMudServices();

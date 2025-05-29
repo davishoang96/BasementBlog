@@ -43,6 +43,7 @@ jobs:
           DatabaseSource: ${{ secrets.DATABASESOURCE }}
           PortNumber: ${{ secrets.PORTNUMBER }}
           BaseUrl: ${{ secrets.BASEURL }}
+          SavePostAPI: ${{ vars.SavePostAPI }}
           pemFilePath: ${{ secrets.PEMFILEPATH }}
           pemKey: ${{ secrets.PEMPRIVATEKEY }}
           Auth0.Domain: ${{ secrets.AUTH0_DOMAIN }}
