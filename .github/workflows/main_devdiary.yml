@@ -54,7 +54,7 @@ jobs:
           zip -r artifact.zip ../Blog/
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: BlogWebApp
           path: artifact.zip
