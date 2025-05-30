@@ -1,5 +1,6 @@
 ﻿using Blog.Database.Interfaces;
 using Blog.DTO;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -93,7 +94,7 @@ public class PostController : ControllerBase
         return await postRepository.RestoreDeletedPost(id);
     }
 
-    [Authorize]
+    [Authorize(AuthenticationSchemes = $"{CookieAuthenticationDefaults.AuthenticationScheme},Bearer")]
     [HttpPost("savePost")]
     [Produces("text/plain")]
     [SwaggerOperation(OperationId = "savePost")]

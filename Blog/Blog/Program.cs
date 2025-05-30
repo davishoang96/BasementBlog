@@ -33,7 +33,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, PersistingRevalidatingAu
 var baseUrl = builder.Configuration["BaseUrl"];
 var databaseSource = builder.Configuration["DatabaseSource"];
 var portNumber = int.Parse(builder.Configuration["PortNumber"]);
-var savePostApi = builder.Configuration["SavePostApi"];
+var savePostApi = builder.Configuration["SavePostAPI"];
 var authority = builder.Configuration["Auth0_Domain"];
 
 
@@ -79,21 +79,39 @@ builder.Services.AddScoped<IApiClient>(sp =>
 });
 
 
+//builder.Services.AddAuth0WebAppAuthentication(options =>
+//{
+//    options.Domain = builder.Configuration["Auth0:Domain"];
+//    options.ClientId = builder.Configuration["Auth0:ClientId"];
+//});
+
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+//}).AddJwtBearer(options =>
+//{
+//    options.Authority = authority;
+//    options.Audience = savePostApi;
+//});
+
+// Auth0 for Web App (cookie-based)
 builder.Services.AddAuth0WebAppAuthentication(options =>
 {
     options.Domain = builder.Configuration["Auth0:Domain"];
     options.ClientId = builder.Configuration["Auth0:ClientId"];
 });
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.Authority = authority;
-    options.Audience = savePostApi;
-});
+// Add default cookie auth scheme for WebApp
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+
+// Add JWT Bearer auth scheme for API
+builder.Services.AddAuthentication()
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.Authority = authority;
+        options.Audience = savePostApi;
+    });
 
 builder.Services.AddMudServices();
 
