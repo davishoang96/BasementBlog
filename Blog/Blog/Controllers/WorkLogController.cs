@@ -14,6 +14,14 @@ public class WorkLogController : BaseAuthorizedController
         this.workLogRepository = workLogRepository;
     }
 
+    [HttpGet(nameof(GetTodayWorkLog))]
+    [SwaggerOperation(OperationId = nameof(GetTodayWorkLog))]
+    public async Task<ActionResult<WorkLogDTO>> GetTodayWorkLog()
+    {
+        var result = await workLogRepository.GetTodayWorkLog();
+        return Ok(result);
+    }
+
     [HttpGet(nameof(GetWorkLogById))]
     [SwaggerOperation(OperationId = nameof(GetWorkLogById))]
     public async Task<ActionResult<WorkLogDTO>> GetWorkLogById(string id)
