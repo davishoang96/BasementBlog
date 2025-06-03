@@ -1,6 +1,7 @@
 using Blog.Database.Models;
 using Blog.DTO;
 using Blog.Services.Interfaces;
+using Blog.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Database.Repositories;
@@ -48,6 +49,25 @@ public class WorkLogRepository : IWorkLogRepository
             LoggedDate = model.LoggedDate,
             ModifiedDate = model.ModifiedDate,
         }).ToListAsync();
+    }
+
+    public async Task<WorkLogDTO> GetTodayWorkLog()
+    {
+        var today = DateTime.Now.ToString(Common.DefaultDateTimeFormat);
+        var model = await db.WorkLogs.FirstOrDefaultAsync(s => s.LoggedDate == today);
+        if (model is null)
+        {
+            return null;
+        }
+
+        return new WorkLogDTO
+        {
+            Id = sqidService.EncryptId(model.Id),
+            Body = model.Body,
+            IsDeleted = model.IsDeleted,
+            LoggedDate = model.LoggedDate,
+            ModifiedDate = model.ModifiedDate,
+        };
     }
 
     public async Task<WorkLogDTO> GetWorkLogById(string id)
